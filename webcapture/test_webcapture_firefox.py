@@ -5,33 +5,40 @@
 #https://www.seleniumqref.com/api/webdriver_gyaku.html
 
 from selenium.webdriver import Firefox, FirefoxOptions
-#from selenium.webdriver.common.by import By
-#from selenium.webdriver.common.keys import Keys
-#from selenium.webdriver.support.ui import WebDriverWait
-#from selenium.webdriver.support import expected_conditions as EC
+import sys
 import time
 
-# ヘッドレスモードオプション
-options = FirefoxOptions()
-options.add_argument('-headless')
+url='https://www.a-zip.co.jp/'
+img='test_firefox.png'
 
-# FirefoxのWebDriver作成
-driver = Firefox(options=options)
+if __name__ == '__main__':
+    if (len(sys.argv) >= 2):
+        url = str(sys.argv[1])
+    if (len(sys.argv) >= 3):
+        img = str(sys.argv[2])
 
-# URLを開く
-driver.get('https://www.a-zip.co.jp/')
+    # ヘッドレスモードオプション
+    options = FirefoxOptions()
+    options.add_argument('-headless')
 
-# 読み込み待機
-time.sleep(5)
+    # FirefoxのWebDriver作成
+    driver = Firefox(options=options)
 
-# ウィンドウサイズとズームを設定
-driver.set_window_size(1280, 3000)
-driver.execute_script("document.body.style.zoom='90%'")
+    # ウィンドウサイズとズームを設定
+    driver.set_window_size(1920, 9999)
+    driver.execute_script("document.body.style.zoom='100%'")
 
-# webページショット
-driver.save_screenshot('test_firefox.png')
+    # URLを開く
+    driver.get(url)
 
-# プラウザを閉じる
-driver.quit()
+    # 読み込み待機
+    time.sleep(5)
+
+    # webページショット
+    #driver.get_screenshot_as_file(img)
+    driver.save_screenshot(img)
+
+    # プラウザを閉じる
+    driver.quit()
 
 
