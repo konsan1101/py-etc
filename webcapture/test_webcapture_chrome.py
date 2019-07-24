@@ -1,5 +1,8 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+#https://qiita.com/orangain/items/6a166a65f5546df72a9d
+#https://www.seleniumqref.com/api/webdriver_gyaku.html
 
 from selenium.webdriver import Chrome, ChromeOptions
 import time
@@ -22,7 +25,7 @@ driver.set_window_size(1280, 3000)
 driver.execute_script("document.body.style.zoom='90%'")
 
 # webページショット
-driver.save_screenshot('test_azip.png')
+driver.save_screenshot('test_chrome.png')
 
 # プラウザを閉じる
 driver.quit()
