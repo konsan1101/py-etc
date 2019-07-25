@@ -105,5 +105,7 @@ venv.bak/
 
 *key.*
 /webcapture/*key.*
+/map/*key.*
+
 
 
