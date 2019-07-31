@@ -18,8 +18,8 @@ if __name__ == '__main__':
         pass
     os.mkdir('temp')
 
-    ffmpeg = subprocess.Popen(['ffmpeg', '-i', 'test_input.mp4', \
-        '-vf', 'select=gt(scene\,0.2), scale=0:0,showinfo', \
+    ffmpeg = subprocess.Popen(['ffmpeg', '-i', 'test_input.flv', \
+        '-vf', 'select=gt(scene\,0.1), scale=0:0,showinfo', \
         '-vsync', 'vfr', 'temp/%04d.jpg', \
         #], )
         ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
