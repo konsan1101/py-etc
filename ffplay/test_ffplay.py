@@ -13,8 +13,8 @@ if __name__ == '__main__':
                                 '-window_title', 'test_input.flv', \
                                 '-noborder', '-autoexit', \
                                 '-x', '320', '-y', '240', \
-        #], )
-        ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+        ], )
+        #], stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
 
     ffplay.terminate()
     ffplay = None
