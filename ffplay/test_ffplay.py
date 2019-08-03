@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import subprocess
+import win32gui
 
 if __name__ == '__main__':
 
@@ -16,6 +17,7 @@ if __name__ == '__main__':
         ], )
         #], stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
 
+    ffplay.wait()
     ffplay.terminate()
     ffplay = None
 
