@@ -1,18 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import subprocess
-import signal
-import time
+#https://pysimplegui.readthedocs.io/en/latest/cookbook/
 
-vlc = subprocess.Popen(['vlc', 'screen://', ':screen-fps=5', ':live-caching=300', \
-    '--sout=#transcode{vcodec=h264,acodec=none}:standard{access=file,mux=mp4,dst="desktop.mp4"}', \
-    '--qt-start-minimized', ])
+import PySimpleGUI as sg
 
-time.sleep(10.00)
+# Very basic window.  Return values using auto numbered keys
 
-vlcx = subprocess.Popen(['vlc', 'vlc://quit', ])
+layout = [
+    [sg.Text('Please enter your Name, Address, Phone')],
+    [sg.Text('Name', size=(15, 1)), sg.InputText()],
+    [sg.Text('Address', size=(15, 1)), sg.InputText()],
+    [sg.Text('Phone', size=(15, 1)), sg.InputText()],
+    [sg.Submit(), sg.Cancel()]
+]
 
-vlc = None
+window = sg.Window('Simple data entry window', layout)
+event, values = window.Read()
+window.Close()
+print(event, values[0], values[1], values[2])    # the input data looks like a simple list when auto numbered
+print(event, values)    
 
 
