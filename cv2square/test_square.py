@@ -11,7 +11,7 @@ img = cv2.imread("sample.png")
 # 変換
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 cv2.imshow('gray', gray)
-_, thresh = cv2.threshold(gray,192,255,cv2.THRESH_BINARY_INV)
+_, thresh = cv2.threshold(gray, 192, 255, cv2.THRESH_BINARY_INV)
 cv2.imshow('thresh', thresh)
 thresh_not = cv2.bitwise_not(thresh)
 cv2.imshow('thresh_not', thresh_not)
@@ -42,18 +42,18 @@ contours, hierarchy = cv2.findContours(thresh_not, cv2.RETR_EXTERNAL, cv2.CHAIN_
 #    print('contour {}: {} -> {}'.format(i, len(cnt), len(approx_cnt)))
 
 # 幾何図形取得
-approx_contours = []
+square_contours = []
 for i, cnt in enumerate(contours):
 
     # 面積で選別
     area = cv2.contourArea(cnt)
     if (area > 5000):
 
-        # 輪郭長さで丸め値を計算
+        # 輪郭長さで輪郭を近似化する。
         arclen = cv2.arcLength(cnt, True)
         epsilon_len = arclen * 0.05
-        # 輪郭を近似化する。
         approx_cnt = cv2.approxPolyDP(cnt, epsilon=epsilon_len, closed=True)
+
         # 画数で選別
         if (len(approx_cnt) == 4):
         #if (True):
@@ -61,9 +61,9 @@ for i, cnt in enumerate(contours):
             # 輪郭に外接する回転した長方形を取得
             #rect = cv2.minAreaRect(approx_cnt)
             #rect_points = cv2.boxPoints(rect)
-            #approx_contours.append(rect_points)
+            #square_contours.append(rect_points)
 
-            approx_contours.append(approx_cnt)
+            square_contours.append(approx_cnt)
 
 
 
@@ -77,7 +77,7 @@ img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 ax.imshow(img_rgb)  # 画像を表示する。
 ax.set_axis_off()
 
-for i, cnt in enumerate(approx_contours):
+for i, cnt in enumerate(square_contours):
     # 形状を変更する。(NumPoints, 1, 2) -> (NumPoints, 2)
     cnt = cnt.squeeze(axis=1)
     # 輪郭の点同士を結ぶ線を描画する。
@@ -96,7 +96,7 @@ for i, cnt in enumerate(approx_contours):
 import numpy as np
 
 dst = []
-pts1 = np.float32(approx_contours[0])
+pts1 = np.float32(square_contours[0])
 pts2 = np.float32([[0,400],[640,400],[640,0],[0,0]])
 
 M = cv2.getPerspectiveTransform(pts1,pts2)
