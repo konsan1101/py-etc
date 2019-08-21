@@ -10,7 +10,7 @@ img = cv2.imread("sample.png")
 
 # 変換
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-cv2.imshow('gray', gray.copy())
+cv2.imshow('gray', gray)
 _, thresh = cv2.threshold(gray,192,255,cv2.THRESH_BINARY_INV)
 cv2.imshow('thresh', thresh)
 thresh_not = cv2.bitwise_not(thresh)
@@ -55,8 +55,8 @@ for i, cnt in enumerate(contours):
         # 輪郭を近似化する。
         approx_cnt = cv2.approxPolyDP(cnt, epsilon=epsilon_len, closed=True)
         # 画数で選別
-        #if (len(approx_cnt) == 4):
-        if (True):
+        if (len(approx_cnt) == 4):
+        #if (True):
 
             # 輪郭に外接する回転した長方形を取得
             #rect = cv2.minAreaRect(approx_cnt)
