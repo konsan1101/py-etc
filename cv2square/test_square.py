@@ -10,8 +10,13 @@ img = cv2.imread("sample.png")
 
 # 変換
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+cv2.imshow('gray', gray.copy())
 _, thresh = cv2.threshold(gray,192,255,cv2.THRESH_BINARY_INV)
+cv2.imshow('thresh', thresh)
 thresh_not = cv2.bitwise_not(thresh)
+cv2.imshow('thresh_not', thresh_not)
+
+cv2.waitKey(1)
 
 # 輪郭抽出
 contours, hierarchy = cv2.findContours(thresh_not, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
