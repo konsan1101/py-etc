@@ -1,6 +1,7 @@
 
 https://medium.com/@colten_jackson/simple-free-screen-capture-with-ffmpeg-3aeddbeb161b
 
+ffmpeg -list_devices true -f dshow -i dummy
 
 ffmpeg -f gdigrab -i desktop -f dshow -i audio="É}ÉCÉN (Realtek High Definition Audio)" -vcodec libx264 test.mp4
 
