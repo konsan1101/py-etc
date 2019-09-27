@@ -18,3 +18,16 @@ pyperclip.copy(u'こんにちは！\n')
 pyautogui.hotkey('ctrl', 'v')
 
 time.sleep(2)
+
+pyautogui.keyDown('ctrlleft')
+pyautogui.keyDown('winleft')
+
+pyautogui.keyDown('right')
+pyautogui.keyUp('right')
+pyautogui.keyDown('left')
+pyautogui.keyUp('left')
+
+pyautogui.keyUp('winleft')
+pyautogui.keyUp('ctrlleft')
+
+time.sleep(2)
