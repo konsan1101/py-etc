@@ -172,7 +172,7 @@ def main():
 
             state = state2
             # 可視化
-            #env.render()
+            env.render()
         # Q-networkの重みをTarget-networkにコピー
         agent.WeightCopy()
         if episode != 0 and episode % 1 == 0:
