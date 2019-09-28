@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#https://qiita.com/Umaremin/items/4317fb88299995e54e5f
+#https://qiita.com/ReoNagai/items/4c5c2c2b1175f898c0d6
 
 import numpy as np
 import gym
