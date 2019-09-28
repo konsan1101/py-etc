@@ -132,8 +132,8 @@ def main():
     min_epsilon = 0.1
     reduction_epsilon = (1. - min_epsilon) / n_episode
 
-    env_name = 'CartPole-v0'
-    #env_name = 'Breakout-v0'
+    #env_name = 'CartPole-v0'
+    env_name = 'Breakout-v0'
     env = gym.make(env_name)
     agent = Agent(env)
     replay_memory = deque()
@@ -151,7 +151,7 @@ def main():
         # ボールが落ちるまで
         while not end_flag:
             action = agent.getAction(state, epsilon)
-            state2, reward, end_flag, info = env.step(actioj)
+            state2, reward, end_flag, info = env.step(action)
             # 前処理
             state2 = Preprocess(state2, resize_x, resize_y)
             episode_reward += reward
@@ -187,4 +187,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
