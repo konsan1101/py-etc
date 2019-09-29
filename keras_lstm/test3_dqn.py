@@ -24,7 +24,7 @@ np.set_printoptions(suppress=True)
 resize_x = 84
 resize_y = 84
 
-file_history = open("history.txt", "w")
+file_history = open("test3_history.txt", "w")
 file_history.close()
 
 
@@ -86,7 +86,7 @@ class Agent:
 
         print(msg_all)
         # 保存
-        file_history = open("history.txt", "a")
+        file_history = open("test3_history.txt", "a")
         file_history.write(msg_all)
         file_history.close()
 
@@ -176,7 +176,7 @@ def main():
         # Q-networkの重みをTarget-networkにコピー
         agent.WeightCopy()
         if episode != 0 and episode % 1 == 0:
-            agent.t_network.save_weights("weight.h5")
+            agent.t_network.save_weights("test3_weight.h5")
 
         #PrintInfo(episode, episode_reward, epsilon)
 

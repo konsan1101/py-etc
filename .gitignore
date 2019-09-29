@@ -107,5 +107,7 @@ venv.bak/
 /webcapture/*key.*
 /map/*key.*
 
+/keras_lstm/test3_history.*
+/keras_lstm/test3_weight.*
 
 
