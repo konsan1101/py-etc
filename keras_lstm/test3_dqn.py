@@ -37,7 +37,7 @@ class Agent:
         self.q_network = self.ModelCreate()
         self.t_network = self.ModelCreate()
 
-        #self.t_network.load_weights("weight.h5") # 初期の重みを考慮する場合
+        self.t_network.load_weights("test3_weight.h5") # 初期の重みを考慮する場合
         self.q_network.summary()
         self.max_q = 0
 
@@ -124,7 +124,7 @@ def Preprocess(image, _resize_x=resize_x, _resize_y=resize_y):
     return gray_image[:,:,np.newaxis]
 
 def main():
-    n_episode = 12000
+    n_episode = 120
     discount_rate = 0.99
     max_memory = 20000
     batch_size = 32
