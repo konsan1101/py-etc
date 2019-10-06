@@ -18,12 +18,24 @@ if __name__ == '__main__':
         pass
     os.mkdir('temp')
 
-    ffmpeg = subprocess.Popen(['ffmpeg', '-i', 'test_input.flv', \
-        '-vf', 'select=gt(scene\,0.1), scale=0:0,showinfo', \
-        '-vsync', 'vfr', 'temp/%04d.jpg', \
-        #], )
-        ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+    sfps   = 1
+    scene = 0.1 #None
+    #scene = None
 
+    if (scene == None):
+        ffmpeg = subprocess.Popen(['ffmpeg', '-i', 'test_input.flv', \
+            '-filter:v', 'fps=fps=' + str(sfps) + ':round=down, showinfo', \
+            'temp/%04d.jpg', \
+            #], )
+            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+    else:
+        ffmpeg = subprocess.Popen(['ffmpeg', '-i', 'test_input.flv', \
+            #'-filter:v', 'fps=fps=' + str(sfps) + ':round=down, select=gt(scene\,' + str(scene) + '), scale=0:0, showinfo', \
+            '-filter:v', 'select=gt(scene\,' + str(scene) + '), scale=0:0, showinfo', \
+            '-vsync', 'vfr', 'temp/%04d.jpg', \
+            #], )
+            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+        
     logb, errb = ffmpeg.communicate()
     ffmpeg.terminate()
     ffmpeg = None
