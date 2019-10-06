@@ -7,12 +7,12 @@ import cv2
 import numpy as np
 import codecs
 
-file_config  = 'yolov3-coco/yolov3-tiny.cfg'
-file_weights = 'yolov3-coco/yolov3-tiny.weights'
-file_labels  = 'yolov3-coco/coco-labels.txt'
+file_config  = 'yolov3/yolov3-tiny.cfg'
+file_weights = 'yolov3/yolov3-tiny.weights'
+file_labels  = 'yolov3/coco-labels.txt'
 
-#file_config  = u'C:/Users/kondou/Documents/GitHub/pycv5/yolo3_weights/yolov3.cfg'
-#file_weights = u'C:/Users/kondou/Documents/GitHub/pycv5/yolo3_weights/yolov3.weights'
+#file_config  = 'yolov3/yolov3.cfg'
+#file_weights = 'yolov3/yolov3.weights'
 
 # モデルの読み込み
 model = cv2.dnn.readNetFromDarknet(file_config, file_weights)

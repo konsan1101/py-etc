@@ -7,9 +7,9 @@ import cv2
 import numpy as np
 import codecs
 
-file_config  = 'ssd_mobilenetv2/frozen_inference_graph.pb'
-file_weights = 'ssd_mobilenetv2/ssd_mobilenet_v2_coco_2018_03_29.pbtxt'
-file_labels  = 'ssd_mobilenetv2/labels.txt'
+file_config  = 'ssd/frozen_inference_graph.pb'
+file_weights = 'ssd/ssd_mobilenet_v2_coco_2018_03_29.pbtxt'
+file_labels  = 'ssd/labels.txt'
 
 # モデルの読み込み
 model = cv2.dnn.readNetFromTensorflow(file_config, file_weights)
