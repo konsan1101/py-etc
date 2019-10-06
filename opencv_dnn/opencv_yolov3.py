@@ -50,38 +50,38 @@ output = model.forward(layer_names)
 for detections in output:
 
     # detectionには[Xの中心点、Yの中心点、Xの幅、Yの幅、クラス別予測確率…]が入っている。
-  for detection in detections:
+    for detection in detections:
 
-    # クラス別予測確率の最大を取り出す
-    scores = detection[5:]
-    classid = np.argmax(scores)
+        # クラス別予測確率の最大を取り出す
+        scores = detection[5:]
+        classid = np.argmax(scores)
 
-    # 予測確率を取り出し0.7以上か判定する。
-    confidence = scores[classid]
-    if confidence > .7:
+        # 予測確率を取り出し0.7以上か判定する。
+        confidence = scores[classid]
+        if confidence > .7:
 
-        # クラス名を取り出す。
-        class_name  = classNames[classid] + ' {0:.2f}'.format(confidence)
-        class_color = [ int(c) for c in classColors[classid] ]
+            # クラス名を取り出す。
+            class_name  = classNames[classid] + ' {0:.2f}'.format(confidence)
+            class_color = [ int(c) for c in classColors[classid] ]
 
-        # 検出された物体の名前を表示
-        print(class_name)
+            # 検出された物体の名前を表示
+            print(class_name)
 
-        # 予測値に元の画像サイズを掛けて、四角で囲むための4点の座標情報を得る
-        axis = detection[0:4] * (image_width, image_height, image_width, image_height)
+            # 予測値に元の画像サイズを掛けて、四角で囲むための4点の座標情報を得る
+            axis = detection[0:4] * (image_width, image_height, image_width, image_height)
 
-        # floatからintに変換して、変数に取り出す。画像に四角や文字列を書き込むには、座標情報はintで渡す必要がある。
-        center_X, center_Y, b_width, b_height = axis.astype(np.int)[:4]
-        start_X = int(center_X - b_width/2)
-        end_X   = int(center_X + b_width/2)
-        start_Y = int(center_Y - b_height/2)
-        end_Y   = int(center_Y + b_height/2)
+            # floatからintに変換して、変数に取り出す。画像に四角や文字列を書き込むには、座標情報はintで渡す必要がある。
+            center_x, center_y, b_width, b_height = axis.astype(np.int)[:4]
+            start_x = int(center_x - b_width/2)
+            end_x   = int(center_x + b_width/2)
+            start_y = int(center_y - b_height/2)
+            end_y   = int(center_y + b_height/2)
 
-        # (画像、開始座標、終了座標、色、線の太さ)を指定
-        cv2.rectangle(image, (start_X, start_Y), (end_X, end_Y), class_color, thickness=2)
+            # (画像、開始座標、終了座標、色、線の太さ)を指定
+            cv2.rectangle(image, (start_x, start_y), (end_x, end_y), class_color, thickness=2)
 
-        # (画像、文字列、開始座標、フォント、文字サイズ、色)を指定
-        cv2.putText(image, class_name, (start_X, start_Y), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255))
+            # (画像、文字列、開始座標、フォント、文字サイズ、色)を指定
+            cv2.putText(image, class_name, (start_x, start_y), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255))
 
 #cv2.imwrite("img/laptop_box_text.jpg", image)
 cv2.imshow('image', image)

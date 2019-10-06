@@ -61,13 +61,13 @@ for detection in detections:
         axis = detection[3:7] * (image_width, image_height, image_width, image_height)
 
         # floatからintに変換して、変数に取り出す。画像に四角や文字列を書き込むには、座標情報はintで渡す必要がある。
-        (start_X, start_Y, end_X, end_Y) = axis.astype(np.int)[:4]
+        (start_x, start_y, end_x, end_y) = axis.astype(np.int)[:4]
 
         # (画像、開始座標、終了座標、色、線の太さ)を指定
-        cv2.rectangle(image, (start_X, start_Y), (end_X, end_Y), class_color, thickness=2)
+        cv2.rectangle(image, (start_x, start_y), (end_x, end_y), class_color, thickness=2)
 
         # (画像、文字列、開始座標、フォント、文字サイズ、色)を指定
-        cv2.putText(image, class_name, (start_X, start_Y), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255))
+        cv2.putText(image, class_name, (start_x, start_y), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255))
 
 #cv2.imwrite("img/laptop_box_text.jpg", image)
 cv2.imshow('image', image)
