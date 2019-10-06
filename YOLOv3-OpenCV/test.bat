@@ -1,3 +1,0 @@
-python yolo.py
-
-pause
