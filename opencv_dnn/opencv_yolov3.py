@@ -16,6 +16,8 @@ file_labels  = 'yolov3/coco-labels.txt'
 
 # モデルの読み込み
 model = cv2.dnn.readNetFromDarknet(file_config, file_weights)
+model.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
+model.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 layer_names = model.getLayerNames()
 layer_names = [layer_names[i[0] - 1] for i in model.getUnconnectedOutLayers()]
 
