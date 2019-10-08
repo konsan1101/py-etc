@@ -1,232 +1,133 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#https://datumstudio.jp/blog/deepmindのdqnアルゴリズムを再現してみた
+#https://qiita.com/sugulu/items/bc7c70e6658f204f85f9
 
-import os
-import gym
-import time
-import random
-import pickle
+import gym  #倒立振子(cartpole)の実行環境
+from gym import wrappers  #gymの画像保存
 import numpy as np
-import pandas as pd
-from itertools import chain
-from collections import deque
-from operator import itemgetter
-from sklearn.preprocessing import StandardScaler
-from keras.models import Sequential, load_model
-from keras.layers import Dense
-import matplotlib.pyplot as plt
- 
-plt.style.use('seaborn')
-plt.rcParams['font.family'] = 'IPAexGothic'
- 
-class DQN(object):
-    
-    def __init__(self, env_id, agent_hist_len=4, memory_size=2000,
-                 replay_start_size=32, gamma=0.99, eps=1.0, eps_min=1e-4,
-                 final_expl_step=1000, mb_size=32, C=100, n_episodes=400,
-                 max_steps=500):
-        
-        self.env_id = env_id
-        self.env = gym.make(env_id)
-        self.path = './data/' + env_id
-        self.agent_hist_len = agent_hist_len
-        self.memory_size = memory_size
-        self.replay_start_size = replay_start_size
-        self.gamma = gamma
-        self.eps = eps
-        self.eps_min = eps_min
-        self.final_expl_step = final_expl_step
-        self.eps_decay = (eps-eps_min) / final_expl_step
-        self.mb_size = mb_size
-        self.C = C
-        self.n_episodes = n_episodes
-        self.max_steps = max_steps
-        
-        self._init_memory()
-        self.scaler = StandardScaler()
-        self.scaler.fit(np.array([t[0] for t in self.memory]))
-    
-    @staticmethod
-    def _flatten_deque(d):
-        return np.array(list(chain(*d)))
-    
-    def _get_optimal_action(self, network, agent_hist):
-        agent_hist_normalized = self.scaler.transform(
-            self._flatten_deque(agent_hist).reshape(1, -1))
-        return np.argmax(network.predict(agent_hist_normalized)[0])
-    
-    def _get_action(self, agent_hist=None):
-        if agent_hist is None:
-            return self.env.action_space.sample()
-        else:
-            self.eps = max(self.eps - self.eps_decay, self.eps_min)
-            if np.random.random() < self.eps:
-                return self.env.action_space.sample()
+import time
+
+
+# [1]Q関数を離散化して定義する関数　------------
+# 観測した状態を離散値にデジタル変換する
+def bins(clip_min, clip_max, num):
+    return np.linspace(clip_min, clip_max, num + 1)[1:-1]
+
+# 各値を離散値に変換
+def digitize_state(observation):
+    cart_pos, cart_v, pole_angle, pole_v = observation
+    digitized = [
+        np.digitize(cart_pos, bins=bins(-2.4, 2.4, num_dizitized)),
+        np.digitize(cart_v, bins=bins(-3.0, 3.0, num_dizitized)),
+        np.digitize(pole_angle, bins=bins(-0.5, 0.5, num_dizitized)),
+        np.digitize(pole_v, bins=bins(-2.0, 2.0, num_dizitized))
+    ]
+    return sum([x * (num_dizitized**i) for i, x in enumerate(digitized)])
+
+
+# [2]行動a(t)を求める関数 -------------------------------------
+def get_action(next_state, episode):
+           #徐々に最適行動のみをとる、ε-greedy法
+    epsilon = 0.5 * (1 / (episode + 1))
+    if epsilon <= np.random.uniform(0, 1):
+        next_action = np.argmax(q_table[next_state])
+    else:
+        next_action = np.random.choice([0, 1])
+    return next_action
+
+
+# [3]Qテーブルを更新する関数 -------------------------------------
+def update_Qtable(q_table, state, action, reward, next_state):
+    gamma = 0.99
+    alpha = 0.5
+    next_Max_Q=max(q_table[next_state][0],q_table[next_state][1] )
+    q_table[state, action] = (1 - alpha) * q_table[state, action] +\
+            alpha * (reward + gamma * next_Max_Q)
+
+    return q_table
+
+# [4]. メイン関数開始 パラメータ設定--------------------------------------------------------
+env = gym.make('CartPole-v0')
+max_number_of_steps = 200  #1試行のstep数
+num_consecutive_iterations = 100  #学習完了評価に使用する平均試行回数
+num_episodes = 2000  #総試行回数
+goal_average_reward = 195  #この報酬を超えると学習終了（中心への制御なし）
+# 状態を6分割^（4変数）にデジタル変換してQ関数（表）を作成
+num_dizitized = 6  #分割数
+q_table = np.random.uniform(
+    low=-1, high=1, size=(num_dizitized**4, env.action_space.n))
+
+total_reward_vec = np.zeros(num_consecutive_iterations)  #各試行の報酬を格納
+final_x = np.zeros((num_episodes, 1))  #学習後、各試行のt=200でのｘの位置を格納
+islearned = 0  #学習が終わったフラグ
+isrender = 0  #描画フラグ
+
+
+# [5] メインルーチン--------------------------------------------------
+for episode in range(num_episodes):  #試行数分繰り返す
+    # 環境の初期化
+    observation = env.reset()
+    state = digitize_state(observation)
+    action = np.argmax(q_table[state])
+    episode_reward = 0
+
+    for t in range(max_number_of_steps):  #1試行のループ
+        if islearned == 1:  #学習終了したらcartPoleを描画する
+            env.render()
+            time.sleep(0.1)
+            print (observation[0])  #カートのx位置を出力
+
+        # 行動a_tの実行により、s_{t+1}, r_{t}などを計算する
+        observation, reward, done, info = env.step(action)
+
+        # 報酬を設定し与える
+        if done:
+            if t < 195:
+                reward = -200  #こけたら罰則
             else:
-                return self._get_optimal_action(self.Q, agent_hist)
-    
-    def _remember(self, agent_hist, action, reward, new_state, done):
-        self.memory.append([self._flatten_deque(agent_hist), action, reward,
-                            new_state if not done else None])
-    
-    def _init_memory(self):
-        print('Initializing replay memory: ', end='')
-        self.memory = deque(maxlen=self.memory_size)
-        while True:
-            state = self.env.reset()
-            agent_hist = deque(maxlen=self.agent_hist_len)
-            agent_hist.append(state)
-            while True:
-                action = self._get_action(agent_hist=None)
-                new_state, reward, done, _ = self.env.step(action)
-                if len(agent_hist) == self.agent_hist_len:
-                    self._remember(agent_hist, action, reward, new_state, done)
-                if len(self.memory) == self.replay_start_size:
-                    print('done')
-                    return
-                if done:
-                    break
-                state = new_state
-                agent_hist.append(state)
-    
-    def _build_network(self):
-        nn = Sequential()
-        nn.add(Dense(20, activation='relu',
-                     input_dim=(self.agent_hist_len
-                                * self.env.observation_space.shape[0])))
-        nn.add(Dense(20, activation='relu'))
-        nn.add(Dense(10, activation='relu'))
-        nn.add(Dense(self.env.action_space.n))
-        nn.compile(optimizer='adam', loss='mse', metrics=['mae'])
-        return nn
-    
-    def _clone_network(self, nn):
-        clone = self._build_network()
-        clone.set_weights(nn.get_weights())
-        return clone
-    
-    def _get_samples(self):
-        samples = random.sample(self.memory, self.mb_size)
-        agent_hists = np.array([s[0] for s in samples])
-        Y = self.target_Q.predict(self.scaler.transform(agent_hists))
-        actions = [s[1] for s in samples]
-        rewards = np.array([s[2] for s in samples])
-        future_rewards = np.zeros(self.mb_size)
-        new_states_idx = [i for i, s in enumerate(samples) if s[3] is not None]
-        new_states = np.array([s[3] for s in itemgetter(*new_states_idx)(samples)])
-        new_agent_hists = np.hstack(
-            [agent_hists[new_states_idx, self.env.observation_space.shape[0]:],
-             new_states])
-        future_rewards[new_states_idx] = np.max(
-            self.target_Q.predict(self.scaler.transform(new_agent_hists)), axis=1)
-        rewards += self.gamma*future_rewards
-        for i, r in enumerate(Y):
-            Y[i, actions[i]] = rewards[i]
-        return agent_hists, Y
-    
-    def _replay(self):
-        agent_hists, Y = self._get_samples()
-        agent_hists_normalized = self.scaler.transform(agent_hists)
-        for i in range(self.mb_size):
-            self.Q.train_on_batch(agent_hists_normalized[i, :].reshape(1, -1),
-                                  Y[i, :].reshape(1, -1))
-    
-    def learn(self, render=False, verbose=True):
-        
-        self.Q = self._build_network()
-        self.target_Q = self._clone_network(self.Q)
-        
-        if verbose:
-            print('Learning target network:')
-        self.scores = []
-        for episode in range(self.n_episodes):
-            state = self.env.reset()
-            agent_hist = deque(maxlen=self.agent_hist_len)
-            agent_hist.append(state)
-            score = 0
-            for step in range(self.max_steps):
-                if render:
-                    self.env.render()
-                if len(agent_hist) < self.agent_hist_len:
-                    action = self._get_action(agent_hist=None)
-                else:
-                    action = self._get_action(agent_hist)
-                new_state, reward, done, _ = self.env.step(action)
-                if verbose:
-                    print('episode: {:4} | step: {:3} | memory: {:6} | \
-eps: {:.4f} | action: {} | reward: {: .1f} | best score: {: 6.1f} | \
-mean score: {: 6.1f}'.format(
-                        episode+1, step+1, len(self.memory), self.eps, action, reward,
-                        max(self.scores) if len(self.scores) != 0 else np.nan,
-                        np.mean(self.scores) if len(self.scores) != 0 else np.nan),
-                        end='\r')                        
-                score += reward
-                if len(agent_hist) == self.agent_hist_len:
-                    self._remember(agent_hist, action, reward, new_state, done)
-                    self._replay()
-                if step % self.C == 0:
-                    self.target_Q = self._clone_network(self.Q)
-                if done:
-                    self.scores.append(score)
-                    break
-                state = new_state
-                agent_hist.append(state)
-        
-        self.target_Q.save(self.path + 'test5_model.h5')
-        with open(self.path + '_scores.pkl', 'wb') as f:
-            pickle.dump(self.scores, f)
-    
-    def plot_training_scores(self):
-        with open(self.path + 'test5_scores.pkl', 'rb') as f:
-            scores = pd.Series(pickle.load(f))
-        avg_scores = scores.cumsum() / (scores.index + 1)
-        plt.figure(figsize=(12, 6))
-        n_scores = len(scores)
-        plt.plot(range(n_scores), scores, color='gray', linewidth=1)
-        plt.plot(range(n_scores), avg_scores, label='平均')
-        plt.legend()
-        plt.xlabel('学習エピソード')
-        plt.ylabel('スコア')
-        plt.title(self.env_id)
-        plt.margins(0.02)
-        plt.tight_layout()
-        plt.show()
-    
-    def run(self, render=True):
-        
-        fname = self.path + 'test5_model.h5'
-        if os.path.exists(fname):
-            self.target_Q = load_model(fname)
+                reward = 1  #立ったまま終了時は罰則はなし
         else:
-            print('Q-network not found. Start learning.')
-            self.learn()
-        
-        state = self.env.reset()
-        agent_hist = deque(maxlen=self.agent_hist_len)
-        agent_hist.extend([state]*self.agent_hist_len)
-        score = 0
-        while True:
-            if render:
-                self.env.render()
-            action = self._get_optimal_action(self.target_Q, agent_hist)
-            new_state, reward, done, _ = self.env.step(action)
-            score += reward
-            if done:
-                print('{} score: {}'.format(self.env_id, score))
-                return
-            state = new_state
-            agent_hist.append(state)
-            time.sleep(0.05)
+            reward = 1  #各ステップで立ってたら報酬追加
 
+        episode_reward += reward  #報酬を追加
 
+        # 離散状態s_{t+1}を求め、Q関数を更新する
+        next_state = digitize_state(observation)  #t+1での観測状態を、離散値に変換
+        q_table = update_Qtable(q_table, state, action, reward, next_state)
 
-if __name__ == '__main__':
-    dqn = DQN('CartPole-v1')
-    dqn.learn()
-    dqn.plot_training_scores()
-    dqn.run()
+        #  次の行動a_{t+1}を求める 
+        action = get_action(next_state, episode)    # a_{t+1} 
+
+        state = next_state
+
+        #終了時の処理
+        if done:
+            print('%d Episode finished after %f time steps / mean %f' %
+                  (episode, t + 1, total_reward_vec.mean()))
+            total_reward_vec = np.hstack((total_reward_vec[1:],
+                                          episode_reward))  #報酬を記録
+            if islearned == 1:  #学習終わってたら最終のx座標を格納
+                final_x[episode, 0] = observation[0]
+            break
+
+    if (total_reward_vec.mean() >=
+            goal_average_reward):  # 直近の100エピソードが規定報酬以上であれば成功
+        print('Episode %d train agent successfuly!' % episode)
+        islearned = 1
+        #np.savetxt('learned_Q_table.csv',q_table, delimiter=",") #Qtableの保存する場合
+        if isrender == 0:
+            #env = wrappers.Monitor(env, './movie/cartpole-experiment-1') #動画保存する場合
+            isrender = 1
+    #10エピソードだけでどんな挙動になるのか見たかったら、以下のコメントを外す
+    #if episode>10:
+    #    if isrender == 0:
+    #        env = wrappers.Monitor(env, './movie/cartpole-experiment-1') #動画保存する場合
+    #        isrender = 1
+    #    islearned=1;
+
+if islearned:
+    np.savetxt('final_x.csv', final_x, delimiter=",")
 
 
 
