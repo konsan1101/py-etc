@@ -7,6 +7,8 @@ import cv2
 import numpy as np
 import codecs
 
+threshold_score = 0.5
+threshold_nms   = 0.4
 file_config  = 'yolov3/yolov3-tiny.cfg'
 file_weights = 'yolov3/yolov3-tiny.weights'
 file_labels  = 'yolov3/coco-labels.txt'
@@ -61,7 +63,7 @@ blob = cv2.dnn.blobFromImage(inp_image, 1 / 255.0, (416, 416), swapRB=True, crop
 model.setInput(blob)
 
 # 画像から物体検出を行う
-#output = model.forward()
+#output = model.forwarscore
 output = model.forward(layer_names)
 
 # ループ
@@ -74,37 +76,58 @@ for detections in output:
         scores = detection[5:]
         classid = np.argmax(scores)
 
-        # 予測確率を取り出し0.5以上か判定する。
-        confidence = scores[classid]
-        if (confidence >= 0.5):
+        # 予測確率がthreshold_score以上を取り出す。
+        pass_classids = []
+        pass_scores   = []
+        pass_boxes    = []
+        score = scores[classid]
+        if (score >= threshold_score):
+
+            # 元の画像サイズを掛けて、四角で囲むための4点の座標情報を得る
+            axis = detection[0:4] * (image_size, image_size, image_size, image_size)
+
+            # floatからintに変換して、変数に取り出す。
+            center_x, center_y, b_width, b_height = axis.astype(np.int)[:4]
+            left   = int(center_x - b_width/2)
+            top    = int(center_y - b_height/2)
+            width  = int(b_width)
+            height = int(b_height)
+            print('ok')
+
+            # 変数に取り出す。
+            pass_classids.append(classid)
+            pass_scores.append(float(score))
+            pass_boxes.append([left, top, width, height])
+    
+        # 重複した領域を排除した内容を利用する。
+        indices = cv2.dnn.NMSBoxes(pass_boxes, pass_scores, threshold_score, threshold_nms)
+        for i in indices:
+            i = i[0]
+            classid = pass_classids[i]
+            score   = pass_scores[i]
+            box     = pass_boxes[i]
+            left    = box[0]
+            top     = box[1]
+            width   = box[2]
+            height  = box[3]
 
             # クラス名を取り出す。
             class_name  = classNames[classid]
             class_color = [ int(c) for c in classColors[classid] ]
-            label       = class_name + ' {0:.2f}'.format(confidence)
+            label       = class_name + ' {0:.2f}'.format(score)
 
             # 検出された物体の名前を表示
             print(label)
 
-            # 予測値に元の画像サイズを掛けて、四角で囲むための4点の座標情報を得る
-            axis = detection[0:4] * (image_size, image_size, image_size, image_size)
-
-            # floatからintに変換して、変数に取り出す。画像に四角や文字列を書き込むには、座標情報はintで渡す必要がある。
-            center_x, center_y, b_width, b_height = axis.astype(np.int)[:4]
-            start_x = int(center_x - b_width/2)
-            end_x   = int(center_x + b_width/2)
-            start_y = int(center_y - b_height/2)
-            end_y   = int(center_y + b_height/2)
-
             # (画像、開始座標、終了座標、色、線の太さ)を指定
-            cv2.rectangle(out_image, (start_x, start_y), (end_x, end_y), class_color, thickness=2)
+            cv2.rectangle(out_image, (left, top), (left+width, top+height), class_color, thickness=2)
 
             # (画像、文字列、開始座標、フォント、文字サイズ、色)を指定
             t_size = cv2.getTextSize(label, cv2.FONT_HERSHEY_COMPLEX_SMALL, 1 , 1)[0]
-            x = start_x + t_size[0] + 3
-            y = end_y - t_size[1] - 4
-            cv2.rectangle(out_image, (start_x, y), (x, end_y), class_color, -1)
-            cv2.putText(out_image, label, (start_x, y + t_size[1] + 2), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255,255,255), 1)
+            x = left + t_size[0] + 3
+            y = top + height - t_size[1] - 4
+            cv2.rectangle(out_image, (left, y), (x, top + height), class_color, -1)
+            cv2.putText(out_image, label, (left, y + t_size[1] + 2), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255,255,255), 1)
 
 # 出力画像復元
 if (image_width > image_height):
