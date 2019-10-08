@@ -61,8 +61,10 @@ class Agent:
             return self.env.action_space.sample()
 
         state = state[np.newaxis,:,:,:]
-        #q_value = self.Predict(state)
-        q_value = self.q_network.predict_on_batch(state)
+        # -20191008
+        #q_value = self.q_network.predict_on_batch(state)
+        # 20191008-
+        q_value = self.Predict(state)
         return np.argmax(q_value)
 
     def Train(self, x_batch, y_batch):
@@ -124,7 +126,7 @@ def Preprocess(image, _resize_x=resize_x, _resize_y=resize_y):
     return gray_image[:,:,np.newaxis]
 
 def main():
-    n_episode = 120
+    n_episode = 1000
     discount_rate = 0.99
     max_memory = 20000
     batch_size = 32
@@ -172,7 +174,7 @@ def main():
 
             state = state2
             # 可視化
-            env.render()
+            #env.render()
         # Q-networkの重みをTarget-networkにコピー
         agent.WeightCopy()
         if episode != 0 and episode % 1 == 0:
