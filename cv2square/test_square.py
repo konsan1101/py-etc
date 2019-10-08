@@ -6,7 +6,8 @@
 import cv2
 
 # 読込
-img = cv2.imread("sample.png")
+#img = cv2.imread("sample.jpg")
+img = cv2.imread("sample2.jpg")
 
 # 変換
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -63,6 +64,45 @@ for i, cnt in enumerate(contours):
             #rect_points = cv2.boxPoints(rect)
             #square_contours.append(rect_points)
 
+            # 座標ずらす
+            x0=approx_cnt[0][0][0]
+            y0=approx_cnt[0][0][1]
+            x1=approx_cnt[1][0][0]
+            y1=approx_cnt[1][0][1]
+            x2=approx_cnt[2][0][0]
+            y2=approx_cnt[2][0][1]
+            x3=approx_cnt[3][0][0]
+            y3=approx_cnt[3][0][1]
+            if (x1<=x0):
+                if (abs(x1-x0) > abs(y1-y0)):
+                    approx_cnt[0][0][0]=x1
+                    approx_cnt[0][0][1]=y1
+                    approx_cnt[1][0][0]=x2
+                    approx_cnt[1][0][1]=y2
+                    approx_cnt[2][0][0]=x3
+                    approx_cnt[2][0][1]=y3
+                    approx_cnt[3][0][0]=x0
+                    approx_cnt[3][0][1]=y0
+            elif (x1>x0):
+                if (abs(x1-x0) > abs(y1-y0)):
+                    approx_cnt[0][0][0]=x3
+                    approx_cnt[0][0][1]=y3
+                    approx_cnt[1][0][0]=x0
+                    approx_cnt[1][0][1]=y0
+                    approx_cnt[2][0][0]=x1
+                    approx_cnt[2][0][1]=y1
+                    approx_cnt[3][0][0]=x2
+                    approx_cnt[3][0][1]=y2
+                else:
+                    approx_cnt[0][0][0]=x2
+                    approx_cnt[0][0][1]=y2
+                    approx_cnt[1][0][0]=x3
+                    approx_cnt[1][0][1]=y3
+                    approx_cnt[2][0][0]=x0
+                    approx_cnt[2][0][1]=y0
+                    approx_cnt[3][0][0]=x1
+                    approx_cnt[3][0][1]=y1
+
             square_contours.append(approx_cnt)
 
 
@@ -95,14 +135,16 @@ for i, cnt in enumerate(square_contours):
 
 import numpy as np
 
-dst = []
-pts1 = np.float32(square_contours[0])
-pts2 = np.float32([[0,400],[640,400],[640,0],[0,0]])
+for i, cnt in enumerate(square_contours):
 
-M = cv2.getPerspectiveTransform(pts1,pts2)
-dst = cv2.warpPerspective(img,M,(640,400))
-cv2.imshow('Display', dst)
-cv2.waitKey(1)
+    dst = []
+    pts1 = np.float32(square_contours[i])
+    pts2 = np.float32([[0,0],[0,400],[640,400],[640,0]])
+
+    M = cv2.getPerspectiveTransform(pts1,pts2)
+    dst = cv2.warpPerspective(img,M,(640,400))
+    cv2.imshow('Display'+str(i), dst)
+    cv2.waitKey(1)
 
 
 
