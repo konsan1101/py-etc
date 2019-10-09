@@ -4,6 +4,7 @@
 #http://pynote.hatenablog.com/entry/opencv-contour-manipulation
 
 import cv2
+import numpy as np
 
 # 読込
 #img = cv2.imread("sample.jpg")
@@ -65,45 +66,39 @@ for i, cnt in enumerate(contours):
             #square_contours.append(rect_points)
 
             # 座標ずらす
-            x0=approx_cnt[0][0][0]
-            y0=approx_cnt[0][0][1]
-            x1=approx_cnt[1][0][0]
-            y1=approx_cnt[1][0][1]
-            x2=approx_cnt[2][0][0]
-            y2=approx_cnt[2][0][1]
-            x3=approx_cnt[3][0][0]
-            y3=approx_cnt[3][0][1]
-            if (x1<=x0):
-                if (abs(x1-x0) > abs(y1-y0)):
-                    approx_cnt[0][0][0]=x1
-                    approx_cnt[0][0][1]=y1
-                    approx_cnt[1][0][0]=x2
-                    approx_cnt[1][0][1]=y2
-                    approx_cnt[2][0][0]=x3
-                    approx_cnt[2][0][1]=y3
-                    approx_cnt[3][0][0]=x0
-                    approx_cnt[3][0][1]=y0
-            elif (x1>x0):
-                if (abs(x1-x0) > abs(y1-y0)):
-                    approx_cnt[0][0][0]=x3
-                    approx_cnt[0][0][1]=y3
-                    approx_cnt[1][0][0]=x0
-                    approx_cnt[1][0][1]=y0
-                    approx_cnt[2][0][0]=x1
-                    approx_cnt[2][0][1]=y1
-                    approx_cnt[3][0][0]=x2
-                    approx_cnt[3][0][1]=y2
-                else:
-                    approx_cnt[0][0][0]=x2
-                    approx_cnt[0][0][1]=y2
-                    approx_cnt[1][0][0]=x3
-                    approx_cnt[1][0][1]=y3
-                    approx_cnt[2][0][0]=x0
-                    approx_cnt[2][0][1]=y0
-                    approx_cnt[3][0][0]=x1
-                    approx_cnt[3][0][1]=y1
+            x = np.array([])
+            y = np.array([])
+            for i in range(4):
+                x = np.append(x, approx_cnt[i][0][0])
+                y = np.append(y, approx_cnt[i][0][1])
+            ave_x = np.mean(x)
+            ave_y = np.mean(y)
 
-            square_contours.append(approx_cnt)
+            hit1 = False
+            hit2 = False
+            hit3 = False
+            hit4 = False
+            for i in range(4):
+                if (x[i] <= ave_x) and (y[i] <= ave_y):
+                    hit1 = True
+                    approx_cnt[0][0][0]=x[i]
+                    approx_cnt[0][0][1]=y[i]
+                if (x[i] <= ave_x) and (y[i] > ave_y):
+                    hit2 = True
+                    approx_cnt[1][0][0]=x[i]
+                    approx_cnt[1][0][1]=y[i]
+                if (x[i] > ave_x) and (y[i] > ave_y):
+                    hit3 = True
+                    approx_cnt[2][0][0]=x[i]
+                    approx_cnt[2][0][1]=y[i]
+                if (x[i] > ave_x) and (y[i] <= ave_y):
+                    hit4 = True
+                    approx_cnt[3][0][0]=x[i]
+                    approx_cnt[3][0][1]=y[i]
+
+            if  (hit1 == True) and (hit2 == True) \
+            and (hit3 == True) and (hit4 == True):
+                square_contours.append(approx_cnt)
 
 
 
