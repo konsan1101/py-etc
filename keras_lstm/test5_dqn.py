@@ -73,6 +73,8 @@ for episode in range(num_episodes):  #試行数分繰り返す
     episode_reward = 0
 
     for t in range(max_number_of_steps):  #1試行のループ
+        # 学習途中を表示
+        # env.render()
         if islearned == 1:  #学習終了したらcartPoleを描画する
             env.render()
             time.sleep(0.1)
