@@ -7,11 +7,17 @@ import cv2
 import numpy as np
 
 # 読込
-#img = cv2.imread("sample.jpg")
-img = cv2.imread("sample2.jpg")
+#img = cv2.imread("sample0.jpg")
+#gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+img = cv2.imread("sample1.jpg")
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+#img = cv2.imread("sample2.jpg")
+#gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+#gray = cv2.bitwise_not(gray)
 
 # 変換
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 cv2.imshow('gray', gray)
 _, thresh = cv2.threshold(gray, 192, 255, cv2.THRESH_BINARY_INV)
 cv2.imshow('thresh', thresh)
