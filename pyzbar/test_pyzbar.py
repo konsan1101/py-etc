@@ -28,7 +28,7 @@ def barcodeReader(image, bgr):
 
 bgr = (8, 70, 208)
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(2)
 while (True):
     ret, frame = cap.read()
     barcode = barcodeReader(frame, bgr)
