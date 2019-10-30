@@ -76,6 +76,7 @@ def strkan2num(text):
 print(strkan2num('平成二十三年十一月二十三日に5,000円使った'))
 print(strkan2num('２０１８年１０-１２月期における日本の名目ＧＤＰは五百四十八兆七千七百二十億円、実質ＧＤＰは５３４兆３,３７０億円です'))
 
+print(strkan2num('十八才'))
 print(strkan2num('二十五才'))
-
+print(strkan2num('F二'))
 
