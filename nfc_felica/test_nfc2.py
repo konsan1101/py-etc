@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# https://www.bnote.net/raspberry_pi/felica_nfcpy.html
-# https://qiita.com/bussorenre/items/48af677c6778c6597f60
+# https://nfcpy.readthedocs.io/en/latest/topics/get-started.html
 
 import nfc
 import binascii
