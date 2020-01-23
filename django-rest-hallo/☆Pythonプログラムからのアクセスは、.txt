@@ -1,0 +1,5 @@
+Pythonプログラムからのアクセスは、
+
+ユーザ名とパスワードの組みをコロン ":" で繋ぎ、Base64でエンコードしたもの
+Authorization: Basic dXNl23X54dnz
+を付けてGetするとたぶんうまくいく
