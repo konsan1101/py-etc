@@ -10,6 +10,9 @@ pause
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py migrate
+
+pause
+
 python manage.py runserver
 
 pause
