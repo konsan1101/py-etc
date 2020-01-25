@@ -1,0 +1,251 @@
+# https://www.django-rest-framework.org/tutorial/quickstart/
+# ↓解説等
+# http://sandmark.hateblo.jp/entry/2017/09/30/160945
+
+pip install --upgrade django
+pip install --upgrade djangorestframework
+
+
+
+C:\Users\kondou>cd \
+C:\>
+
+C:\>mkdir django-test
+C:\>cd django-test
+C:\django-test>
+
+C:\django-test>django-admin startproject tutorial .   ←.がフォルダ指定なので重要
+C:\django-test>cd tutorial
+C:\django-test\tutorial>
+
+C:\django-test\tutorial>django-admin startapp quickstart
+C:\django-test\tutorial>cd ..
+C:\django-test>
+
+C:\django-test>python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying sessions.0001_initial... OK
+C:\django-test>
+
+C:\django-test>python manage.py createsuperuser --email admin@example.com --username admin
+Password:
+Password (again):
+The password is too similar to the username.
+This password is too short. It must contain at least 8 characters.
+This password is too common.
+Bypass password validation and create user anyway? [y/N]: y
+Superuser created successfully.
+
+C:\django-test>code -n tutorial/quickstart/serializers.py
+
+from django.contrib.auth.models import User, Group
+from rest_framework import serializers
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ['url', 'username', 'email', 'groups']
+class GroupSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['url', 'name']
+
+C:\django-test>code -n tutorial/quickstart/views.py
+
+#from django.shortcuts import render
+from django.contrib.auth.models import User, Group
+from rest_framework import viewsets
+from tutorial.quickstart.serializers import UserSerializer, GroupSerializer
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+
+C:\django-test>code -n tutorial/urls.py
+
+#from django.contrib import admin
+from django.urls import include, path
+from rest_framework import routers
+from tutorial.quickstart import views
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'groups', views.GroupViewSet)
+urlpatterns = [
+    #path('admin/', admin.site.urls),
+    path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+]
+
+C:\django-test>code -n tutorial/settings.py
+
+#:
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
+#:
+#INSTALLED_APPS = [
+#    :
+    'rest_framework',
+#    :
+#]
+
+C:\django-test>python manage.py runserver
+
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+January 24, 2020 - 16:07:27
+Django version 3.0.2, using settings 'tutorial.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+
+
+
+echo http://127.0.0.1:8000/
+echo http://127.0.0.1:8000/users/
+echo curl -H 'Accept: application/json; indent=4' -u admin:password http://127.0.0.1:8000/users/
+
+
+------------
+  コピペ用
+------------
+cd \
+mkdir django-test
+cd django-test
+
+django-admin startproject tutorial .
+cd tutorial
+
+django-admin startapp quickstart
+cd ..
+
+python manage.py migrate
+
+python manage.py createsuperuser --email admin@example.com --username admin
+
+pause
+
+
+
+code -n tutorial/quickstart/serializers.py
+pause
+
+from django.contrib.auth.models import User, Group
+from rest_framework import serializers
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ['url', 'username', 'email', 'groups']
+class GroupSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['url', 'name']
+
+
+
+code -n tutorial/quickstart/views.py
+pause
+
+#from django.shortcuts import render
+from django.contrib.auth.models import User, Group
+from rest_framework import viewsets
+from tutorial.quickstart.serializers import UserSerializer, GroupSerializer
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+
+
+
+code -n tutorial/urls.py
+pause
+
+#from django.contrib import admin
+from django.urls import include, path
+from rest_framework import routers
+from tutorial.quickstart import views
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'groups', views.GroupViewSet)
+urlpatterns = [
+    #path('admin/', admin.site.urls),
+    path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+]
+
+
+
+code -n tutorial/settings.py
+pause
+
+#:
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
+#:
+#INSTALLED_APPS = [
+#    :
+    'rest_framework',
+#    :
+#]
+
+
+
+python manage.py runserver
+
+#Watching for file changes with StatReloader
+#Performing system checks...
+#System check identified no issues (0 silenced).
+#January 24, 2020 - 16:07:27
+#Django version 3.0.2, using settings 'tutorial.settings'
+#Starting development server at http://127.0.0.1:8000/
+#Quit the server with CTRL-BREAK.
+
+pause
+
+
+
+echo http://127.0.0.1:8000/
+echo http://127.0.0.1:8000/users/
+echo curl -H 'Accept: application/json; indent=4' -u admin:password http://127.0.0.1:8000/users/
+
+pause
+
+
+
