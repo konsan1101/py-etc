@@ -8,10 +8,13 @@
 
 
 
-import os
 import sys
+import os
+import time
 import datetime
 import codecs
+
+
 
 import logging
 from rainbow_logging_handler import RainbowLoggingHandler
@@ -20,8 +23,13 @@ from rainbow_logging_handler import RainbowLoggingHandler
 
 class qLog_class:
 
-    def __init__(self, mode='logger', filename='', display=True, outfile=True, ):
-        nowTime = datetime.datetime.now()
+    def __init__(self, ):
+        self.mode     = 'nologger' 
+        self.logfile  = ''
+        self.display  = True
+        self.outfile  = False
+
+    def init(self, mode='nologger', filename='', display=True, outfile=True, ):
         self.mode     = mode
         if (filename == ''):
             if (not os.path.isdir('temp')):
@@ -29,6 +37,7 @@ class qLog_class:
             if (not os.path.isdir('temp/_log')):
                 os.makedirs('temp/_log')
             filename = 'temp/_log/' + os.path.basename(__file__)
+        nowTime = datetime.datetime.now()
         self.logfile  = filename + '_' + nowTime.strftime('%Y%m%d.%H%M%S') + '.log'
         self.display  = display
         self.outfile  = outfile
@@ -50,14 +59,14 @@ class qLog_class:
         # ファイルハンドラー
         if (self.mode == 'logger'):
             file_format  = logging.Formatter('%(asctime)s, %(lineno)d, %(levelname)s, %(message)s')
-            file_handler = logging.FileHandler(self.logfile, 'a')
+            file_handler = logging.FileHandler(self.logfile, 'a', 'utf-8', )
             file_handler.setLevel(logging.DEBUG)
             file_handler.setFormatter(file_format)
             self.logger_file.addHandler(file_handler)
 
     def log(self, level='info', proc='', msg='info', display=None, outfile=None,):
         if (proc == ''):
-            procname = proc
+            procname = ''
         else:
             procname = proc + ' : '
 
@@ -102,11 +111,26 @@ class qLog_class:
         else:
             txt = str(procname + msg)
             if (display == True):
-                print(txt)
+                if   (level=='info') or (level==logging.INFO):
+                    print( txt )
+                elif (level=='debug') or (level==logging.DEBUG):
+                    print( self.colorTxt(txt=txt, fgColor='cyan', fgLine='', bgColor='', ) )
+                elif (level=='warning') or (level==logging.WARNING):
+                    print( self.colorTxt(txt=txt, fgColor='yellow', fgLine='', bgColor='', ) )
+                elif (level=='error') or (level==logging.ERROR):
+                    print( self.colorTxt(txt=txt, fgColor='red', fgLine='', bgColor='', ) )
+                elif (level=='critical') or (level==logging.CRITICAL):
+                    print( self.colorTxt(txt=txt, fgColor='white', fgLine='', bgColor='red', ) )
+                else:
+                    print( self.colorTxt(txt=txt, fgColor='white', fgLine='', bgColor='red', ) )
             if (outfile == True):
                 try:
+                    nowTime = datetime.datetime.now()
+                    s  = nowTime.strftime('%Y-%m-%d %H:%M:%S, ')
+                    s += str(level) + ', '
+                    s += str(txt)
                     w = codecs.open(self.logfile, 'a', 'utf-8')
-                    w.write(str(txt) + '\n')
+                    w.write(s + '\n')
                     w.close()
                     w = None
                 except:
@@ -119,14 +143,48 @@ class qLog_class:
             self.logger_disp.exception(txt)
             self.logger_file.exception(txt)
         else:
-            print(txt)
-            try:
-                w = codecs.open(self.logfile, 'a', 'utf-8')
-                w.write(str(txt) + '\n')
-                w.close()
-                w = None
-            except:
-                pass
+            self.log(level='error', proc='', msg=txt, )
+
+    def colorTxt(self, txt='', fgColor='', fgLine='', bgColor='', ):
+        txtColor = ''
+        if   (fgLine != ''):
+            txtColor += '\033[4m'
+        if   (fgColor == 'black'):
+            txtColor += '\033[30m'
+        elif (fgColor == 'red'):
+            txtColor += '\033[31m'
+        elif (fgColor == 'green'):
+            txtColor += '\033[32m'
+        elif (fgColor == 'yellow'):
+            txtColor += '\033[33m'
+        elif (fgColor == 'blue'):
+            txtColor += '\033[34m'
+        elif (fgColor == 'magenta'):
+            txtColor += '\033[35m'
+        elif (fgColor == 'cyan'):
+            txtColor += '\033[36m'
+        elif (fgColor == 'white'):
+            txtColor += '\033[37m'
+        if   (bgColor == 'black'):
+            txtColor += '\033[40m'
+        elif (bgColor == 'red'):
+            txtColor += '\033[41m'
+        elif (bgColor == 'green'):
+            txtColor += '\033[42m'
+        elif (bgColor == 'yellow'):
+            txtColor += '\033[43m'
+        elif (bgColor == 'blue'):
+            txtColor += '\033[44m'
+        elif (bgColor == 'magenta'):
+            txtColor += '\033[45m'
+        elif (bgColor == 'cyan'):
+            txtColor += '\033[46m'
+        elif (bgColor == 'white'):
+            txtColor += '\033[47m'
+        resetColor = ''
+        if (txtColor != ''):
+            resetColor = '\033[0m'
+        return txtColor + str(txt) + resetColor
 
 
 
@@ -134,25 +192,32 @@ def sub():
     proc_name = 'sub'
     proc_id   = '{0:10s}'.format(proc_name).replace(' ', '_')
 
-    qLog.log('info', proc_id, u'start')
-    qLog.log('info', proc_id, u'error test ↓')
+    qLog.log('info', proc_id, 'start')
+    qLog.log('info', proc_id, 'error test ↓')
     try:
         a=100/0
     except Exception as e:
         qLog.exception(e)        
-    qLog.log('info', proc_id, u'end')
+    qLog.log('info', proc_id, 'end')
     
     return True
 
 
 
 if __name__ == '__main__':
-    qLog = qLog_class(mode='logger', filename='', )
-    #qLog = qLog_class(mode='nologger', filename='', )
+    qLog = qLog_class()
+    qLog.init(mode='nologger', filename='', )
 
     main_name = 'main'
     main_id   = '{0:10s}'.format(main_name).replace(' ', '_')
-    qLog.log('info', main_id, u'run')
+    qLog.log('info', main_id, 'run')
+
+    qLog.log('info'    , main_id, '')
+    qLog.log('debug'   , main_id, 'debug')
+    qLog.log('warning' , main_id, 'warning')
+    qLog.log('error'   , main_id, 'error')
+    qLog.log('critical', main_id, 'critical')
+    qLog.log('info'    , main_id, '')
 
     x = sub()
 
