@@ -8,8 +8,10 @@
 
 
 
+import os
 import sys
 import datetime
+import codecs
 
 import logging
 from rainbow_logging_handler import RainbowLoggingHandler
@@ -18,30 +20,40 @@ from rainbow_logging_handler import RainbowLoggingHandler
 
 class qLog_class:
 
-    def __init__(self, filename='logfile', display=True, outfile=True, ):
+    def __init__(self, mode='logger', filename='', display=True, outfile=True, ):
         nowTime = datetime.datetime.now()
-        self.filename = filename + '_' + nowTime.strftime('%Y%m%d.%H%M%S') + '.log'
+        self.mode     = mode
+        if (filename == ''):
+            if (not os.path.isdir('temp')):
+                os.makedirs('temp')
+            if (not os.path.isdir('temp/_log')):
+                os.makedirs('temp/_log')
+            filename = 'temp/_log/' + os.path.basename(__file__)
+        self.logfile  = filename + '_' + nowTime.strftime('%Y%m%d.%H%M%S') + '.log'
         self.display  = display
         self.outfile  = outfile
 
         # ロガー定義
-        self.logger_disp = logging.getLogger(filename + '_disp').getChild(__name__)
-        self.logger_disp.setLevel(logging.DEBUG)
-        self.logger_file = logging.getLogger(filename + '_file').getChild(__name__)
-        self.logger_file.setLevel(logging.DEBUG)
+        if (self.mode == 'logger'):
+            self.logger_disp = logging.getLogger('disp')
+            self.logger_disp.setLevel(logging.DEBUG)
+            self.logger_file = logging.getLogger('file')
+            self.logger_file.setLevel(logging.DEBUG)
 
         # コンソールハンドラー
-        console_format  = logging.Formatter('%(asctime)s, %(message)s')
-        console_handler = RainbowLoggingHandler(sys.stderr, color_funcName=('black', 'yellow', True))
-        console_handler.setFormatter(console_format)
-        self.logger_disp.addHandler(console_handler)
+        if (self.mode == 'logger'):
+            console_format  = logging.Formatter('%(asctime)s, %(message)s')
+            console_handler = RainbowLoggingHandler(sys.stderr, color_funcName=('black', 'yellow', True))
+            console_handler.setFormatter(console_format)
+            self.logger_disp.addHandler(console_handler)
 
         # ファイルハンドラー
-        file_format  = logging.Formatter('%(asctime)s, %(lineno)d, %(levelname)s, %(message)s')
-        file_handler = logging.FileHandler(self.filename, 'a')
-        file_handler.setLevel(logging.DEBUG)
-        file_handler.setFormatter(file_format)
-        self.logger_file.addHandler(file_handler)
+        if (self.mode == 'logger'):
+            file_format  = logging.Formatter('%(asctime)s, %(lineno)d, %(levelname)s, %(message)s')
+            file_handler = logging.FileHandler(self.logfile, 'a')
+            file_handler.setLevel(logging.DEBUG)
+            file_handler.setFormatter(file_format)
+            self.logger_file.addHandler(file_handler)
 
     def log(self, level='info', proc='', msg='info', display=None, outfile=None,):
         if (proc == ''):
@@ -54,38 +66,67 @@ class qLog_class:
         if (outfile == None):
             outfile = self.outfile
 
-        if   (level=='info') or (level==logging.INFO):
-            if (display == True):
-                self.logger_disp.info(procname + msg)
-            if (outfile == True):
-                self.logger_file.info(procname + msg)
-        elif (level=='debug') or (level==logging.DEBUG):
-            if (display == True):
-                self.logger_disp.debug(procname + msg)
-            if (outfile == True):
-                self.logger_file.debug(procname + msg)
-        elif (level=='warning') or (level==logging.WARNING):
-            if (display == True):
-                self.logger_disp.warning(procname + msg)
-            if (outfile == True):
-                self.logger_file.warning(procname + msg)
-        elif (level=='error') or (level==logging.ERROR):
-            if (display == True):
-                self.logger_disp.err(procname + msg)
-            if (outfile == True):
-                self.logger_file.err(procname + msg)
-        elif (level=='critical') or (level==logging.CRITICAL):
-            if (display == True):
-                self.logger_disp.critical(procname + msg)
-            if (outfile == True):
-                self.logger_file.critical(procname + msg)
-        else:
-            self.logger_disp.critical(procname + msg)
-            self.logger_file.critical(procname + msg)
+        # ログ出力（logger）
+        txt = str(procname + msg)
+        if (self.mode == 'logger'):
+            if   (level=='info') or (level==logging.INFO):
+                if (display == True):
+                    self.logger_disp.info(txt)
+                if (outfile == True):
+                    self.logger_file.info(txt)
+            elif (level=='debug') or (level==logging.DEBUG):
+                if (display == True):
+                    self.logger_disp.debug(txt)
+                if (outfile == True):
+                    self.logger_file.debug(txt)
+            elif (level=='warning') or (level==logging.WARNING):
+                if (display == True):
+                    self.logger_disp.warning(txt)
+                if (outfile == True):
+                    self.logger_file.warning(txt)
+            elif (level=='error') or (level==logging.ERROR):
+                if (display == True):
+                    self.logger_disp.error(txt)
+                if (outfile == True):
+                    self.logger_file.error(txt)
+            elif (level=='critical') or (level==logging.CRITICAL):
+                if (display == True):
+                    self.logger_disp.critical(txt)
+                if (outfile == True):
+                    self.logger_file.critical(txt)
+            else:
+                self.logger_disp.critical(txt)
+                self.logger_file.critical(txt)
 
+        # ログ出力（local）
+        else:
+            txt = str(procname + msg)
+            if (display == True):
+                print(txt)
+            if (outfile == True):
+                try:
+                    w = codecs.open(self.logfile, 'a', 'utf-8')
+                    w.write(str(txt) + '\n')
+                    w.close()
+                    w = None
+                except:
+                    pass
+            
     def exception(self, e):
-            self.logger_disp.exception(e)
-            self.logger_file.exception(e)
+        # ログ出力（logger）
+        txt = str(e.args)
+        if (self.mode == 'logger'):
+            self.logger_disp.exception(txt)
+            self.logger_file.exception(txt)
+        else:
+            print(txt)
+            try:
+                w = codecs.open(self.logfile, 'a', 'utf-8')
+                w.write(str(txt) + '\n')
+                w.close()
+                w = None
+            except:
+                pass
 
 
 
@@ -96,7 +137,7 @@ def sub():
     qLog.log('info', proc_id, u'start')
     qLog.log('info', proc_id, u'error test ↓')
     try:
-        a=a/0
+        a=100/0
     except Exception as e:
         qLog.exception(e)        
     qLog.log('info', proc_id, u'end')
@@ -106,7 +147,8 @@ def sub():
 
 
 if __name__ == '__main__':
-    qLog = qLog_class()
+    qLog = qLog_class(mode='logger', filename='', )
+    #qLog = qLog_class(mode='nologger', filename='', )
 
     main_name = 'main'
     main_id   = '{0:10s}'.format(main_name).replace(' ', '_')

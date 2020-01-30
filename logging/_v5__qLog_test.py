@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import sys
 import datetime
 
@@ -15,7 +16,7 @@ def sub():
     qLog.log('info', proc_id, u'start')
     qLog.log('info', proc_id, u'error test ↓')
     try:
-        a=a/0
+        a=100/0
     except Exception as e:
         qLog.exception(e)        
     qLog.log('info', proc_id, u'end')
@@ -25,10 +26,18 @@ def sub():
 
 
 if __name__ == '__main__':
-    qLog = _v5__qLog.qLog_class('test')
-
     main_name = 'main'
     main_id   = '{0:10s}'.format(main_name).replace(' ', '_')
+
+    # ログ
+    if (not os.path.isdir('temp')):
+        os.makedirs('temp')
+    if (not os.path.isdir('temp/_log')):
+        os.makedirs('temp/_log')
+    filename = 'temp/_log/' + os.path.basename(__file__)
+    qLog = _v5__qLog.qLog_class(mode='logger', filename=filename, )
+    #qLog = _v5__qLog.qLog_class(mode='nologger', filename=filename, )
+
     qLog.log('info', main_id, u'run')
 
     x = sub()
