@@ -46,8 +46,12 @@ class qLog_class:
         if (self.mode == 'logger'):
             self.logger_disp = logging.getLogger('disp')
             self.logger_disp.setLevel(logging.DEBUG)
+            for h in self.logger_disp.handlers:
+                self.logger_disp.removeHandler(h)
             self.logger_file = logging.getLogger('file')
             self.logger_file.setLevel(logging.DEBUG)
+            for h in self.logger_file.handlers:
+                self.logger_file.removeHandler(h)
 
         # コンソールハンドラー
         if (self.mode == 'logger'):
