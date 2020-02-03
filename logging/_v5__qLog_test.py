@@ -38,7 +38,7 @@ if __name__ == '__main__':
         os.makedirs('temp')
     if (not os.path.isdir('temp/_log')):
         os.makedirs('temp/_log')
-    filename = 'temp/_log/' + os.path.basename(__file__)
+    filename = 'temp/_log/' + os.path.basename(__file__) + '.log'
     qLog.init(mode='nologger', filename=filename, )
     #qLog.init(mode='logger', filename=filename, )
 
