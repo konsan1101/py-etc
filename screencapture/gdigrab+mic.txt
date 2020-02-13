@@ -5,3 +5,6 @@ ffmpeg -list_devices true -f dshow -i dummy
 
 ffmpeg -f gdigrab -i desktop -f dshow -i audio="É}ÉCÉN (Realtek High Definition Audio)" -vcodec libx264 test.mp4
 
+ffmpeg -f gdigrab -i desktop -ss 0 -t 2 -r 1 -qmin 1 -q 1 %04d.jpg -loglevel warning
+
+
