@@ -9,7 +9,7 @@ import win32con
 import numpy as np
 import cv2
 
-def ntWindowCapture(window_name: str, bgr2rgb: bool = False):
+def WindowCapture(window_name: str, bgr2rgb: bool = False):
     # 現在アクティブなウィンドウ名を探す
     process_list = []
 
@@ -24,9 +24,9 @@ def ntWindowCapture(window_name: str, bgr2rgb: bool = False):
             break
     else:
         # 見つからなかったら画面全体を取得
-        #hnd = win32gui.GetDesktopWindow()
+        hnd = win32gui.GetDesktopWindow()
         # 見つからなかったら前画面を取得
-        hnd = win32gui.GetForegroundWindow()
+        #hnd = win32gui.GetForegroundWindow()
 
     # ウィンドウサイズ取得
     x0, y0, x1, y1 = win32gui.GetWindowRect(hnd)
