@@ -4,6 +4,12 @@
 # http://e-yuki67.hatenablog.com/entry/2017/02/12/152759
 
 
+import ctypes
+user32 = ctypes.windll.user32
+SCREEN_WIDTH  = user32.GetSystemMetrics(78)
+SCREEN_HEIGHT = user32.GetSystemMetrics(79)
+SCREEN_SCALING_FACTOR = 1.0
+
 import win32gui
 import win32ui
 import win32con
@@ -11,11 +17,11 @@ from PIL import Image
 import numpy as np
 import cv2
 
-SCREEN_WIDTH = 2160
-SCREEN_HEIGHT = 1440
-SCREEN_SCALING_FACTOR = 1.5
+#SCREEN_WIDTH = 1920
+#SCREEN_HEIGHT = 1080
+#SCREEN_SCALING_FACTOR = 1.0
 
-def screenshot():
+def nt_screenshot():
     try:
         window = win32gui.GetDesktopWindow()
         window_dc = win32ui.CreateDCFromHandle(win32gui.GetWindowDC(window))
