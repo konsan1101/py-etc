@@ -4,6 +4,7 @@
 #https://pysimplegui.readthedocs.io/en/latest/cookbook/
 
 import PySimpleGUI as sg
+#import PySimpleGUIWeb as sg
 
 # Very basic window.  Return values using auto numbered keys
 
