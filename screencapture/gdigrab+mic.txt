@@ -1,10 +1,25 @@
 
 https://medium.com/@colten_jackson/simple-free-screen-capture-with-ffmpeg-3aeddbeb161b
 
-ffmpeg -list_devices true -f dshow -i dummy
+ffmpeg -list_devices true -f dshow -i nul
+
+# "Microsoft Camera Rear"
+# "Microsoft Camera Front"
+
+# デスクチップ
+
+ffmpeg -f gdigrab -i desktop -vcodec libx264 desktop.mp4
+
+ffmpeg -rtbufsize 30M -f gdigrab -i desktop -vcodec libx264 desktop.mp4
 
 ffmpeg -f gdigrab -i desktop -f dshow -i audio="マイク (Realtek High Definition Audio)" -vcodec libx264 test.mp4
 
-ffmpeg -f gdigrab -i desktop -ss 0 -t 2 -r 1 -qmin 1 -q 1 %04d.jpg -loglevel warning
+# キャプチャ
+ffmpeg -f gdigrab -i desktop -ss 0 -t 0.2 -r 10 -q 1 capture.%04d.jpg -loglevel warning
 
+# カメラ
+
+ffmpeg -f dshow -i video="Microsoft Camera Front" -vcodec libx264 test.flv
+
+ffmpeg -f dshow -i video=0 -vcodec libx264 test.flv
 
