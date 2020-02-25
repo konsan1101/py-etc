@@ -12,7 +12,7 @@ if (os.path.isfile(filename)):
 ffmpeg = subprocess.Popen(['ffmpeg', '-f', 'gdigrab', '-i', 'desktop', '-r', '5', filename, ],
                            stdin=subprocess.PIPE, )
 
-time.sleep(10.00)
+time.sleep(120.00)
 
 ffmpeg.stdin.write(b'q\n')
 ffmpeg.stdin.flush()
