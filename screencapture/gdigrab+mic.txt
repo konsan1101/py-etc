@@ -21,4 +21,6 @@ ffmpeg -f gdigrab -i desktop -ss 0 -t 0.2 -r 10 -q 1 capture.%04d.jpg -loglevel 
 
 ffmpeg -f dshow -i video="Microsoft Camera Front" -vcodec libx264 test.flv
 
+ffmpeg -f dshow -i video="UCAM-DLB200TA" -vcodec libx264 test.flv
+
 
