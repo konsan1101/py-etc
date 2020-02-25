@@ -8,9 +8,14 @@ ffmpeg -list_devices true -f dshow -i nul
 
 # ƒfƒXƒNƒ`ƒbƒv
 
-ffmpeg -f gdigrab -i desktop -vcodec libx264 desktop.mp4
+ffmpeg -f gdigrab -i desktop -vcodec flv1 -q:v 0 -r 10 desktop_flv.flv
+¨‚b‚o‚t‚Q‚T“
 
-ffmpeg -rtbufsize 30M -f gdigrab -i desktop -vcodec libx264 desktop.mp4
+ffmpeg -f gdigrab -i desktop -vcodec libx264 -r 10 desktop_264.mp4
+¨‚b‚o‚t‚R‚O“
+
+ffmpeg -f gdigrab -i desktop -vcodec libx265 -r 10 desktop_265.mp4
+¨‚b‚o‚t‚T‚O“
 
 ffmpeg -f gdigrab -i desktop -f dshow -i audio="ƒ}ƒCƒN (Realtek High Definition Audio)" -vcodec libx264 test.mp4
 
@@ -19,8 +24,22 @@ ffmpeg -f gdigrab -i desktop -ss 0 -t 0.2 -r 10 -q 1 capture.%04d.jpg -loglevel 
 
 # ƒJƒƒ‰
 
-ffmpeg -f dshow -i video="Microsoft Camera Front" -vcodec libx264 test.flv
+ffmpeg -rtbufsize 1024M -f dshow -i video="Microsoft Camera Front" -vcodec flv1 -q:v 0 -r 10 camera_flv.flv
 
 ffmpeg -f dshow -i video="UCAM-DLB200TA" -vcodec libx264 test.flv
+
+# MP4 •ÏŠ·
+
+ffmpeg -i desktop_flv.flv -vcodec flv1 -q:v 0 -r 2 testflv.flv
+
+ffmpeg -i desktop_flv.flv -vcodec libx264 -r 2 test264.mp4
+ffmpeg -i camera_flv.flv  -vcodec libx264 -r 2 test264.mp4
+
+ffmpeg -i desktop_flv -vcodec libx265 -r 2 test265.mp4
+ffmpeg -i desktop_flv -vcodec hevc    -r 2 testhevc.mp4
+
+# ƒXƒiƒbƒvƒVƒ‡ƒbƒg
+
+ffmpeg -i desktop_flv.flv -filter:v select=gt(scene\,0.1),scale=0:0,showinfo -vsync vfr test_%04d.jpg
 
 
