@@ -17,6 +17,9 @@ ffmpeg -f gdigrab -i desktop -vcodec libx264 -r 10 desktop_264.mp4
 ffmpeg -f gdigrab -i desktop -vcodec libx265 -r 10 desktop_265.mp4
 ¨‚b‚o‚t‚T‚O“
 
+ffmpeg -f gdigrab -i desktop -vcodec hevc_qsv -r 10 desktop_265qsv.mp4
+¨‚b‚o‚t‚Q‚T“
+
 ffmpeg -f gdigrab -i desktop -f dshow -i audio="ƒ}ƒCƒN (Realtek High Definition Audio)" -vcodec libx264 test.mp4
 
 # ƒLƒƒƒvƒ`ƒƒ
