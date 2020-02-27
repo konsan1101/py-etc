@@ -23,8 +23,8 @@ ffmpeg -f gdigrab -i desktop -vcodec hevc_qsv -r 10 desktop_265qsv.mp4
 ffmpeg -f gdigrab -i desktop -f dshow -i audio="マイク (Realtek High Definition Audio)" -vcodec libx264 test.mp4
 
 # QSVのサンプル
-ffmpeg -f gdigrab -i desktop -c:v h264_qsv -r 10 -s 1920x1080 desktop.mp4
-ffmpeg -f gdigrab -i desktop -vf scale=1920:-1 -vcodec h264_qsv -r 10 desktop.mp4
+ffmpeg -init_hw_device qsv:hw -f gdigrab -i desktop -vf scale=1920:-1 -vcodec hevc_qsv -r 10 desktop.mp4
+ffmpeg -init_hw_device qsv:hw -f gdigrab -i desktop -vf scale=1920:-1 -vcodec h264_qsv -r 10 desktop.mp4
 
 # キャプチャ
 ffmpeg -f gdigrab -i desktop -ss 0 -t 0.2 -r 10 -q 1 capture.%04d.jpg -loglevel warning
