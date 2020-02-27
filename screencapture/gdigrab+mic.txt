@@ -1,10 +1,14 @@
 
 https://medium.com/@colten_jackson/simple-free-screen-capture-with-ffmpeg-3aeddbeb161b
 
+
+
 ffmpeg -list_devices true -f dshow -i nul
 
 # "Microsoft Camera Rear"
 # "Microsoft Camera Front"
+
+
 
 # デスクチップ
 
@@ -26,14 +30,21 @@ ffmpeg -f gdigrab -i desktop -f dshow -i audio="マイク (Realtek High Definition 
 ffmpeg -init_hw_device qsv:hw -f gdigrab -i desktop -vf scale=1920:-1 -vcodec hevc_qsv -r 10 desktop.mp4
 ffmpeg -init_hw_device qsv:hw -f gdigrab -i desktop -vf scale=1920:-1 -vcodec h264_qsv -r 10 desktop.mp4
 
+
+
 # キャプチャ
+
 ffmpeg -f gdigrab -i desktop -ss 0 -t 0.2 -r 10 -q 1 capture.%04d.jpg -loglevel warning
+
+
 
 # カメラ
 
 ffmpeg -rtbufsize 1024M -f dshow -i video="Microsoft Camera Front" -vcodec flv1 -q:v 0 -r 10 camera_flv.flv
 
 ffmpeg -f dshow -i video="UCAM-DLB200TA" -vcodec libx264 test.flv
+
+
 
 # MP4 変換
 
@@ -42,12 +53,18 @@ ffmpeg -i desktop_flv.flv -vcodec flv1 -q:v 0 -r 2 testflv.flv
 ffmpeg -i desktop_flv.flv -vcodec libx264 -r 2 test264.mp4
 ffmpeg -i camera_flv.flv  -vcodec libx264 -r 2 test264.mp4
 
-ffmpeg -i desktop_flv -vcodec libx265 -r 2 test265.mp4
-ffmpeg -i desktop_flv -vcodec hevc    -r 2 testhevc.mp4
+ffmpeg -i desktop_flv. -vcodec libx265 -r 2 test265.mp4
+ffmpeg -i desktop_flv.mp4 -vcodec hevc    -r 2 testhevc.mp4
+
+# QSVのサンプル
+ffmpeg -i desktop.mp4 -vcodec h264_qsv -r 10 test265.mp4
+
+
 
 # スナップショット
 
 ffmpeg -i desktop_flv.flv -filter:v select=gt(scene\,0.1),scale=0:0,showinfo -vsync vfr test_%04d.jpg
+
 
 
 # ffmpeg encoders
