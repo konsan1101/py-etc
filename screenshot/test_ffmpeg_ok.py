@@ -25,7 +25,7 @@ def fullCapture(full=True, workpath='temp/_work/caputure.', ):
                 break
         # キャプチャー
         ffmpeg = subprocess.Popen(['ffmpeg', '-f', 'gdigrab', '-i', 'desktop',
-                                '-ss','0','-t','0.2','-r','10','-q','1', workpath + '%04d.jpg',
+                                '-ss','0','-t','0.2','-r','10','-qmin','1','-q','1', workpath + '%04d.jpg',
                                 '-loglevel', 'warning',],
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
         # 時限待機・終了

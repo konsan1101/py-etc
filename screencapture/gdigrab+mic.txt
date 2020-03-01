@@ -56,14 +56,21 @@ ffmpeg -i camera_flv.flv  -vcodec libx264 -r 2 test264.mp4
 ffmpeg -i desktop_flv. -vcodec libx265 -r 2 test265.mp4
 ffmpeg -i desktop_flv.mp4 -vcodec hevc    -r 2 testhevc.mp4
 
+ffmpeg -i _desktop.mp4 -vcodec libx265 -r 10 test_265.mp4
+
 # QSVのサンプル
-ffmpeg -i desktop.mp4 -vcodec h264_qsv -r 10 test265.mp4
+ffmpeg -init_hw_device qsv:hw -i _desktop.mp4 -vcodec hevc_qsv -r 10 test_264qsv.mp4
+ffmpeg -init_hw_device qsv:hw -i _desktop.mp4 -vcodec hevc_qsv -r 10 test_hevcqsv.mp4
 
 
 
 # スナップショット
 
 ffmpeg -i desktop_flv.flv -filter:v select=gt(scene\,0.1),scale=0:0,showinfo -vsync vfr test_%04d.jpg
+ffmpeg -i _desktop.mp4 -filter:v select=gt(scene\,0.1),scale=0:0,showinfo -vsync vfr test_%04d.jpg
+
+# QSVのサンプル
+ffmpeg -init_hw_device qsv:hw -i _desktop.mp4 -vcodec h264_qsv -filter:v select=gt(scene\,0.1),scale=0:0,showinfo -vsync vfr test_%04d.jpg
 
 
 
