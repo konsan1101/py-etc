@@ -3,10 +3,10 @@
 
 import pandas as pd
 
-def pd2fields(pandas_df=None):
+def pd2fields(pandas_df=None, ):
 
         # pandas_df → fields_df
-        columns   = ['フィールド', 'タイプ', '最小値', '最大値', '合計値', '最大桁数', '小数桁数', 'サンプル', ]
+        columns   = ['フィールド', 'タイプ', '最小値', '最大値', '合計値', '最大桁数', '小数桁数', 'NULL有', 'NULL全件', 'サンプル', ]
         fields_df = pd.DataFrame(columns=columns, )
 
         # フィールド
@@ -28,6 +28,32 @@ def pd2fields(pandas_df=None):
                 # タイプ
                 index = row.index[0]
                 fields_df.loc[index, 'タイプ'] = str(タイプ)
+
+        # Nullスキャン
+        for f in range(len(fields_df)):
+            フィールド = fields_df.loc[f, 'フィールド']
+            fields_df.loc[f, 'NULL有']   = False  # Nullが1件でもあればTrueに
+            fields_df.loc[f, 'NULL全件'] = True   # 有効か1件でもあればFalseに
+            for i in range(len(pandas_df)):
+                値 = pandas_df.loc[i, フィールド]
+                if (pd.isnull(値)):
+                    if(fields_df.loc[f, 'NULL有']  == False):
+                        fields_df.loc[f, 'NULL有'] = True
+                else:
+                    if(fields_df.loc[f, 'NULL全件']  == True):
+                        fields_df.loc[f, 'NULL全件'] = False
+                if  (fields_df.loc[f, 'NULL有']   == True) \
+                and (fields_df.loc[f, 'NULL全件'] == False):
+                    break
+
+        # Null列を文字化
+        for f in range(len(fields_df)):
+            #if (fields_df.loc[f, 'NULL有']   == True) \
+            #or (fields_df.loc[f, 'NULL全件'] == True):
+            if (fields_df.loc[f, 'NULL全件'] == True):
+                フィールド = fields_df.loc[f, 'フィールド']
+                pandas_df[フィールド].astype('object')
+                fields_df.loc[f, 'タイプ'] = 'object'
 
         # 作業用 df
         work_df = pandas_df.copy()
@@ -83,9 +109,9 @@ def pd2fields(pandas_df=None):
                         最大桁数 = 桁数
                 fields_df.loc[f, '最大桁数'] = 最大桁数
 
-        print('')
-        print(fields_df)
-        print('')
+        #print('')
+        #print(fields_df)
+        #print('')
 
         return fields_df
 
@@ -97,6 +123,10 @@ if __name__ == '__main__':
     inp_df = pd.read_excel(excel_file, sheet_name=0)
 
     fields_df = pd2fields(inp_df)
+
+    print('')
+    print(fields_df)
+    print('')
 
     # 関連マスタ抽出
     関連マスタ項目 = {}
