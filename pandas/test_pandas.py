@@ -94,8 +94,48 @@ def pd2fields(pandas_df=None):
 if __name__ == '__main__':
 
     excel_file = '工程テスト.xlsx'
-    pandas_df = pd.read_excel(excel_file, sheet_name=0)
+    inp_df = pd.read_excel(excel_file, sheet_name=0)
 
-    res = pd2fields(pandas_df)
+    fields_df = pd2fields(inp_df)
+
+    # 関連マスタ抽出
+    関連マスタ項目 = {}
+    search_point    = 0
+    while (search_point < len(fields_df)):
+
+        # コード探索
+        for f in range(search_point, len(fields_df)):
+            フィールド = fields_df.loc[f, 'フィールド']
+            search_point = f
+            if (フィールド[-3:] == 'コード'):
+                マスタ = フィールド[:-3]
+
+                # コード追加
+                #print(マスタ)
+                関連マスタ項目[マスタ] = [フィールド]
+
+                # フィールド追加
+                for m in range(search_point + 1, len(fields_df)):
+                    マスタ項目 = fields_df.loc[m, 'フィールド']
+                    if (search_point == 0) \
+                    or (マスタ項目[:len(マスタ)] == マスタ):
+                        #print(マスタ名,マスタ項目)
+                        関連マスタ項目[マスタ].append(マスタ項目)
+
+            # 続きから探索
+            search_point += 1
+
+    # テーブル中のマスタ項目
+    for マスタ in 関連マスタ項目.keys():
+        マスタ項目 = 関連マスタ項目[マスタ]
+        #print(マスタ, マスタ項目)
+
+        out_df = pd.DataFrame(index=[], columns=マスタ項目, )
+        for i in range(len(inp_df)):
+            コード = inp_df.loc[i, マスタ項目[0]]
+            out_df = out_df[out_df[マスタ項目[0]] != コード]
+            out_df = out_df.append(inp_df.loc[i, マスタ項目], ignore_index=True, )
+
+        print(out_df)
 
 
