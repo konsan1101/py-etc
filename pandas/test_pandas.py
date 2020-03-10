@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
 import pandas as pd
 
 def pd2fields(pandas_df=None, ):
@@ -119,7 +120,10 @@ def pd2fields(pandas_df=None, ):
 
 if __name__ == '__main__':
 
-    excel_file = '工程テスト.xlsx'
+    excel_file = 'Mサンプル.xlsx'
+    if (len(sys.argv) >= 2):
+        excel_file = sys.argv[1]
+
     inp_df = pd.read_excel(excel_file, sheet_name=0)
 
     fields_df = pd2fields(inp_df)
