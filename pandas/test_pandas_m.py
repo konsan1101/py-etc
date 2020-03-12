@@ -120,7 +120,7 @@ def pd2fields(pandas_df=None, ):
 
 if __name__ == '__main__':
 
-    excel_file = '_サンプル.xlsx'
+    excel_file = '_サンプルマスタ.xlsx'
     if (len(sys.argv) >= 2):
         excel_file = sys.argv[1]
 
