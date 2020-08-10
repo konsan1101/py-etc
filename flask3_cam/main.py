@@ -5,9 +5,12 @@
 
 from flask import Flask, render_template, Response
 
+import os
 from camera import VideoCamera
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='templates/static')
+app.config['JSON_AS_ASCII'] = False
+app.config['SECRET_KEY'] = os.urandom(24)
 
 @app.route('/')
 def index():
@@ -32,8 +35,13 @@ def video_feed():
     return Response(gen(VideoCamera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
+# アイコン
+@app.route("/favicon.ico")
+def favicon():
+    return app.send_static_file("favicon.ico")
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', port=5000, threaded=True, debug=True, )
 
 # 0.0.0.0はすべてのアクセスを受け付けます。    
 # webブラウザーには、「localhost:5000」と入力

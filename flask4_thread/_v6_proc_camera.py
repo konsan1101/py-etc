@@ -450,8 +450,8 @@ class proc_camera:
                         out_name  = '[img]'
                         out_value = input_img.copy()
                         cn_s.put([out_name, out_value])
-                        cv2.imshow('Display', out_value )
-                        cv2.waitKey(1)
+                        #cv2.imshow('Display', out_value )
+                        #cv2.waitKey(1)
 
 
 

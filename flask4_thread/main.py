@@ -3,23 +3,32 @@
 
 from flask import Flask, render_template, Response
 
-import cv2
+import os
 import time
+import cv2
 
 import _v6_proc_camera
 camera_thread = None
-camDev = '0'
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='templates/static')
+app.config['JSON_AS_ASCII'] = False
+app.config['SECRET_KEY'] = os.urandom(24)
 
 @app.route('/')
 def index():
+    global camera_thread
+    if camera_thread is None:
+        camDev = '0'
+        camera_thread = _v6_proc_camera.proc_camera(name='camera', id=camDev, runMode='debug', 
+                        camDev=camDev, camMode='vga', camStretch='0', camRotate='0', camZoom='1.0', camFps='30',)
+        camera_thread.begin()
+
     return render_template('index.html')
 
     # "/" を呼び出したときには、indexが表示される。
 
-def gen(camera_thread):
-    #global camera_thread
+def gen():
+    global camera_thread
     while True:
         hit = False
         while hit == False:
@@ -43,18 +52,16 @@ def gen(camera_thread):
 @app.route('/video_feed')
 def video_feed():
     global camera_thread
-    return Response(gen(camera_thread),
+    return Response(gen(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-if __name__ == '__main__':
-    if camera_thread is None:
-        camera_thread = _v6_proc_camera.proc_camera(name='camera', id=camDev, runMode='debug', 
-                        camDev=camDev, camMode='vga', camStretch='0', camRotate='0', camZoom='1.0', camFps='5',)
-        camera_thread.begin()
-        camDev = str(int(camDev) + 1)
-        time.sleep(5)
+# アイコン
+@app.route("/favicon.ico")
+def favicon():
+    return app.send_static_file("favicon.ico")
 
-    app.run(host='0.0.0.0', debug=True)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, threaded=True, debug=True, )
 
 # 0.0.0.0はすべてのアクセスを受け付けます。    
 # webブラウザーには、「localhost:5000」と入力
