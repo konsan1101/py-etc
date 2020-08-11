@@ -28,10 +28,10 @@ qBusy_dev_cpu    = qPath_work + 'busy_dev_cpu.txt'
 qBusy_dev_cam    = qPath_work + 'busy_dev_camera.txt'
 qBusy_dev_dsp    = qPath_work + 'busy_dev_display.txt'
 qBusy_v_inp      = qPath_work + 'busy_v_1video.txt'
-qRdy__v_mirror   = qPath_work + 'ready_v_mirror.txt'
 qBusy_d_play     = qPath_work + 'busy_d_7play.txt'
 qBusy_d_browser  = qPath_work + 'busy_d_8web.txt'
 qBusy_d_rec      = qPath_work + 'busy_d_5rec.txt'
+qRdy__v_mirror   = qPath_work + 'ready_v_mirror.txt'
 
 # 共通ルーチン
 import  _v5__qFunc

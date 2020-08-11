@@ -27,13 +27,10 @@ import cv2
 qPath_work = 'work/'
 qPath_log  = 'work/'
 qBusy_dev_cpu    = qPath_work + 'busy_dev_cpu.txt'
-qBusy_dev_cam    = qPath_work + 'busy_dev_camera.txt'
-qBusy_dev_dsp    = qPath_work + 'busy_dev_display.txt'
-qBusy_v_inp      = qPath_work + 'busy_v_1video.txt'
-qRdy__v_mirror   = qPath_work + 'ready_v_mirror.txt'
+qBusy_dev_scn    = qPath_work + 'busy_dev_screen.txt'
+qBusy_d_inp      = qPath_work + 'busy_d_1screen.txt'
 qBusy_d_play     = qPath_work + 'busy_d_7play.txt'
 qBusy_d_browser  = qPath_work + 'busy_d_8web.txt'
-qBusy_d_rec      = qPath_work + 'busy_d_5rec.txt'
 
 
 
@@ -335,7 +332,7 @@ class proc_capture:
 if __name__ == '__main__':
 
     # 共通クラス
-    qRiKi.init()
+    #qRiKi.init()
     qFunc.init()
 
     # ログ
@@ -347,7 +344,8 @@ if __name__ == '__main__':
     cv2.namedWindow('Display', 1)
     cv2.moveWindow( 'Display', 0, 0)
 
-    capture_thread = proc_capture('capture', '0', )
+    capture_thread = proc_capture(name='capture', id='0', runMode='debug', 
+                    capStretch='0', capRotate='0', capZoom='1.0', capFps='2', ):
     capture_thread.begin()
 
 
