@@ -345,7 +345,7 @@ if __name__ == '__main__':
     cv2.moveWindow( 'Display', 0, 0)
 
     capture_thread = proc_capture(name='capture', id='0', runMode='debug', 
-                    capStretch='0', capRotate='0', capZoom='1.0', capFps='2', ):
+                                  capStretch='0', capRotate='0', capZoom='1.0', capFps='2', )
     capture_thread.begin()
 
 
