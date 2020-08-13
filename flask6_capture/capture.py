@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, Response, send_file
+from flask import Flask, render_template, Response, send_file, make_response
 
 import os
 import time
+import datetime
 import cv2
 import io
 
@@ -16,7 +17,7 @@ app = Flask(__name__, static_folder='templates/static')
 app.config['JSON_AS_ASCII'] = False
 app.config['SECRET_KEY'] = os.urandom(24)
 
-
+# ホーム
 @app.route('/')
 def index():
     global app_thread
@@ -32,11 +33,13 @@ def index():
     <a href='/oneshot/'>ワンショット表示</a> <br />
     ''')
 
+# ストリーム
 @app.route('/stream/')
 def stream():
-    return render_template('stream.html')
+    return render_template('stream.html', filename='/stream/result/image')
 
-def gen():
+# フレーム取得
+def frame():
     global app_thread
     while (True):
         hit = False
@@ -52,15 +55,30 @@ def gen():
         yield (b'--frame\r\n'
             b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
 
-@app.route('/stream_feed')
-def stream_feed():
-    global app_thread
-    return Response(gen(),
+# ストリーム応答
+@app.route('/stream/result/<name>')
+def stream_result(name=None):
+    return Response(frame(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
+# 1画像
 @app.route('/oneshot/')
 def oneshot():
-    global app_thread, app_seq
+    global app_seq
+    app_seq += 1
+    if (app_seq > 9999):
+        app_seq = 1
+    seq4 = '{:04}'.format(app_seq)
+
+    nowTime  = datetime.datetime.now()
+    filename = nowTime.strftime('%Y%m%d.%H%M%S') + '.' + seq4 + '.log'
+
+    return render_template('oneshot.html', filename='/oneshot/result/' + filename)
+
+# 1画像応答
+@app.route('/oneshot/result/<name>')
+def oneshot_result(name=None):
+    global app_thread
     hit = False
     while (hit == False):
         res_data  = app_thread.get()
@@ -69,39 +87,12 @@ def oneshot():
         if (res_name == '[img]'):
             ret, jpeg = cv2.imencode('.jpg', res_value.copy())
             hit = True
-    #return (b'--frame\r\n'
-    #    b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
-
-    #return send_file(
-    #    io.BytesIO(jpeg),
-    #    mimetype='image/jpeg',
-    #    as_attachment=True,
-    #    attachment_filename=filename + '.jpg',
-    #    )
-
-    #response = make_response(jpeg)
-    #response.headers.set('Content-Type', 'image/jpeg')
-    #response.headers.set(
-    #    'Content-Disposition', 'attachment', filename=filename + '.jpg')
-    #return response
-
-    app_seq += 1
-    if (app_seq >= 10):
-        app_seq = 1
-    seq4 = '{:04}'.format(app_seq)
-    filename = 'result_' + seq4 + '.jpg'
-    cv2.imwrite('templates/static/images/' + filename, res_value)
-    return render_template('oneshot.html', filename=filename)
+    return send_file(io.BytesIO(jpeg), mimetype='image/jpeg', )
 
 # アイコン
 @app.route("/favicon.ico")
 def favicon():
     return app.send_static_file("favicon.ico")
-
-# スタイル
-@app.route("/destyle.css")
-def destyle():
-    return app.send_static_file("destyle.css")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, threaded=True, debug=True, )
