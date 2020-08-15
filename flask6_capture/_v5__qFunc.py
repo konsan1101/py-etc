@@ -316,6 +316,13 @@ class qFunc_class:
         else:
             return False
 
+    def statusWait_false(self, filename, falseWait=1, ):
+        if (falseWait != 0):
+            chktime = time.time()
+            while (os.path.exists(filename)) and ((time.time() - chktime) < falseWait):
+                time.sleep(0.10)
+        return self.statusCheck(filename)
+
     def txtFilePath(self, txt='',):
         if (txt == ''):
             return False

@@ -9,7 +9,7 @@ import datetime
 import cv2
 import io
 
-import _v6_proc_capture
+import _v6_proc_recorder
 app_thread = None
 app_seq    = 0
 
@@ -22,8 +22,9 @@ app.config['SECRET_KEY'] = os.urandom(24)
 def index():
     global app_thread
     if (app_thread is None):
-        app_thread = _v6_proc_capture.proc_capture(name='capture', id='0', runMode='debug', 
-                                                   capStretch='0', capRotate='0', capZoom='1.0', capFps='2', )
+        camDev = '0'
+        app_thread = _v6_proc_camera.proc_camera(name='camera', id=camDev, runMode='debug', 
+                                                 camDev=camDev, camMode='vga', camStretch='0', camRotate='0', camZoom='1.0', camFps='30',)
         app_thread.begin()
 
     return Response('''
