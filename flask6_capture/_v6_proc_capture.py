@@ -24,8 +24,9 @@ import cv2
 
 
 
-qPath_work = 'work/'
-qPath_log  = 'work/'
+qPath_log  = 'temp/'
+qPath_work = 'temp/'
+
 qBusy_dev_cpu    = qPath_work + 'busy_dev_cpu.txt'
 qBusy_dev_scn    = qPath_work + 'busy_dev_screen.txt'
 qBusy_d_inp      = qPath_work + 'busy_d_1screen.txt'

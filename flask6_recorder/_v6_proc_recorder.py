@@ -21,10 +21,10 @@ import subprocess
 
 
 
-qPath_log  = 'work/'
-qPath_work = 'work/'
+qPath_log  = 'temp/'
+qPath_work = 'temp/'
 
-qPath_rec  = 'rec/'
+qPath_rec        = qPath_work + '_recorder/'
 qPath_d_movie    = qPath_work + 'd5_5movie/'
 qPath_d_upload   = qPath_work + 'd5_9upload/'
 

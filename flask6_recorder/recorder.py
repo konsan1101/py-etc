@@ -13,7 +13,7 @@ import _v6_proc_recorder
 app_thread = None
 app_seq    = 0
 
-app = Flask(__name__, static_folder='templates/static')
+app = Flask(__name__, template_folder='html', static_folder='html/static')
 app.config['JSON_AS_ASCII'] = False
 app.config['SECRET_KEY'] = os.urandom(24)
 
@@ -23,72 +23,39 @@ def index():
     global app_thread
     if (app_thread is None):
         camDev = '0'
-        app_thread = _v6_proc_camera.proc_camera(name='camera', id=camDev, runMode='debug', 
-                                                 camDev=camDev, camMode='vga', camStretch='0', camRotate='0', camZoom='1.0', camFps='30',)
+        app_thread = _v6_proc_recorder.proc_recorder(name='recorder', id='0', runMode='debug',)
         app_thread.begin()
 
     return Response('''
     ホーム <br />
     <hr />
-    <a href='/stream/'>ストリーム表示</a> <br />
-    <a href='/oneshot/'>ワンショット表示</a> <br />
+    <a href='/start/'>録画開始</a> <br />
+    <a href='/abort/'>録画終了</a> <br />
     ''')
 
-# ストリーム
-@app.route('/stream/')
-def stream():
-    return render_template('stream.html', filename='/stream/result/image')
-
-# フレーム取得
-def frame():
+# 録画開始
+@app.route('/start/')
+def start():
     global app_thread
-    while (True):
-        hit = False
-        while (hit == False):
-            res_data  = app_thread.get()
-            res_name  = res_data[0]
-            res_value = res_data[1]
-            if (res_name == '[img]'):
-                #cv2.imshow('Display', res_value.copy() )
-                #cv2.waitKey(1)
-                ret, jpeg = cv2.imencode('.jpg', res_value.copy())
-                hit = True
-        yield (b'--frame\r\n'
-            b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
+    app_thread.put(['control', u'録画開始'])
+    return Response('''
+    録画開始 <br />
+    <hr />
+    <a href='/'>ホーム</a> <br />
+    ''')
+    return
 
-# ストリーム応答
-@app.route('/stream/result/<name>')
-def stream_result(name=None):
-    return Response(frame(),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
-
-# 1画像
-@app.route('/oneshot/')
-def oneshot():
-    global app_seq
-    app_seq += 1
-    if (app_seq > 9999):
-        app_seq = 1
-    seq4 = '{:04}'.format(app_seq)
-
-    nowTime  = datetime.datetime.now()
-    filename = nowTime.strftime('%Y%m%d.%H%M%S') + '.' + seq4 + '.log'
-
-    return render_template('oneshot.html', filename='/oneshot/result/' + filename)
-
-# 1画像応答
-@app.route('/oneshot/result/<name>')
-def oneshot_result(name=None):
+# 録画終了
+@app.route('/abort/')
+def abort():
     global app_thread
-    hit = False
-    while (hit == False):
-        res_data  = app_thread.get()
-        res_name  = res_data[0]
-        res_value = res_data[1]
-        if (res_name == '[img]'):
-            ret, jpeg = cv2.imencode('.jpg', res_value.copy())
-            hit = True
-    return send_file(io.BytesIO(jpeg), mimetype='image/jpeg', )
+    app_thread.put(['control', u'録画終了'])
+    return Response('''
+    録画終了 <br />
+    <hr />
+    <a href='/'>ホーム</a> <br />
+    ''')
+    return
 
 # アイコン
 @app.route("/favicon.ico")

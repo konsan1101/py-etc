@@ -13,7 +13,7 @@ import _v6_proc_capture
 app_thread = None
 app_seq    = 0
 
-app = Flask(__name__, static_folder='templates/static')
+app = Flask(__name__, template_folder='html', static_folder='html/static')
 app.config['JSON_AS_ASCII'] = False
 app.config['SECRET_KEY'] = os.urandom(24)
 
@@ -30,7 +30,7 @@ def index():
     ホーム <br />
     <hr />
     <a href='/stream/'>ストリーム表示</a> <br />
-    <a href='/oneshot/'>ワンショット表示</a> <br />
+    <a href='/interval/'>インターバル表示</a> <br />
     ''')
 
 # ストリーム
@@ -62,8 +62,8 @@ def stream_result(name=None):
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 # 1画像
-@app.route('/oneshot/')
-def oneshot():
+@app.route('/interval/')
+def interval():
     global app_seq
     app_seq += 1
     if (app_seq > 9999):
@@ -71,13 +71,13 @@ def oneshot():
     seq4 = '{:04}'.format(app_seq)
 
     nowTime  = datetime.datetime.now()
-    filename = nowTime.strftime('%Y%m%d.%H%M%S') + '.' + seq4 + '.log'
+    filename = nowTime.strftime('%Y%m%d.%H%M%S') + '.' + seq4 + '.jpg'
 
-    return render_template('oneshot.html', filename='/oneshot/result/' + filename)
+    return render_template('interval.html', filename='/interval/result/' + filename)
 
 # 1画像応答
-@app.route('/oneshot/result/<name>')
-def oneshot_result(name=None):
+@app.route('/interval/result/<name>')
+def interval_result(name=None):
     global app_thread
     hit = False
     while (hit == False):

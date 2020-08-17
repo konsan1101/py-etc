@@ -22,8 +22,11 @@ import subprocess
 import numpy as np
 import cv2
 
-qPath_work = 'work/'
-qPath_log  = 'work/'
+
+
+qPath_log  = 'temp/'
+qPath_work = 'temp/'
+
 qBusy_dev_cpu    = qPath_work + 'busy_dev_cpu.txt'
 qBusy_dev_cam    = qPath_work + 'busy_dev_camera.txt'
 qBusy_dev_dsp    = qPath_work + 'busy_dev_display.txt'
