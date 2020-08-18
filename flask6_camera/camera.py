@@ -9,7 +9,7 @@ import datetime
 import cv2
 import io
 
-import _v6_proc_camera
+import _v5_proc_camera
 app_thread = None
 app_seq    = 0
 
@@ -23,7 +23,7 @@ def index():
     global app_thread
     if (app_thread is None):
         camDev = '0'
-        app_thread = _v6_proc_camera.proc_camera(name='camera', id=camDev, runMode='debug', 
+        app_thread = _v5_proc_camera.proc_camera(name='camera', id=camDev, runMode='debug', 
                                                  camDev=camDev, camMode='vga', camStretch='0', camRotate='0', camZoom='1.0', camFps='30',)
         app_thread.begin()
 

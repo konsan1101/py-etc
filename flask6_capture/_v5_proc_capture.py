@@ -24,24 +24,86 @@ import cv2
 
 
 
-qPath_log  = 'temp/'
-qPath_work = 'temp/'
-
-qBusy_dev_cpu    = qPath_work + 'busy_dev_cpu.txt'
-qBusy_dev_scn    = qPath_work + 'busy_dev_screen.txt'
-qBusy_d_inp      = qPath_work + 'busy_d_1screen.txt'
-qBusy_d_play     = qPath_work + 'busy_d_7play.txt'
-qBusy_d_browser  = qPath_work + 'busy_d_8web.txt'
-
-
-
 # 共通ルーチン
+import  _v5__qRiKi
+qRiKi = _v5__qRiKi.qRiKi_class()
 import  _v5__qFunc
 qFunc = _v5__qFunc.qFunc_class()
 import  _v5__qLog
 qLog  = _v5__qLog.qLog_class()
 import  _v5__qFFmpeg
 qFFmpeg=_v5__qFFmpeg.qFFmpeg_class()
+
+qPLATFORM        = qRiKi.getValue('qPLATFORM'        )
+qRUNATTR         = qRiKi.getValue('qRUNATTR'         )
+qHOSTNAME        = qRiKi.getValue('qHOSTNAME'        )
+qUSERNAME        = qRiKi.getValue('qUSERNAME'        )
+qPath_pictures   = qRiKi.getValue('qPath_pictures'   )
+qPath_videos     = qRiKi.getValue('qPath_videos'     )
+qPath_cache      = qRiKi.getValue('qPath_cache'      )
+qPath_sounds     = qRiKi.getValue('qPath_sounds'     )
+qPath_icons      = qRiKi.getValue('qPath_icons'      )
+qPath_fonts      = qRiKi.getValue('qPath_fonts'      )
+qPath_log        = qRiKi.getValue('qPath_log'        )
+qPath_work       = qRiKi.getValue('qPath_work'       )
+qPath_rec        = qRiKi.getValue('qPath_rec'        )
+
+qPath_s_ctrl     = qRiKi.getValue('qPath_s_ctrl'     )
+qPath_s_inp      = qRiKi.getValue('qPath_s_inp'      )
+qPath_s_wav      = qRiKi.getValue('qPath_s_wav'      )
+qPath_s_jul      = qRiKi.getValue('qPath_s_jul'      )
+qPath_s_STT      = qRiKi.getValue('qPath_s_STT'      )
+qPath_s_TTS      = qRiKi.getValue('qPath_s_TTS'      )
+qPath_s_TRA      = qRiKi.getValue('qPath_s_TRA'      )
+qPath_s_play     = qRiKi.getValue('qPath_s_play'     )
+qPath_v_ctrl     = qRiKi.getValue('qPath_v_ctrl'     )
+qPath_v_inp      = qRiKi.getValue('qPath_v_inp'      )
+qPath_v_jpg      = qRiKi.getValue('qPath_v_jpg'      )
+qPath_v_detect   = qRiKi.getValue('qPath_v_detect'   )
+qPath_v_cv       = qRiKi.getValue('qPath_v_cv'       )
+qPath_v_photo    = qRiKi.getValue('qPath_v_photo'    )
+qPath_v_msg      = qRiKi.getValue('qPath_v_msg'      )
+qPath_d_ctrl     = qRiKi.getValue('qPath_d_ctrl'     )
+qPath_d_play     = qRiKi.getValue('qPath_d_play'     )
+qPath_d_prtscn   = qRiKi.getValue('qPath_d_prtscn'   )
+qPath_d_movie    = qRiKi.getValue('qPath_d_movie'    )
+qPath_d_upload   = qRiKi.getValue('qPath_d_upload'   )
+
+qBusy_dev_cpu    = qRiKi.getValue('qBusy_dev_cpu'    )
+qBusy_dev_com    = qRiKi.getValue('qBusy_dev_com'    )
+qBusy_dev_mic    = qRiKi.getValue('qBusy_dev_mic'    )
+qBusy_dev_spk    = qRiKi.getValue('qBusy_dev_spk'    )
+qBusy_dev_cam    = qRiKi.getValue('qBusy_dev_cam'    )
+qBusy_dev_dsp    = qRiKi.getValue('qBusy_dev_dsp'    )
+qBusy_dev_scn    = qRiKi.getValue('qBusy_dev_scn'    )
+qBusy_s_ctrl     = qRiKi.getValue('qBusy_s_ctrl'     )
+qBusy_s_inp      = qRiKi.getValue('qBusy_s_inp'      )
+qBusy_s_wav      = qRiKi.getValue('qBusy_s_wav'      )
+qBusy_s_STT      = qRiKi.getValue('qBusy_s_STT'      )
+qBusy_s_TTS      = qRiKi.getValue('qBusy_s_TTS'      )
+qBusy_s_TRA      = qRiKi.getValue('qBusy_s_TRA'      )
+qBusy_s_play     = qRiKi.getValue('qBusy_s_play'     )
+qBusy_v_ctrl     = qRiKi.getValue('qBusy_v_ctrl'     )
+qBusy_v_inp      = qRiKi.getValue('qBusy_v_inp'      )
+qBusy_v_QR       = qRiKi.getValue('qBusy_v_QR'       )
+qBusy_v_jpg      = qRiKi.getValue('qBusy_v_jpg'      )
+qBusy_v_CV       = qRiKi.getValue('qBusy_v_CV'       )
+qBusy_d_ctrl     = qRiKi.getValue('qBusy_d_ctrl'     )
+qBusy_d_inp      = qRiKi.getValue('qBusy_d_inp'      )
+qBusy_d_QR       = qRiKi.getValue('qBusy_d_QR'       )
+qBusy_d_rec      = qRiKi.getValue('qBusy_d_rec'      )
+qBusy_d_telework = qRiKi.getValue('qBusy_d_telework' )
+qBusy_d_play     = qRiKi.getValue('qBusy_d_play'     )
+qBusy_d_browser  = qRiKi.getValue('qBusy_d_browser'  )
+qBusy_d_upload   = qRiKi.getValue('qBusy_d_upload'   )
+qRdy__s_force    = qRiKi.getValue('qRdy__s_force'    )
+qRdy__s_fproc    = qRiKi.getValue('qRdy__s_fproc'    )
+qRdy__s_sendkey  = qRiKi.getValue('qRdy__s_sendkey'  )
+qRdy__v_mirror   = qRiKi.getValue('qRdy__v_mirror'   )
+qRdy__v_reader   = qRiKi.getValue('qRdy__v_reader'   )
+qRdy__v_sendkey  = qRiKi.getValue('qRdy__v_sendkey'  )
+qRdy__d_reader   = qRiKi.getValue('qRdy__d_reader'   )
+qRdy__d_sendkey  = qRiKi.getValue('qRdy__d_sendkey'  )
 
 
 
@@ -333,7 +395,7 @@ class proc_capture:
 if __name__ == '__main__':
 
     # 共通クラス
-    #qRiKi.init()
+    qRiKi.init()
     qFunc.init()
 
     # ログ

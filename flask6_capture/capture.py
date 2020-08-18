@@ -9,7 +9,7 @@ import datetime
 import cv2
 import io
 
-import _v6_proc_capture
+import _v5_proc_capture
 app_thread = None
 app_seq    = 0
 
@@ -22,7 +22,7 @@ app.config['SECRET_KEY'] = os.urandom(24)
 def index():
     global app_thread
     if (app_thread is None):
-        app_thread = _v6_proc_capture.proc_capture(name='capture', id='0', runMode='debug', 
+        app_thread = _v5_proc_capture.proc_capture(name='capture', id='0', runMode='debug', 
                                                    capStretch='0', capRotate='0', capZoom='1.0', capFps='2', )
         app_thread.begin()
 

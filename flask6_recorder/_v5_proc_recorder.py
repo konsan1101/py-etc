@@ -21,43 +21,95 @@ import subprocess
 
 
 
-qPath_log  = 'temp/'
-qPath_work = 'temp/'
-
-qPath_rec        = qPath_work + '_recorder/'
-qPath_d_movie    = qPath_work + 'd5_5movie/'
-qPath_d_upload   = qPath_work + 'd5_9upload/'
-
-if (os.name == 'nt'):
-    qUSERNAME = os.environ["USERNAME"]
-    qPath_pictures   = 'C:/Users/' + qUSERNAME + '/Pictures/RiKi/'
-    qPath_videos     = 'C:/Users/' + qUSERNAME + '/Videos/RiKi/'
-else:
-    qUSERNAME = os.environ["USER"]
-    qPath_pictures   = ''
-    qPath_videos     = ''
-
-qBusy_dev_cpu    = qPath_work + 'busy_dev_cpu.txt'
-qBusy_dev_scn    = qPath_work + 'busy_dev_screen.txt'
-qBusy_dev_dsp    = qPath_work + 'busy_dev_display.txt'
-qBusy_d_rec      = qPath_work + 'busy_d_5rec.txt'
-
 # インターフェース
-qCtrl_control_desktop    = qPath_work + 'control_desktop.txt'
+qCtrl_control_desktop    = 'temp/control_desktop.txt'
 
 # 出力インターフェース
-qCtrl_result_movie        = qPath_work + 'result_movie.mp4'
-qCtrl_result_recorder     = qPath_work + 'result_recorder.txt'
+qCtrl_result_movie        = 'temp/result_movie.mp4'
+qCtrl_result_recorder     = 'temp/result_recorder.txt'
 
 
 
 # 共通ルーチン
+import  _v5__qRiKi
+qRiKi = _v5__qRiKi.qRiKi_class()
 import  _v5__qFunc
 qFunc = _v5__qFunc.qFunc_class()
 import  _v5__qLog
 qLog  = _v5__qLog.qLog_class()
 import  _v5__qFFmpeg
 qFFmpeg=_v5__qFFmpeg.qFFmpeg_class()
+
+qPLATFORM        = qRiKi.getValue('qPLATFORM'        )
+qRUNATTR         = qRiKi.getValue('qRUNATTR'         )
+qHOSTNAME        = qRiKi.getValue('qHOSTNAME'        )
+qUSERNAME        = qRiKi.getValue('qUSERNAME'        )
+qPath_pictures   = qRiKi.getValue('qPath_pictures'   )
+qPath_videos     = qRiKi.getValue('qPath_videos'     )
+qPath_cache      = qRiKi.getValue('qPath_cache'      )
+qPath_sounds     = qRiKi.getValue('qPath_sounds'     )
+qPath_icons      = qRiKi.getValue('qPath_icons'      )
+qPath_fonts      = qRiKi.getValue('qPath_fonts'      )
+qPath_log        = qRiKi.getValue('qPath_log'        )
+qPath_work       = qRiKi.getValue('qPath_work'       )
+qPath_rec        = qRiKi.getValue('qPath_rec'        )
+
+qPath_s_ctrl     = qRiKi.getValue('qPath_s_ctrl'     )
+qPath_s_inp      = qRiKi.getValue('qPath_s_inp'      )
+qPath_s_wav      = qRiKi.getValue('qPath_s_wav'      )
+qPath_s_jul      = qRiKi.getValue('qPath_s_jul'      )
+qPath_s_STT      = qRiKi.getValue('qPath_s_STT'      )
+qPath_s_TTS      = qRiKi.getValue('qPath_s_TTS'      )
+qPath_s_TRA      = qRiKi.getValue('qPath_s_TRA'      )
+qPath_s_play     = qRiKi.getValue('qPath_s_play'     )
+qPath_v_ctrl     = qRiKi.getValue('qPath_v_ctrl'     )
+qPath_v_inp      = qRiKi.getValue('qPath_v_inp'      )
+qPath_v_jpg      = qRiKi.getValue('qPath_v_jpg'      )
+qPath_v_detect   = qRiKi.getValue('qPath_v_detect'   )
+qPath_v_cv       = qRiKi.getValue('qPath_v_cv'       )
+qPath_v_photo    = qRiKi.getValue('qPath_v_photo'    )
+qPath_v_msg      = qRiKi.getValue('qPath_v_msg'      )
+qPath_d_ctrl     = qRiKi.getValue('qPath_d_ctrl'     )
+qPath_d_play     = qRiKi.getValue('qPath_d_play'     )
+qPath_d_prtscn   = qRiKi.getValue('qPath_d_prtscn'   )
+qPath_d_movie    = qRiKi.getValue('qPath_d_movie'    )
+qPath_d_upload   = qRiKi.getValue('qPath_d_upload'   )
+
+qBusy_dev_cpu    = qRiKi.getValue('qBusy_dev_cpu'    )
+qBusy_dev_com    = qRiKi.getValue('qBusy_dev_com'    )
+qBusy_dev_mic    = qRiKi.getValue('qBusy_dev_mic'    )
+qBusy_dev_spk    = qRiKi.getValue('qBusy_dev_spk'    )
+qBusy_dev_cam    = qRiKi.getValue('qBusy_dev_cam'    )
+qBusy_dev_dsp    = qRiKi.getValue('qBusy_dev_dsp'    )
+qBusy_dev_scn    = qRiKi.getValue('qBusy_dev_scn'    )
+qBusy_s_ctrl     = qRiKi.getValue('qBusy_s_ctrl'     )
+qBusy_s_inp      = qRiKi.getValue('qBusy_s_inp'      )
+qBusy_s_wav      = qRiKi.getValue('qBusy_s_wav'      )
+qBusy_s_STT      = qRiKi.getValue('qBusy_s_STT'      )
+qBusy_s_TTS      = qRiKi.getValue('qBusy_s_TTS'      )
+qBusy_s_TRA      = qRiKi.getValue('qBusy_s_TRA'      )
+qBusy_s_play     = qRiKi.getValue('qBusy_s_play'     )
+qBusy_v_ctrl     = qRiKi.getValue('qBusy_v_ctrl'     )
+qBusy_v_inp      = qRiKi.getValue('qBusy_v_inp'      )
+qBusy_v_QR       = qRiKi.getValue('qBusy_v_QR'       )
+qBusy_v_jpg      = qRiKi.getValue('qBusy_v_jpg'      )
+qBusy_v_CV       = qRiKi.getValue('qBusy_v_CV'       )
+qBusy_d_ctrl     = qRiKi.getValue('qBusy_d_ctrl'     )
+qBusy_d_inp      = qRiKi.getValue('qBusy_d_inp'      )
+qBusy_d_QR       = qRiKi.getValue('qBusy_d_QR'       )
+qBusy_d_rec      = qRiKi.getValue('qBusy_d_rec'      )
+qBusy_d_telework = qRiKi.getValue('qBusy_d_telework' )
+qBusy_d_play     = qRiKi.getValue('qBusy_d_play'     )
+qBusy_d_browser  = qRiKi.getValue('qBusy_d_browser'  )
+qBusy_d_upload   = qRiKi.getValue('qBusy_d_upload'   )
+qRdy__s_force    = qRiKi.getValue('qRdy__s_force'    )
+qRdy__s_fproc    = qRiKi.getValue('qRdy__s_fproc'    )
+qRdy__s_sendkey  = qRiKi.getValue('qRdy__s_sendkey'  )
+qRdy__v_mirror   = qRiKi.getValue('qRdy__v_mirror'   )
+qRdy__v_reader   = qRiKi.getValue('qRdy__v_reader'   )
+qRdy__v_sendkey  = qRiKi.getValue('qRdy__v_sendkey'  )
+qRdy__d_reader   = qRiKi.getValue('qRdy__d_reader'   )
+qRdy__d_sendkey  = qRiKi.getValue('qRdy__d_sendkey'  )
 
 
 
@@ -767,20 +819,20 @@ class proc_recorder:
             and (dev == 'desktop'):
                 speechs = []
                 speechs.append({ 'text':u'記録を開始します。', 'wait':0, })
-                #qRiKi.speech(id=self.proc_id, speechs=speechs, lang='', )
+                qRiKi.speech(id=self.proc_id, speechs=speechs, lang='', )
 
             elif (proc_text.find(u'録画') >=0) \
             and  (proc_text.find(u'開始') >=0) \
             and  (dev == 'desktop'):
                 speechs = []
                 speechs.append({ 'text':u'録画を開始します。', 'wait':0, })
-                #qRiKi.speech(id=self.proc_id, speechs=speechs, lang='', )
+                qRiKi.speech(id=self.proc_id, speechs=speechs, lang='', )
 
             elif (proc_text.lower() == '_rec_restart_') \
             and (dev == 'desktop'):
                 speechs = []
                 speechs.append({ 'text':u'記録は継続しています。', 'wait':0, })
-                #qRiKi.speech(id=self.proc_id, speechs=speechs, lang='', )
+                qRiKi.speech(id=self.proc_id, speechs=speechs, lang='', )
 
             if  (proc_text.lower() == '_rec_start_') \
              or (proc_text.lower() == '_rec_restart_') \
@@ -976,7 +1028,7 @@ class proc_recorder:
             # メッセージ
             speechs = []
             speechs.append({ 'text':u'記録を終了しました。', 'wait':0, })
-            #qRiKi.speech(id=self.proc_id, speechs=speechs, lang='', )
+            qRiKi.speech(id=self.proc_id, speechs=speechs, lang='', )
 
             # ビジー解除
             qFunc.statusSet(self.fileBsy, False)
@@ -999,7 +1051,7 @@ signal.signal(signal.SIGTERM, signal.SIG_IGN)
 if __name__ == '__main__':
 
     # 共通クラス
-    #qRiKi.init()
+    qRiKi.init()
     qFunc.init()
 
     # ログ
@@ -1009,7 +1061,7 @@ if __name__ == '__main__':
 
     # 初期設定
     qFunc.remove(qCtrl_control_desktop)
-    #qRiKi.statusReset_desktop(False)
+    qRiKi.statusReset_desktop(False)
 
     # パラメータ
     runMode = 'debug'

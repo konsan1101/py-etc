@@ -9,7 +9,7 @@ import datetime
 import cv2
 import io
 
-import _v6_proc_recorder
+import _v5_proc_recorder
 app_thread = None
 app_seq    = 0
 
@@ -23,7 +23,7 @@ def index():
     global app_thread
     if (app_thread is None):
         camDev = '0'
-        app_thread = _v6_proc_recorder.proc_recorder(name='recorder', id='0', runMode='debug',)
+        app_thread = _v5_proc_recorder.proc_recorder(name='recorder', id='0', runMode='debug',)
         app_thread.begin()
 
     return Response('''
