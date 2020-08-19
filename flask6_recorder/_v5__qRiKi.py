@@ -29,8 +29,23 @@ if getattr(sys, 'frozen', False):
 import socket
 qHOSTNAME = socket.gethostname().lower()
 
+
+
+def setFolder(name='temp'):
+    if (name[-1:] == '/'):
+        name = name[:-1]
+    if (not os.path.isdir(name)):
+        os.makedirs(name)
+    return name + '/'
+
+
+
+qPath_pictures   = ''
+qPath_videos     = ''
 if (os.name == 'nt'):
     qUSERNAME = os.environ["USERNAME"]
+    qPath_pictures  = setFolder('C:/Users/' + qUSERNAME + '/Pictures/RiKi/')
+    qPath_videos    = setFolder('C:/Users/' + qUSERNAME + '/Videos/RiKi/'  )
 else:
     qUSERNAME = os.environ["USER"]
 
@@ -40,39 +55,33 @@ qPath_sounds    = '_sounds/'
 qPath_icons     = '_icons/'
 qPath_fonts     = '_fonts/'
 
+qPath_cache      = setFolder('_cache/' )
+qPath_config     = setFolder('_config/')
+qPath_temp       = setFolder('temp/'   )
 
-
-qPath_pictures   = ''
-qPath_videos     = ''
-if (os.name == 'nt'):
-    qPath_pictures  = 'C:/Users/' + qUSERNAME + '/Pictures/RiKi/'
-    qPath_videos    = 'C:/Users/' + qUSERNAME + '/Videos/RiKi/'
-
-qPath_cache      = '_cache/'
-qPath_log        = 'temp/_log/'
-qPath_work       = 'temp/_work/'
-qPath_rec        = 'temp/_recorder/'
-
-qPath_s_ctrl     = 'temp/s5_0control/'
-qPath_s_inp      = 'temp/s5_1voice/'
-qPath_s_wav      = 'temp/s5_2wav/'
-qPath_s_jul      = 'temp/s5_3stt_julius/'
-qPath_s_STT      = 'temp/s5_4stt_txt/'
-qPath_s_TTS      = 'temp/s5_5tts_txt/'
-qPath_s_TRA      = 'temp/s5_6tra_txt/'
-qPath_s_play     = 'temp/s5_7play/'
-qPath_v_ctrl     = 'temp/v5_0control/'
-qPath_v_inp      = 'temp/v5_1vision/'
-qPath_v_jpg      = 'temp/v5_2jpg/'
-qPath_v_detect   = 'temp/v5_3detect/'
-qPath_v_cv       = 'temp/v5_5cv_txt/'
-qPath_v_photo    = 'temp/v5_7photo/'
-qPath_v_msg      = 'temp/v5_7photo_msg/'
-qPath_d_ctrl     = 'temp/d5_0control/'
-qPath_d_play     = 'temp/d5_1play/'
-qPath_d_prtscn   = 'temp/d5_2screen/'
-qPath_d_movie    = 'temp/d5_5movie/'
-qPath_d_upload   = 'temp/d5_9upload/'
+qPath_log        = setFolder(qPath_temp + '_log/'          )
+qPath_work       = setFolder(qPath_temp + '_work/'         )
+qPath_rec        = setFolder(qPath_temp + '_recorder/'     )
+qPath_s_ctrl     = setFolder(qPath_temp + 's5_0control/'   )
+qPath_s_inp      = setFolder(qPath_temp + 's5_1voice/'     )
+qPath_s_wav      = setFolder(qPath_temp + 's5_2wav/'       )
+qPath_s_jul      = setFolder(qPath_temp + 's5_3stt_julius/')
+qPath_s_STT      = setFolder(qPath_temp + 's5_4stt_txt/'   )
+qPath_s_TTS      = setFolder(qPath_temp + 's5_5tts_txt/'   )
+qPath_s_TRA      = setFolder(qPath_temp + 's5_6tra_txt/'   )
+qPath_s_play     = setFolder(qPath_temp + 's5_7play/'      )
+qPath_v_ctrl     = setFolder(qPath_temp + 'v5_0control/'   )
+qPath_v_inp      = setFolder(qPath_temp + 'v5_1vision/'    )
+qPath_v_jpg      = setFolder(qPath_temp + 'v5_2jpg/'       )
+qPath_v_detect   = setFolder(qPath_temp + 'v5_3detect/'    )
+qPath_v_cv       = setFolder(qPath_temp + 'v5_5cv_txt/'    )
+qPath_v_photo    = setFolder(qPath_temp + 'v5_7photo/'     )
+qPath_v_msg      = setFolder(qPath_temp + 'v5_7photo_msg/' )
+qPath_d_ctrl     = setFolder(qPath_temp + 'd5_0control/'   )
+qPath_d_play     = setFolder(qPath_temp + 'd5_1play/'      )
+qPath_d_prtscn   = setFolder(qPath_temp + 'd5_2screen/'    )
+qPath_d_movie    = setFolder(qPath_temp + 'd5_5movie/'     )
+qPath_d_upload   = setFolder(qPath_temp + 'd5_9upload/'    )
 
 qBusy_dev_cpu    = qPath_work + 'busy_dev_cpu.txt'
 qBusy_dev_com    = qPath_work + 'busy_dev_commnication.txt'
