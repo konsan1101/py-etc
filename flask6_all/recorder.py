@@ -13,10 +13,16 @@ import _v5_proc_recorder
 app_thread = None
 app_seq    = 0
 
-#app = Flask(__name__, template_folder='html', static_folder='html/static')
-#app.config['JSON_AS_ASCII'] = False
-#app.config['SECRET_KEY'] = os.urandom(24)
-app = Blueprint('recorder', __name__, template_folder='html', static_folder='html/static')
+
+
+if __name__ == '__main__':
+    app = Flask(__name__, template_folder='html', static_folder='html/static')
+    app.config['JSON_AS_ASCII'] = False
+    app.config['SECRET_KEY'] = os.urandom(24)
+else:
+    app = Blueprint('recorder', __name__, template_folder='html', static_folder='html/static')
+
+
 
 # ホーム
 @app.route('/recorder/')

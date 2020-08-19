@@ -13,10 +13,16 @@ import _v5_proc_capture
 app_thread = None
 app_seq    = 0
 
-#app = Flask(__name__, template_folder='html', static_folder='html/static')
-#app.config['JSON_AS_ASCII'] = False
-#app.config['SECRET_KEY'] = os.urandom(24)
-app = Blueprint('capture', __name__, template_folder='html', static_folder='html/static')
+
+
+if __name__ == '__main__':
+    app = Flask(__name__, template_folder='html', static_folder='html/static')
+    app.config['JSON_AS_ASCII'] = False
+    app.config['SECRET_KEY'] = os.urandom(24)
+else:
+    app = Blueprint('capture', __name__, template_folder='html', static_folder='html/static')
+
+
 
 # ホーム
 @app.route('/capture/')
@@ -53,6 +59,8 @@ def frame():
                 #cv2.waitKey(1)
                 ret, jpeg = cv2.imencode('.jpg', res_value.copy())
                 hit = True
+            elif (res_name != ''):
+                print(res_name, res_value, )
         yield (b'--frame\r\n'
             b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
 
@@ -80,6 +88,17 @@ def interval():
 @app.route('/capture/interval/result/<name>')
 def interval_result(name=None):
     global app_thread
+    # 1枚目スキップ
+    hit = False
+    while (hit == False):
+        res_data  = app_thread.get()
+        res_name  = res_data[0]
+        res_value = res_data[1]
+        if (res_name == '[img]'):
+            hit = True
+        elif (res_name != ''):
+            print(res_name, res_value, )
+    # 2枚目有効
     hit = False
     while (hit == False):
         res_data  = app_thread.get()
@@ -88,6 +107,8 @@ def interval_result(name=None):
         if (res_name == '[img]'):
             ret, jpeg = cv2.imencode('.jpg', res_value.copy())
             hit = True
+        elif (res_name != ''):
+            print(res_name, res_value, )
     return send_file(io.BytesIO(jpeg), mimetype='image/jpeg', )
 
 # アイコン
