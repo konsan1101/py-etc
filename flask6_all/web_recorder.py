@@ -25,7 +25,8 @@ else:
 
 
 # ホーム
-@app.route('/recorder/')
+route='/recorder'
+@app.route(route + '/')
 def index():
     global app_thread
     if (app_thread is None):
@@ -33,36 +34,23 @@ def index():
         app_thread = _v5_proc_recorder.proc_recorder(name='recorder', id='0', runMode='debug',)
         app_thread.begin()
 
-    return Response('''
-    ホーム <br />
-    <hr />
-    <a href='/recorder/start/'>録画開始</a> <br />
-    <a href='/recorder/abort/'>録画終了</a> <br />
-    ''')
+    return render_template(route + '/_index.html')
 
 # 録画開始
-@app.route('/recorder/start/')
+@app.route(route + '/start/')
 def start():
     global app_thread
     app_thread.put(['control', u'録画開始'])
-    return Response('''
-    録画開始 <br />
-    <hr />
-    <a href='/recorder/'>ホーム</a> <br />
-    ''')
-    return
+
+    return render_template(route + '/start.html')
 
 # 録画終了
-@app.route('/recorder/abort/')
+@app.route(route + '/abort/')
 def abort():
     global app_thread
     app_thread.put(['control', u'録画終了'])
-    return Response('''
-    録画終了 <br />
-    <hr />
-    <a href='/recorder/'>ホーム</a> <br />
-    ''')
-    return
+
+    return render_template(route + '/abort.html')
 
 # アイコン
 @app.route("/favicon.ico")

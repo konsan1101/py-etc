@@ -13,25 +13,22 @@ app = Flask(__name__, template_folder='html', static_folder='html/static')
 app.config['JSON_AS_ASCII'] = False
 app.config['SECRET_KEY'] = os.urandom(24)
 
-import camera
-app.register_blueprint(camera.app)
+import web_camera
+app.register_blueprint(web_camera.app)
 
-import capture
-app.register_blueprint(capture.app)
+import web_capture
+app.register_blueprint(web_capture.app)
 
-import recorder
-app.register_blueprint(recorder.app)
+import web_recorder
+app.register_blueprint(web_recorder.app)
+
+
 
 # ホーム
-@app.route('/')
+route=''
+@app.route(route + '/')
 def index():
-    return Response('''
-    ホーム <br />
-    <hr />
-    <a href='/camera/'>カメラ表示</a> <br />
-    <a href='/capture/'>キャプチャ表示</a> <br />
-    <a href='/recorder/'>録画制御</a> <br />
-    ''')
+    return render_template(route + '/_index.html')
 
 # アイコン
 @app.route("/favicon.ico")

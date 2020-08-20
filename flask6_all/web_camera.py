@@ -25,7 +25,8 @@ else:
 
 
 # ホーム
-@app.route('/camera/')
+route='/camera'
+@app.route(route + '/')
 def index():
     global app_thread
     if (app_thread is None):
@@ -34,17 +35,12 @@ def index():
                                                  camDev=camDev, camMode='vga', camStretch='0', camRotate='0', camZoom='1.0', camFps='30',)
         app_thread.begin()
 
-    return Response('''
-    ホーム <br />
-    <hr />
-    <a href='/camera/stream/'>ストリーム表示</a> <br />
-    <a href='/camera/interval/'>インターバル表示</a> <br />
-    ''')
+    return render_template(route + '/_index.html')
 
 # ストリーム
-@app.route('/camera/stream/')
+@app.route(route + '/stream/')
 def stream():
-    return render_template('/camera/stream.html', filename='/camera/stream/result/image')
+    return render_template(route + '/stream.html', filename=route + '/stream/result/image')
 
 # フレーム取得
 def frame():
@@ -66,13 +62,13 @@ def frame():
             b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
 
 # ストリーム応答
-@app.route('/camera/stream/result/<name>')
+@app.route(route + '/stream/result/<name>')
 def stream_result(name=None):
     return Response(frame(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 # 1画像
-@app.route('/camera/interval/')
+@app.route(route + '/interval/')
 def interval():
     global app_seq
     app_seq += 1
@@ -83,10 +79,10 @@ def interval():
     nowTime  = datetime.datetime.now()
     filename = nowTime.strftime('%Y%m%d.%H%M%S') + '.' + seq4 + '.jpg'
 
-    return render_template('/camera/interval.html', filename='/camera/interval/result/' + filename)
+    return render_template(route + '/interval.html', filename=route + '/interval/result/' + filename)
 
 # 1画像応答
-@app.route('/camera/interval/result/<name>')
+@app.route(route + '/interval/result/<name>')
 def interval_result(name=None):
     global app_thread
     # 1枚目スキップ
