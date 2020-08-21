@@ -15,17 +15,19 @@ app_seq    = 0
 
 
 
+# ルート
+route='/recorder'
+
 if __name__ == '__main__':
     app = Flask(__name__, template_folder='html', static_folder='html/static')
     app.config['JSON_AS_ASCII'] = False
     app.config['SECRET_KEY'] = os.urandom(24)
 else:
-    app = Blueprint('recorder', __name__, template_folder='html', static_folder='html/static')
+    app = Blueprint(route, __name__, template_folder='html', static_folder='html/static')
 
 
 
 # ホーム
-route='/recorder'
 @app.route(route + '/')
 def index():
     global app_thread

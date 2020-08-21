@@ -22,10 +22,14 @@ app.register_blueprint(web_capture.app)
 import web_recorder
 app.register_blueprint(web_recorder.app)
 
+import web_adin2wav
+app.register_blueprint(web_adin2wav.app)
 
+
+# ルート
+route=''
 
 # ホーム
-route=''
 @app.route(route + '/')
 def index():
     return render_template(route + '/_index.html')

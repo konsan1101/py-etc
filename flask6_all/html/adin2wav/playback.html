@@ -10,15 +10,20 @@
 
   <link rel="stylesheet" href="/static/css/destyle.css">
 
+  <script language="JavaScript">
+<!--
+
+  setTimeout("location.reload()",1000*10);
+
+//-->
+  </script>
+
   </head>
 
   <body>
-    ホーム <br />
-    <hr />
-    <a href='/camera/'>→ カメラ表示</a> <br />
-    <a href='/capture/'>→ キャプチャ表示</a> <br />
-    <a href='/recorder/'>→ 録画制御</a> <br />
-    <a href='/adin2wav/'>→ 音声制御</a> <br />
+    <audio controls autoplay>
+    <source src="{{ filename }}">
+    </audio>
   </body>
 
 </html>
