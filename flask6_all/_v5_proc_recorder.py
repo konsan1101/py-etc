@@ -134,8 +134,12 @@ def dshow_dev():
 
     if (os.name == 'nt'):
 
-        ffmpeg = subprocess.Popen(['ffmpeg', '-f', 'dshow', '-list_devices', 'true', '-i', 'nul', ],
-                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+        ffmpeg = subprocess.Popen(['ffmpeg',
+	            '-threads', '2',
+	            '-f', 'dshow',
+	            '-list_devices', 'true',
+	            '-i', 'nul',
+	            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
 
         flag = ''
         checkTime = time.time()
@@ -204,6 +208,7 @@ def movie2jpg(proc_id, batch_index, index=0, dev='desktop',
 
             # 動画処理
             ffmpeg = subprocess.Popen(['ffmpeg',
+                '-threads', '2',
                 '-i', inpFilev,
                 '-ss', '0', '-t', '0.2', '-r', '10',
                 '-qmin', '1', '-q', '1',
@@ -251,6 +256,7 @@ def movie2jpg(proc_id, batch_index, index=0, dev='desktop',
                     qFunc.makeDirs(wrkPath, remove=True, )
 
                     ffmpeg = subprocess.Popen(['ffmpeg',
+                        '-threads', '2',
                         '-i', inpFilev,
                         '-filter:v', 'fps=fps=' + str(sfps) + ':round=down,showinfo',
                         wrkPath + '%04d.jpg',
@@ -275,6 +281,7 @@ def movie2jpg(proc_id, batch_index, index=0, dev='desktop',
 
                     # software encoder,
                     ffmpeg = subprocess.Popen(['ffmpeg',
+                        '-threads', '2',
                         '-i', inpFilev,
                         '-filter:v', 'select=gt(scene\,' + str(scene) + '),scale=0:0,showinfo',
                         '-vsync', 'vfr',
@@ -400,25 +407,6 @@ def movie_proc(runMode, proc_id, batch_index, index, dev,
     # ログ
     qLog.log('info', proc_id, 'thread ' + str(batch_index) + ' : start', )
 
-    # サムネイル抽出
-    wrkPath = qPath_work + 'movie2jpeg' + '{:02}'.format(index) + '/'
-    res = movie2jpg(proc_id, batch_index, index=index, dev=dev,
-                inpPath=qPath_work, inpNamev=rec_namev, 
-                outPath=qPath_rec, wrkPath=wrkPath, sfps=1, scene=0.1, )
-    if (res != False):
-        for f in res:
-            outFile = f.replace(qPath_rec, '')
-            qFunc.copy(f, qPath_d_movie  + outFile)
-            if (runMode != 'assistant'):
-                qFunc.copy(f, qPath_d_upload + outFile)
-            if (qPath_videos != ''):
-                folder = qPath_videos + yyyymmdd + '/'
-                qFunc.makeDirs(folder)
-                qFunc.copy(f, folder + outFile)
-
-            # ログ
-            qLog.log('debug', proc_id, 'thread ' + str(batch_index) + ' : ' + rec_namev + u' → ' + outFile, )
-
     # 動画変換
     res = movie2mp4(proc_id, batch_index, index=index, dev=dev,
                 inpPath=qPath_work, inpNamev=rec_namev, inpNamea=rec_namea, 
@@ -448,6 +436,25 @@ def movie_proc(runMode, proc_id, batch_index, index, dev,
             qFunc.txtsWrite(qCtrl_result_recorder, txts=[mp4file], encoding='utf-8', exclusive=True, mode='w', )
         else:
             qFunc.txtsWrite(qCtrl_result_recorder, txts=['_mp4?_'], encoding='utf-8', exclusive=True, mode='w', )
+
+    # サムネイル抽出
+    wrkPath = qPath_work + 'movie2jpeg' + '{:02}'.format(index) + '/'
+    res = movie2jpg(proc_id, batch_index, index=index, dev=dev,
+                inpPath=qPath_work, inpNamev=rec_namev, 
+                outPath=qPath_rec, wrkPath=wrkPath, sfps=1, scene=0.1, )
+    if (res != False):
+        for f in res:
+            outFile = f.replace(qPath_rec, '')
+            qFunc.copy(f, qPath_d_movie  + outFile)
+            if (runMode != 'assistant'):
+                qFunc.copy(f, qPath_d_upload + outFile)
+            if (qPath_videos != ''):
+                folder = qPath_videos + yyyymmdd + '/'
+                qFunc.makeDirs(folder)
+                qFunc.copy(f, folder + outFile)
+
+            # ログ
+            qLog.log('debug', proc_id, 'thread ' + str(batch_index) + ' : ' + rec_namev + u' → ' + outFile, )
 
     # ワーク削除
     if (rec_filev != ''):

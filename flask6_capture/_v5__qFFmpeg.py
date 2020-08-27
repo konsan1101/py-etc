@@ -104,8 +104,12 @@ class qFFmpeg_class:
 
         if (os.name == 'nt'):
 
-            ffmpeg = subprocess.Popen(['ffmpeg', '-f', 'dshow', '-list_devices', 'true', '-i', 'nul', ],
-                                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+            ffmpeg = subprocess.Popen(['ffmpeg',
+	            '-threads', '2',
+	            '-f', 'dshow',
+	            '-list_devices', 'true',
+	            '-i', 'nul',
+	            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
 
             flag = ''
             checkTime = time.time()
@@ -198,6 +202,7 @@ class qFFmpeg_class:
                 if (os.name == 'nt'):
 
                     ffmpeg = subprocess.Popen(['ffmpeg', 
+                        '-threads', '2',
                         '-f', 'gdigrab', '-i', 'desktop',
                         '-ss','0','-t','0.2','-r','10',
                         '-q','1', 
@@ -209,6 +214,7 @@ class qFFmpeg_class:
                 else:
 
                     ffmpeg = subprocess.Popen(['ffmpeg', 
+                        '-threads', '2',
                         '-f', 'avfoundation', '-i', '1:2',
                         '-ss','0','-t','0.2','-r','10',
                         '-q','1', 
@@ -222,6 +228,7 @@ class qFFmpeg_class:
                 if (os.name == 'nt'):
 
                     ffmpeg = subprocess.Popen(['ffmpeg', 
+                        '-threads', '2',
                         '-rtbufsize', '1024M',
                         '-f', 'dshow', '-i', 'video=' + dev,
                         '-ss','0','-t','0.2','-r','10',
@@ -298,6 +305,7 @@ class qFFmpeg_class:
 
                         # ffmpeg -f avfoundation -i 1:2 -vcodec flv1 -q:v 0 -r 10 desktop.flv
                         res_ffmpeg = subprocess.Popen(['ffmpeg',
+                            '-threads', '2',
                             '-f', 'avfoundation',
                             '-i', '1:2',
                             '-vf', 'scale=1920:-2',
@@ -320,6 +328,7 @@ class qFFmpeg_class:
                         # GPU encoder, intel GPU 6th enable !
                         # ffmpeg -init_hw_device qsv:hw -f gdigrab -i desktop -vcodec hevc_qsv -r 10 desktop.mp4
                         res_ffmpeg = subprocess.Popen(['ffmpeg',
+                            '-threads', '2',
                             '-init_hw_device', 'qsv:hw',
                             '-f', 'gdigrab', '-i', 'desktop',
                             '-vf', 'scale=1920:-2',
@@ -341,6 +350,7 @@ class qFFmpeg_class:
                         # GPU encoder, intel GPU enable !
                         # ffmpeg -init_hw_device qsv:hw -f gdigrab -i desktop -vcodec h264_qsv -r 10 desktop.mp4
                         res_ffmpeg = subprocess.Popen(['ffmpeg',
+                            '-threads', '2',
                             '-init_hw_device', 'qsv:hw',
                             '-f', 'gdigrab', '-i', 'desktop',
                             '-vf', 'scale=1920:-2',
@@ -364,6 +374,7 @@ class qFFmpeg_class:
 
                         # ffmpeg -f gdigrab -i desktop -vcodec flv1 -q:v 0 -r 10 desktop.flv
                         res_ffmpeg = subprocess.Popen(['ffmpeg',
+                            '-threads', '2',
                             '-f', 'gdigrab', '-i', 'desktop',
                             '-vf', 'scale=1920:-2',
                             '-vcodec', 'flv1',
@@ -385,6 +396,7 @@ class qFFmpeg_class:
                         # GPU encoder, intel 6th GPU enable !
                         # ffmpeg -init_hw_device qsv:hw -rtbufsize 1024M -f dshow -i "video=Microsoft Camera Front" -vcodec hevc_qsv -r 10 camera.mp4
                         res_ffmpeg = subprocess.Popen(['ffmpeg',
+                            '-threads', '2',
                             '-init_hw_device', 'qsv:hw',
                             '-rtbufsize', '1024M',
                             '-f', 'dshow', '-i', 'video=' + dev,
@@ -407,6 +419,7 @@ class qFFmpeg_class:
                         # GPU encoder, intel GPU enable !
                         # ffmpeg -init_hw_device qsv:hw -rtbufsize 1024M -f dshow -i "video=Microsoft Camera Front" -vcodec h264_qsv -r 10 camera.mp4
                         res_ffmpeg = subprocess.Popen(['ffmpeg',
+                            '-threads', '2',
                             '-init_hw_device', 'qsv:hw',
                             '-rtbufsize', '1024M',
                             '-f', 'dshow', '-i', 'video=' + dev,
@@ -431,6 +444,7 @@ class qFFmpeg_class:
 
                         # ffmpeg -rtbufsize 1024M -f dshow -i "video=Microsoft Camera Front" -vcodec flv1 -q:v 0 -r 10 camera.flv
                         res_ffmpeg = subprocess.Popen(['ffmpeg',
+                            '-threads', '2',
                             '-rtbufsize', '1024M',
                             '-f', 'dshow', '-i', 'video=' + dev,
                             '-vf', 'scale=1920:-2',
@@ -548,6 +562,7 @@ class qFFmpeg_class:
 
                 # GPU encoder, intel 6th GPU enable !
                 ffmpeg = subprocess.Popen(['ffmpeg',
+                    '-threads', '2',
                     '-init_hw_device', 'qsv:hw',
                     '-i', inp_filev, '-i', inp_filea,
                     '-vf', 'scale=1920:-1',
@@ -576,6 +591,7 @@ class qFFmpeg_class:
 
                 # GPU encoder, intel GPU enable !
                 ffmpeg = subprocess.Popen(['ffmpeg',
+                    '-threads', '2',
                     '-init_hw_device', 'qsv:hw',
                     '-i', inp_filev, '-i', inp_filea,
                     '-vf', 'scale=1920:-1',
@@ -604,6 +620,7 @@ class qFFmpeg_class:
 
                 # software encoder,
                 ffmpeg = subprocess.Popen(['ffmpeg',
+                    '-threads', '2',
                     '-i', inp_filev, '-i', inp_filea,
                     '-vcodec', 'libx265', '-r', str(rate),
                     '-acodec', 'libmp3lame', '-strict', 'unofficial', '-ab', '96k', '-ac', '1', '-ar', '16000',
@@ -632,6 +649,7 @@ class qFFmpeg_class:
 
                 # GPU encoder, intel 6th GPU enable !
                 ffmpeg = subprocess.Popen(['ffmpeg',
+                    '-threads', '2',
                     '-init_hw_device', 'qsv:hw',
                     '-i', inp_filev,
                     '-vf', 'scale=1920:-1',
@@ -658,6 +676,7 @@ class qFFmpeg_class:
 
                 # GPU encoder, intel GPU enable !
                 ffmpeg = subprocess.Popen(['ffmpeg',
+                    '-threads', '2',
                     '-init_hw_device', 'qsv:hw',
                     '-i', inp_filev,
                     '-vf', 'scale=1920:-1',
@@ -684,6 +703,7 @@ class qFFmpeg_class:
 
                 # software encoder,
                 ffmpeg = subprocess.Popen(['ffmpeg',
+                    '-threads', '2',
                     '-i', inp_filev,
                     '-vcodec', 'libx265', '-r', str(rate),
                     out_filev,
