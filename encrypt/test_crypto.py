@@ -17,8 +17,12 @@ if __name__ == '__main__':
     data = b'Hoge Hoge'
     print(data)
 
-    cipher_enc = AES.new(key, AES.MODE_EAX)
-    crypto_bin, tag = cipher_enc.encrypt_and_digest(data)
+    aes_mode = AES.MODE_EAX
+    #aes_mode = AES.MODE_CCM
+    #aes_mode = AES.MODE_GCM
+
+    cipher_enc = AES.new(key, aes_mode)
+    crypto_bin = cipher_enc.encrypt(data)
 
     print(crypto_bin)
     crypto_text = base64.b64encode(crypto_bin)
@@ -27,8 +31,8 @@ if __name__ == '__main__':
     crypto_bin = base64.b64decode(crypto_text)
     print(crypto_bin)
 
-    cipher_dec = AES.new(key, AES.MODE_EAX, cipher_enc.nonce)
-    data = cipher_dec.decrypt_and_verify(crypto_bin, tag)
+    cipher_dec = AES.new(key, aes_mode, cipher_enc.nonce)
+    data = cipher_dec.decrypt(crypto_bin)
     print(data)
 
 
