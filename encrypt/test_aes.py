@@ -11,10 +11,10 @@ import base64
 
 if __name__ == '__main__':
 
-    #key = b'Kondokondo01'
-    key = base64.b64encode(b'Kondokondo01')
+    #key = b'Testxtestx01'
+    key = base64.b64encode(b'Testxtestx01')
 
-    ptext = 'sanko'
+    ptext = 'test'
 
     iv = b'0' * 16
     aes = AES.new(key, AES.MODE_CBC, iv)
