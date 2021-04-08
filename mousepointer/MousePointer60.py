@@ -58,17 +58,26 @@ class proc_mousePointer:
     def check(self, ):
         nowTime = datetime.datetime.now()
         nowHHMMSS = nowTime.strftime('%H:%M:%S')
+        nowYOUBI  = nowTime.strftime('%a')
         if (nowHHMMSS < self.dayStart) \
         or (nowHHMMSS > self.dayEnd):
             if (self.startMsg == True):
                 self.startMsg = False
-                print('mouse pointer stop')
+                print('mouse pointer stop (day time)')
             return
         if  (nowHHMMSS > self.lunchStart) \
         and (nowHHMMSS < self.lunchEnd):
             if (self.startMsg == True):
                 self.startMsg = False
-                print('mouse pointer stop')
+                print('mouse pointer stop (lunch time)')
+            return
+        if  (nowYOUBI == 'Sat') \
+        or  (nowYOUBI == 'Sun') \
+        or  (nowYOUBI == '土') \
+        or  (nowYOUBI == '日'):
+            if (self.startMsg == True):
+                self.startMsg = False
+                print('mouse pointer stop (YOUBI=' & nowYOUBI & ')')
             return
 
         (x, y) = pyautogui.position()
