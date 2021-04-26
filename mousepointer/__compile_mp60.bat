@@ -13,18 +13,18 @@ ECHO ---------------------------
 ECHO pyinstaller compile setting
 rem  setuptools==49.6.0, 44.0.0
 ECHO ---------------------------
-rem  python -m pip  install --upgrade numpy
-     python -m pip  uninstall -y      numpy
-     python -m pip  install           numpy==1.19
-rem  python -m pip  install --upgrade matplotlib==3.0.3
-     python -m pip  uninstall -y      matplotlib
-     python -m pip  install           matplotlib==3.0.3
-rem  python -m pip  install --upgrade setuptools
-rem  python -m pip  uninstall -y      setuptools
-rem  python -m pip  install           setuptools==49.6.0
-rem  python -m pip  install --upgrade pyinstaller
-rem  python -m pip  uninstall -y      pyinstaller
-rem  python -m pip  install           pyinstaller==3.6
+rem rem  python -m pip  install --upgrade setuptools
+rem rem  python -m pip  uninstall -y      setuptools
+rem rem  python -m pip  install           setuptools==49.6.0
+rem rem  python -m pip  install --upgrade pyinstaller
+rem rem  python -m pip  uninstall -y      pyinstaller
+rem rem  python -m pip  install           pyinstaller==3.6
+rem rem  python -m pip  install --upgrade numpy
+rem      python -m pip  uninstall -y      numpy
+rem      python -m pip  install           numpy==1.19
+    rem  python -m pip  install --upgrade matplotlib==3.2.2
+         python -m pip  uninstall -y      matplotlib
+         python -m pip  install           matplotlib==3.2.2
 ECHO;
 
 
