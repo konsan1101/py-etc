@@ -591,9 +591,9 @@ if __name__ == '__main__':
 
     #camDev='http://192.168.200.250/SnapshotJPEG?Resolution=640x480'
     #camDev='http://192.168.200.250/nphMotionJpeg?Resolution=640x480'
-    camDev='http://192.168.200.251/SnapshotJPEG?Resolution=640x480'
+    ###camDev='http://192.168.200.251/SnapshotJPEG?Resolution=640x480'
     #camDev='http://192.168.200.251/MotionJPEG?Resolution=640x480'
-    #ok camDev='0'
+    camDev='0'
     camera_thread = proc_camera(name='camera', id='0', runMode='debug', 
                     camDev=camDev, camMode='vga', camStretch='0', camRotate='0', camZoom='1.0', camFps='5',)
     camera_thread.begin()

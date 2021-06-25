@@ -36,7 +36,7 @@ set pyname=MousePointer60
 IF EXIST "dist\%pyname%.exe"  ECHO "%pyname%.exe"
     copy "dist\%pyname%.exe"       "%pyname%.exe"
     del  "%pyname%.spec"
-    copy "%pyname%.exe"        "C:\RiKi_v5_assistant\%pyname%.exe"
+    copy "%pyname%.exe"        "C:\RiKi_assistant\%pyname%.exe"
     del  "%pyname%.exe"
 
 ECHO;
