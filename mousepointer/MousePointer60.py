@@ -149,7 +149,7 @@ class proc_mousePointer:
             return
 
         # Sign 00:00
-        if (nowHHMM[-3:] == ':08'):
+        if (nowHHMM[-3:] == ':00'):
             if (nowHHMM != self.lastSign):
                 self.lastSign = nowHHMM
                 print(nowHHMM)
