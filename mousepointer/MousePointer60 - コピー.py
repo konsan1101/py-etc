@@ -40,8 +40,8 @@ def in_japanese(txt=''):
 def txt2img(txts=[], bg_color=(0,0,0), txt_color=(255,255,255), ):
 
     # フォント定義
-    font128_default  = ImageFont.truetype(qFont_default['file'], 128, encoding='unic')
-    font128_defaulty =                    qFont_default['offset']
+    font64_default  = ImageFont.truetype(qFont_default['file'], 64, encoding='unic')
+    font64_defaulty =                    qFont_default['offset']
 
     # キャンバス用意
     maxlen = 0
@@ -53,8 +53,8 @@ def txt2img(txts=[], bg_color=(0,0,0), txt_color=(255,255,255), ):
         if (maxlen < lenstr):
             maxlen = lenstr
 
-    draw_height = int(10 + (128 + 10) * len(txts))
-    draw_width = int(10 + 128/2 + 128 * maxlen)
+    draw_height = int(10 + (64 + 10) * len(txts))
+    draw_width = int(64/2 + 64 * maxlen)
     #bg_color = (0,0,0)
     text_img  = Image.new('RGB', (draw_width, draw_height), bg_color)
     text_draw = ImageDraw.Draw(text_img)
@@ -64,7 +64,7 @@ def txt2img(txts=[], bg_color=(0,0,0), txt_color=(255,255,255), ):
     # 文字描写
     #txt_color = (255,255,255)
     for i in range(0, len(txts)):
-        text_draw.text((10, (128 + 10)*i + font128_defaulty), txts[i], font=font64_default, fill=txt_color)
+        text_draw.text((16, (64 + 10)*i + font64_defaulty), txts[i], font=font64_default, fill=txt_color)
 
         #print(txts[i])
 
