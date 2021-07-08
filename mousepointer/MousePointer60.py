@@ -40,8 +40,8 @@ def in_japanese(txt=''):
 def txt2img(txts=[], bg_color=(0,0,0), txt_color=(255,255,255), ):
 
     # フォント定義
-    font32_default  = ImageFont.truetype(qFont_default['file'], 32, encoding='unic')
-    font32_defaulty =                    qFont_default['offset']
+    font64_default  = ImageFont.truetype(qFont_default['file'], 64, encoding='unic')
+    font64_defaulty =                    qFont_default['offset']
 
     # キャンバス用意
     maxlen = 0
@@ -53,8 +53,8 @@ def txt2img(txts=[], bg_color=(0,0,0), txt_color=(255,255,255), ):
         if (maxlen < lenstr):
             maxlen = lenstr
 
-    draw_height = int(10 + (32 + 10) * len(txts))
-    draw_width = int(32 + 32 * maxlen)
+    draw_height = int(10 + (64 + 10) * len(txts))
+    draw_width = int(64/2 + 64 * maxlen)
     #bg_color = (0,0,0)
     text_img  = Image.new('RGB', (draw_width, draw_height), bg_color)
     text_draw = ImageDraw.Draw(text_img)
@@ -64,7 +64,7 @@ def txt2img(txts=[], bg_color=(0,0,0), txt_color=(255,255,255), ):
     # 文字描写
     #txt_color = (255,255,255)
     for i in range(0, len(txts)):
-        text_draw.text((16, (32 + 10)*i + font32_defaulty), txts[i], font=font32_default, fill=txt_color)
+        text_draw.text((16, (64 + 10)*i + font64_defaulty), txts[i], font=font64_default, fill=txt_color)
 
         #print(txts[i])
 
@@ -162,7 +162,7 @@ class proc_mousePointer:
 
                 img  = cv2.resize(img_txts, (image_width, image_height))
 
-                qGuide.init(panel='5', title='', image=img,)
+                qGuide.init(panel='5', title='', image=img, alpha_channel=0.5, )
                 qGuide.open()
                 qGuide.setMessage(txt='', )
                 time.sleep(3.00)
