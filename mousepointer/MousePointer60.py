@@ -37,6 +37,8 @@ def in_japanese(txt=''):
             pass
         return False
 
+
+
 def txt2img(txts=[], bg_color=(0,0,0), txt_color=(255,255,255), ):
 
     # フォント定義
@@ -54,7 +56,7 @@ def txt2img(txts=[], bg_color=(0,0,0), txt_color=(255,255,255), ):
             maxlen = lenstr
 
     draw_height = int(10 + (128 + 10) * len(txts))
-    draw_width = int(10 + 128/2 + 128 * maxlen)
+    draw_width = int(128 * (maxlen + 1))
     #bg_color = (0,0,0)
     text_img  = Image.new('RGB', (draw_width, draw_height), bg_color)
     text_draw = ImageDraw.Draw(text_img)
@@ -64,11 +66,35 @@ def txt2img(txts=[], bg_color=(0,0,0), txt_color=(255,255,255), ):
     # 文字描写
     #txt_color = (255,255,255)
     for i in range(0, len(txts)):
-        text_draw.text((10, (128 + 10)*i + font128_defaulty), txts[i], font=font64_default, fill=txt_color)
+        text_draw.text((128/2, (128 + 10)*i + font128_defaulty), txts[i], font=font128_default, fill=txt_color)
 
         #print(txts[i])
 
     return np.asarray(text_img)
+
+
+def imgOverlay(img1_base, img2_overlay, threshold=64, ):
+
+    # ベースサイズ取得
+    img1_height, img1_width = img1_base.shape[:2]
+
+    # リサイズ
+    img2_resize = cv2.resize(img2_overlay, (img1_width, img1_height))
+
+    # 重ね合わせ領域
+    img2_gray    = cv2.cvtColor(img2_resize, cv2.COLOR_BGR2GRAY)
+    ret, img2_bw = cv2.threshold(img2_gray, threshold, 255, cv2.THRESH_BINARY)
+    img2_invert  = cv2.bitwise_not(img2_bw)
+
+    # 合成
+    img1 = cv2.bitwise_and(img1_base,   img1_base,   mask=img2_invert)
+    img2 = cv2.bitwise_and(img2_resize, img2_resize, mask=img2_bw)
+    img_out = cv2.add(img1, img2)
+
+    #cv2.cvCopy(img_txts, img_base, img_bw)
+    #cv2.cvCopy(img_txts, img_base, img_bw)
+
+    return img_out
 
 
 
@@ -154,15 +180,18 @@ class proc_mousePointer:
                 self.lastSign = nowHHMM
                 print(nowHHMM)
 
+                # ベース画像
                 img_base = cv2.imread('C:/RiKi_assistant/_icons/RiKi_base.png')
-                image_height, image_width = img_base.shape[:2]
 
+                # 文字画像
                 zen = mojimoji.han_to_zen(nowHHMM)
-                img_txts = txt2img([zen])
+                img_overlay = txt2img([zen], txt_color=(255,0,255) )
 
-                img  = cv2.resize(img_txts, (image_width, image_height))
+                # 合成
+                image = imgOverlay(img_base, img_overlay)
 
-                qGuide.init(panel='5', title='', image=img, alpha_channel=0.5, )
+                # 表示
+                qGuide.init(panel='5', title='', image=image, alpha_channel=0.3, )
                 qGuide.open()
                 qGuide.setMessage(txt='', )
                 time.sleep(3.00)
