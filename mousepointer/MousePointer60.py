@@ -182,13 +182,18 @@ class proc_mousePointer:
 
                 # ベース画像
                 img_base = cv2.imread('C:/RiKi_assistant/_icons/RiKi_base.png')
+                image = img_base.copy()
 
-                # 文字画像
-                zen = mojimoji.han_to_zen(nowHHMM)
-                img_overlay = txt2img([zen], txt_color=(255,0,255) )
+                ## 文字画像
+                #zen = mojimoji.han_to_zen(nowHHMM)
+                #img_overlay = txt2img([zen], txt_color=(255,0,255) )
+                #
+                ## 合成
+                #image = imgOverlay(img_base, img_overlay)
 
-                # 合成
-                image = imgOverlay(img_base, img_overlay)
+                # 直接描写
+                image_height, image_width = image.shape[:2]
+                cv2.putText(image, nowHHMM, (20, int(image_height*0.75)-40), cv2.FONT_HERSHEY_SIMPLEX, 5, (255,0,255), 12, cv2.LINE_AA)
 
                 # 表示
                 qGuide.init(panel='5', title='', image=image, alpha_channel=0.3, )
