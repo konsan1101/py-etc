@@ -9,29 +9,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #load image
-image=cv2.imread("sample.jpg")
-#cv2.imshow("figure",image)
-cv2.waitKey(0)
-#create blob detector
-detector=cv2.SimpleBlobDetector_create()
-#keypoints
-keypoints=detector.detect(image)
-#create a blank file which is a numpy array to hold our circle that we will detect and mark during the process
-blank = np.zeros((1,1))
-blobs = cv2.drawKeypoints(image, keypoints, blank, (0,0,255),cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+input_img=cv2.imread("sample2.jpg")
 
-number_of_blobs = len(keypoints)
-text = "Total Number of Blobss: " + str(len(keypoints))
-cv2.putText(blobs, text, (2, 55), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
-
-# Display image with blob keypoints
-#cv2.imshow("Blobs using default parameters", blobs)
-cv2.waitKey(0)
 #another function to create blobs
 params=cv2.SimpleBlobDetector_Params()
 #AREA
 params.filterByArea=True
-params.minArea=100
+params.minArea=150
 #CIRCULARITY
 params.filterByCircularity=True
 params.minCircularity=0.4
@@ -43,22 +27,26 @@ params.filterByInertia=True
 params.minInertiaRatio=0.01
 
 detector=cv2.SimpleBlobDetector_create(params)
-keypoints=detector.detect(image)
+keypoints=detector.detect(input_img)
 blank=np.zeros((1,1))
-number_of_blobs = len(keypoints)
+number_of_keypoints = len(keypoints)
 
 #for i in range(number_of_blobs):
-print("Number of Circular Blobs: " + str(number_of_blobs))
+print("Number of Circular keypoints: " + str(number_of_keypoints))
 
-blobs=cv2.drawKeypoints(image,keypoints,blank,(0,200,222),cv2.DRAW_MATCHES_FLAGS_DEFAULT)
+#drawKeypoints
+#output_img=cv2.drawKeypoints(input_img,keypoints,blank,(255,0,255),cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
-#number_of_blobs = len(keypoints)
-text = "Number of Circular Blobs: " + str(len(keypoints))
+#circle
+output_img=input_img.copy()
+for kp in keypoints:
+    #print(kp.pt, kp.size)
+    x = int(kp.pt[0])
+    y = int(kp.pt[1])
+    l = int(kp.size*0.5)
+    cv2.circle(output_img, (x,y), l, (255, 0, 255), thickness=-1)
 
-cv2.putText(blobs, text, (1, 55), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
-
-
-cv2.imshow("blobs",blobs)
+cv2.imshow("matchs",output_img)
 cv2.waitKey(0)
 
 cv2.destroyAllWindows()
