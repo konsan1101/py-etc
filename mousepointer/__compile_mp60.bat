@@ -23,8 +23,11 @@ rem rem  python -m pip  install --upgrade numpy
 rem      python -m pip  uninstall -y      numpy
 rem      python -m pip  install           numpy==1.20.2
 rem rem  python -m pip  install --upgrade matplotlib
-         python -m pip  uninstall -y      matplotlib
-         python -m pip  install           matplotlib==3.2.2
+rem      python -m pip  uninstall -y      matplotlib
+rem      python -m pip  install           matplotlib==3.2.2
+rem rem  python -m pip  install --upgrade pandas
+rem      python -m pip  uninstall -y      pandas
+rem      python -m pip  install           pandas==1.3.5
 rem rem  python -m pip  install --upgrade opencv-python
          python -m pip  uninstall -y      opencv-python
          python -m pip  install           opencv-python==4.4.0.46
