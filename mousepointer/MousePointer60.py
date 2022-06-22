@@ -122,6 +122,9 @@ class proc_mousePointer:
         self.lunchEnd   = '12:55:00'
         self.lastSign   = '00:00'
 
+        self.last_t = time.time()
+        self.last_c = time.time()
+
     def init(self, ):
         (w, h) = pyautogui.size()
         self.sc_width  = w
@@ -137,10 +140,13 @@ class proc_mousePointer:
             pyautogui.moveTo(int(x), int(y))
         except Exception as e:
             pass
-        try:
-            pyautogui.press("ctrl")
-        except Exception as e:
-            pass
+
+        if ((time.time() - self.last_c) > self.waitSec):
+            try:
+                pyautogui.press("ctrl")
+            except Exception as e:
+                pass
+            self.last_c = time.time()
 
         (x, y) = pyautogui.position()
         self.last_x = x
@@ -229,6 +235,9 @@ class proc_mousePointer:
                 y = (self.sc_height-100)
 
             self.moveTo(x, y)
+            self.last_x = x
+            self.last_y = y
+            #self.last_t = time.time()
 
 
 
