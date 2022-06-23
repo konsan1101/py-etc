@@ -117,7 +117,7 @@ class proc_mousePointer:
         time.sleep(1)
         self.waitSec= 60
         self.dayStart   = '06:55:00'
-        self.dayEnd     = '16:05:00'
+        self.dayEnd     = '18:05:00'
         self.lunchStart = '12:05:00'
         self.lunchEnd   = '12:55:00'
         self.lastSign   = '00:00'
