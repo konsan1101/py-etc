@@ -18,15 +18,16 @@ if __name__ == '__main__':
         img = str(sys.argv[2])
 
     # ヘッドレスモードオプション
-    options = ChromeOptions()
-    options.add_argument('-headless')
+    #options = ChromeOptions()
+    #options.add_argument('-headless')
 
     # ChromeのWebDriver作成
-    driver = Chrome(options=options)
+    #driver = Chrome(options=options, executable_path='_webdrivers/chromedriver.exe')
+    driver = Chrome(executable_path='_webdrivers/chromedriver.exe')
 
     # ウィンドウサイズとズームを設定
-    driver.set_window_size(1920, 9999)
-    driver.execute_script("document.body.style.zoom='100%'")
+    #driver.set_window_size(1920, 9999)
+    #driver.execute_script("document.body.style.zoom='100%'")
 
     # URLを開く
     driver.get(url)

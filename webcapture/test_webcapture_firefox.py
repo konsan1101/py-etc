@@ -22,7 +22,7 @@ if __name__ == '__main__':
     options.add_argument('-headless')
 
     # FirefoxのWebDriver作成
-    driver = Firefox(options=options)
+    driver = Firefox(options=options, executable_path='_webdrivers/geckodriver.exe')
 
     # ウィンドウサイズとズームを設定
     driver.set_window_size(1920, 9999)
