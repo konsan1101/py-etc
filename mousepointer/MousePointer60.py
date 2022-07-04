@@ -105,13 +105,13 @@ class proc_mousePointer:
         time.sleep(1)
         pyautogui.FAILSAFE = False
 
-        print('Change Sub Screen ...')
-        time.sleep(1)
-        pyautogui.keyDown('ctrlleft')
-        pyautogui.keyDown('winleft')
-        pyautogui.press('right')
-        pyautogui.keyUp('winleft')
-        pyautogui.keyUp('ctrlleft')
+        #print('Change Sub Screen ...')
+        #time.sleep(1)
+        #pyautogui.keyDown('ctrlleft')
+        #pyautogui.keyDown('winleft')
+        #pyautogui.press('right')
+        #pyautogui.keyUp('winleft')
+        #pyautogui.keyUp('ctrlleft')
 
         print('Parameter Setting ...')
         time.sleep(1)
