@@ -9,10 +9,15 @@ PAUSE
 
 
 
+ECHO;
+    python -m pip  install --upgrade pyautogui
+
+
+
 set pyname=pyWinLeft
     echo;
     echo %pyname%.py
-    pyinstaller %pyname%.py  -F --log-level ERROR
+    pyinstaller %pyname%.py  -F --log-level ERROR  --noconsole
 IF EXIST "dist\%pyname%.exe"  ECHO "%pyname%.exe"
     copy "dist\%pyname%.exe"       "%pyname%.exe"
     del  "%pyname%.spec"
@@ -22,7 +27,7 @@ rem del  "%pyname%.exe"
 set pyname=pyWinRight
     echo;
     echo %pyname%.py
-    pyinstaller %pyname%.py  -F --log-level ERROR
+    pyinstaller %pyname%.py  -F --log-level ERROR  --noconsole
 IF EXIST "dist\%pyname%.exe"  ECHO "%pyname%.exe"
     copy "dist\%pyname%.exe"       "%pyname%.exe"
     del  "%pyname%.spec"
