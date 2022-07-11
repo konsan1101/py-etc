@@ -10,6 +10,8 @@ PAUSE
 
 
 ECHO;
+    python -m pip  install --upgrade pyinstaller==5.1
+    python -m pip  install --upgrade numpy
     python -m pip  install --upgrade pyqt5
     python -m pip  install --upgrade pyqtgraph
 

@@ -8,7 +8,7 @@ import pyqtgraph as pg
 import numpy as np
 import datetime
 
-win = pg.GraphicsLayoutWidget(show=True, title='Analog clock')
+win = pg.GraphicsLayoutWidget(show=True, title='pyClock')
 init_window_size = 400 #800
 win.resize(init_window_size, init_window_size)
 
@@ -56,7 +56,7 @@ font = QtGui.QFont()
 font.setPixelSize(int(font_size / 2))
 
 date_text = pg.TextItem(text='0000/00/00', anchor=(0.5, 0.5))
-date_text.setPos(0, -radius / 3.5)
+date_text.setPos(0, radius / 2.5)
 date_text.setFont(font)
 graph.addItem(date_text)
 
@@ -136,21 +136,8 @@ resize_timer = QtCore.QTimer()
 resize_timer.timeout.connect(resize_text)
 resize_timer.start(200)
 
-
-def update_clock():
-    dt_now = datetime.datetime.now()
-    yy = dt_now.year
-    mm = dt_now.month
-    dd = dt_now.day
-    h = dt_now.hour
-    m = dt_now.minute
-    s = dt_now.second
-
-    set_datetime()
-
-
 update_timer = QtCore.QTimer()
-update_timer.timeout.connect(update_clock)
+update_timer.timeout.connect(set_datetime)
 update_timer.start(50)
 
 if __name__ == '__main__':
