@@ -14,6 +14,7 @@ ECHO;
     python -m pip  install --upgrade numpy
     python -m pip  install --upgrade pyqt5
     python -m pip  install --upgrade pyqtgraph
+    python -m pip  install --upgrade pyautogui
 
 
 
@@ -25,6 +26,7 @@ IF EXIST "dist\%pyname%.exe"  ECHO "%pyname%.exe"
     copy "dist\%pyname%.exe"       "%pyname%.exe"
     del  "%pyname%.spec"
     copy "%pyname%.exe"        "C:\RiKi_assistant\%pyname%.exe"
+    copy "%pyname%.exe"        "C:\_‹¤—L\Player\%pyname%.exe"
 rem del  "%pyname%.exe"
 
 ECHO;

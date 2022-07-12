@@ -3,10 +3,14 @@
 
 # https://qiita.com/ddside/items/5831980e9409e2b09ed5
 
+import sys
+import datetime
+
 from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg
 import numpy as np
-import datetime
+
+import pyautogui
 
 win = pg.GraphicsLayoutWidget(show=True, title='pyClock')
 init_window_size = 400 #800
@@ -141,8 +145,12 @@ update_timer.timeout.connect(set_datetime)
 update_timer.start(50)
 
 if __name__ == '__main__':
-    import sys
 
     app = QtGui.QApplication([])
+
+    # 右上
+    w, h = pyautogui.size()
+    win.move(w - init_window_size - 20, 20)
+
     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
         QtGui.QApplication.instance().exec_()
