@@ -15,6 +15,7 @@ ECHO;
     python -m pip  install --upgrade pyqt5
     python -m pip  install --upgrade pyqtgraph
     python -m pip  install --upgrade pyautogui
+    python -m pip  install --upgrade pywin32
 
 
 
