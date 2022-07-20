@@ -74,12 +74,15 @@ for second in range(60):
 
 hour_texts = []
 for hour in range(1, 13, 1):
-    x = np.sin(np.radians(360 * (hour / 12))) * radius * 0.8
-    y = np.cos(np.radians(360 * (hour / 12))) * radius * 0.8
-    hour_text = pg.TextItem(text=str(hour), anchor=(0.5, 0.5), color=(255,255,255), )
+    x = np.sin(np.radians(360 * (hour / 12))) * radius * 0.7
+    y = np.cos(np.radians(360 * (hour / 12))) * radius * 0.7
+    if ((hour % 3) == 0):
+        hour_text = pg.TextItem(text=str(hour), anchor=(0.5, 0.5), color=(255,255,255), )
+    else:
+        hour_text = pg.TextItem(text='', anchor=(0.5, 0.5), color=(255,255,255), )
     hour_text.setPos(x, y)
     font = QtGui.QFont()
-    font.setPixelSize(font_size)
+    font.setPixelSize(int(font_size * 1.5))
     hour_text.setFont(font)
     graph.addItem(hour_text)
     hour_texts.append(hour_text)
@@ -116,7 +119,7 @@ def resize_text():
 
     for hour_text in hour_texts:
         font = QtGui.QFont()
-        font.setPixelSize(int(new_font_size))
+        font.setPixelSize(int(new_font_size * 1.5))
         hour_text.setFont(font)
 
 
