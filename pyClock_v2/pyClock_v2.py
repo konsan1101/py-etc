@@ -32,8 +32,9 @@ qPath_fonts     = '_fonts/'
 
 runMode = 'analog'
 #runMode = 'digital'
-alpha   = '0.7'
+panel   = 'auto'
 design  = 'auto'
+alpha   = '0.7'
 
 
 
@@ -60,18 +61,20 @@ class qClock_class:
 
         # 規定値
         self.analog_b_fcolor = 'white'
+        self.analog_b_tcolor = 'fuchsia'
         self.analog_b_bcolor = 'black'
         self.analog_s_fcolor  = 'red'
         self.analog_s_bcolor1 = 'darkred'
-        self.analog_s_bcolor2 = 'orangered'
+        self.analog_s_bcolor2 = 'tomato'
         self.analog_m_fcolor  = 'cyan'
         self.analog_m_bcolor1 = 'darkgreen'
-        self.analog_m_bcolor2 = 'lime'
+        self.analog_m_bcolor2 = 'limegreen'
         self.analog_h_fcolor  = 'cyan'
         self.analog_h_bcolor1 = 'darkblue'
         self.analog_h_bcolor2 = 'deepskyblue'
 
-        self.digital_b_fcolor = 'magenta'
+        self.digital_b_fcolor = 'white'
+        self.digital_b_tcolor = 'fuchsia'
         self.digital_b_bcolor = 'black'
 
         # -------------
@@ -163,10 +166,10 @@ class qClock_class:
                 pil_image2 = self.cv2pil(self.digital_dseg7_0)
                 text_draw1 = ImageDraw.Draw(pil_image1)
                 text_draw1.text((int(width*0.63),int(height*0.05)), ymd, font=self.font32_dseg7, fill=(0,0,255))
-                text_draw1.text((int(width*0.05),int(height*0.2)), hhmm, font=self.font99_dseg7, fill=self.digital_b_fcolor)
+                text_draw1.text((int(width*0.05),int(height*0.2)), hhmm, font=self.font99_dseg7, fill=self.digital_b_tcolor)
                 text_draw2 = ImageDraw.Draw(pil_image2)
                 text_draw2.text((int(width*0.63),int(height*0.05)), ymd, font=self.font32_dseg7, fill=(0,0,255))
-                text_draw2.text((int(width*0.05),int(height*0.2)), hhmm2, font=self.font99_dseg7, fill=self.digital_b_fcolor)
+                text_draw2.text((int(width*0.05),int(height*0.2)), hhmm2, font=self.font99_dseg7, fill=self.digital_b_tcolor)
                 self.digital_dseg7_0 = self.pil2cv(pil_image1)
                 self.digital_dseg7_1 = self.pil2cv(pil_image2)
 
@@ -227,10 +230,10 @@ class qClock_class:
                     pil_image2 = self.cv2pil(self.analog_dseg7_0)
                     text_draw1 = ImageDraw.Draw(pil_image1)
                     text_draw1.text((int(width*0.37),int(height*0.30)), ymd, font=self.font32_dseg7, fill=(0,0,255))
-                    text_draw1.text((int(width*0.06),int(height*0.6)), hhmm, font=self.font99_dseg7, fill=(255,0,255))
+                    text_draw1.text((int(width*0.06),int(height*0.6)), hhmm, font=self.font99_dseg7, fill=self.analog_b_tcolor)
                     text_draw2 = ImageDraw.Draw(pil_image2)
                     text_draw2.text((int(width*0.37),int(height*0.30)), ymd, font=self.font32_dseg7, fill=(0,0,255))
-                    text_draw2.text((int(width*0.06),int(height*0.6)), hhmm2, font=self.font99_dseg7, fill=(255,0,255))
+                    text_draw2.text((int(width*0.06),int(height*0.6)), hhmm2, font=self.font99_dseg7, fill=self.analog_b_tcolor)
                     self.analog_dseg7_0 = self.pil2cv(pil_image1)
                     self.analog_dseg7_1 = self.pil2cv(pil_image2)
                 else:
@@ -239,8 +242,8 @@ class qClock_class:
                     pil_image = self.cv2pil(self.analog_dseg7_0)
                     text_draw = ImageDraw.Draw(pil_image)
                     text_draw.text((int(width*0.65),int(height*0.02)), ymd, font=self.font32_dseg7, fill=(0,0,255))
-                    text_draw.text((int(width*0.05),int(height*0.08)), hh, font=self.font88_dseg7, fill=(255,0,255))
-                    text_draw.text((int(width*0.35),int(height*0.53)), mm, font=self.font88_dseg7, fill=(255,0,255))
+                    text_draw.text((int(width*0.05),int(height*0.08)), hh, font=self.font88_dseg7, fill=self.analog_b_tcolor)
+                    text_draw.text((int(width*0.35),int(height*0.53)), mm, font=self.font88_dseg7, fill=self.analog_b_tcolor)
                     self.analog_dseg7_0 = self.pil2cv(pil_image)
                     self.analog_dseg7_1 = self.analog_dseg7_0.copy()
 
@@ -350,15 +353,15 @@ class qClock_class:
             # 時針
             h_x = np.sin(np.radians((h % 12)/12*360)) * 0.55
             h_y = np.cos(np.radians((h % 12)/12*360)) * 0.55
-            self.ax.plot([0,h_x], [0,h_y], color=self.analog_h_fcolor, lw=20, zorder=99, )
+            self.ax.plot([0,h_x], [0,h_y], color=self.analog_h_fcolor, lw=32, zorder=99, )
             # 分針
             m_x = np.sin(np.radians(m/60*360)) * 0.80
             m_y = np.cos(np.radians(m/60*360)) * 0.80
-            self.ax.plot([0,m_x], [0,m_y], color=self.analog_m_fcolor, lw=12, zorder=99, )
+            self.ax.plot([0,m_x], [0,m_y], color=self.analog_m_fcolor, lw=16, zorder=99, )
             # 秒針
             s_x = np.sin(np.radians(s/60*360)) * 0.85
             s_y = np.cos(np.radians(s/60*360)) * 0.85
-            self.ax.plot([0,s_x], [0,s_y], color=self.analog_s_fcolor, lw=6, zorder=99, )
+            self.ax.plot([0,s_x], [0,s_y], color=self.analog_s_fcolor, lw=8, zorder=99, )
             # 画像保存
             buf = io.BytesIO()
             self.fig.savefig(buf, format='png', bbox_inches='tight', pad_inches=0, )
@@ -480,6 +483,62 @@ class qClock_class:
             pass
         return None
 
+    # qFunc,qGuide 共通
+    def getPanelPos(self, id='0-', ):
+        #left, top, width, height = getPanelPos(panel,)
+
+        w, h = pyautogui.size()
+        wa = int(w/100) 
+        ha = int(h/100) 
+        wb = int(w/20) 
+        hb = int(h/20) 
+        if   (id == '0'):
+            return 0, 0, w, h
+        elif (id == '0-'):
+            return wb, hb, int(w-wb*2), int(h-hb*2)
+        elif (id == '0+'):
+            return -30, -30, w+60, h+60
+        elif (id == '1'):
+            return 0, 0, int(w/3), int(h/3)
+        elif (id == '1-'):
+            return 0+wa, 0+ha, int((w/3)-wa*2), int((h/3)-ha*2)
+        elif (id == '2'):
+            return int(w/3), 0, int(w/3), int(h/3)
+        elif (id == '2-'):
+            return int(w/3)+wa, 0+ha, int((w/3)-wa*2), int((h/3)-ha*2)
+        elif (id == '3'):
+            return w-int(w/3), 0, int(w/3), int(h/3)
+        elif (id == '3-'):
+            return w-int(w/3)+wa, 0+ha, int((w/3)-wa*2), int((h/3)-ha*2)
+        elif (id == '4'):
+            return 0, int(h/3), int(w/3), int(h/3)
+        elif (id == '4-'):
+            return 0+wa, int(h/3)+ha, int((w/3)-wa*2), int((h/3)-ha*2)
+        elif (id == '5'):
+            return int(w/3), int(h/3), int(w/3), int(h/3)
+        elif (id == '5-'):
+            return int(w/3)+wa, int(h/3)+ha, int((w/3)-wa*2), int((h/3)-ha*2)
+        elif (id == '5+'):
+            return int(w/4), int(h/4), int(w/2), int(h/2)
+        elif (id == '6'):
+            return w-int(w/3), int(h/3), int(w/3), int(h/3)
+        elif (id == '6-'):
+            return w-int(w/3)+wa, int(h/3)+ha, int((w/3)-wa*2), int((h/3)-ha*2)
+        elif (id == '7'):
+            return 0, h-int(h/3), int(w/3), int(h/3)
+        elif (id == '7-'):
+            return 0+wa, h-int(h/3)+ha, int((w/3)-wa*2), int((h/3)-ha*2)
+        elif (id == '8'):
+            return int(w/3), h-int(h/3), int(w/3), int(h/3)
+        elif (id == '8-'):
+            return int(w/3)+wa, h-int(h/3)+ha, int((w/3)-wa*2), int((h/3)-ha*2)
+        elif (id == '9'):
+            return w-int(w/3), h-int(h/3), int(w/3), int(h/3)
+        elif (id == '9-'):
+            return w-int(w/3)+wa, h-int(h/3)+ha, int((w/3)-wa*2), int((h/3)-ha*2)
+        else:
+            return int(w/4), int(h/4), int(w/2), int(h/2)
+
 
 
 if __name__ == '__main__':
@@ -491,9 +550,11 @@ if __name__ == '__main__':
     if (len(sys.argv) >= 2):
         runMode  = str(sys.argv[1]).lower()
     if (len(sys.argv) >= 3):
-        alpha = str(sys.argv[2])
+        panel  = str(sys.argv[2])
     if (len(sys.argv) >= 4):
         design = str(sys.argv[3])
+    if (len(sys.argv) >= 5):
+        alpha = str(sys.argv[4])
 
     # テーマ
     sg.theme('Black')
@@ -502,25 +563,35 @@ if __name__ == '__main__':
     # レイアウト
     w, h = pyautogui.size()
     sg_title = 'pyClock'
-    if (runMode != 'digital'):
-        sg_top = 0
-        sg_left = w - int(w*0.25)
-        sg_width = int(w*0.25)
-        sg_height = int(w*0.25)
+    if (panel == 'auto'):
+        if (runMode != 'digital'):
+            sg_left = w - int(w/3)
+            sg_top = 0
+            sg_width = int(w/3)
+            sg_height = int(w/3)
+        else:
+            sg_left = w - int(w/3)
+            sg_top = 0
+            sg_width = int(w/3)
+            sg_height = int(h/3)
     else:
-        sg_top = 0
-        sg_left = w - int(w*0.25)
-        sg_width = int(w*0.25)
-        sg_height = int(w*0.25/2)
-    sg_no_titlebar = True
-    red_x = "R0lGODlhEAAQAPeQAIsAAI0AAI4AAI8AAJIAAJUAAJQCApkAAJoAAJ4AAJkJCaAAAKYAAKcAAKcCAKcDA6cGAKgAAKsAAKsCAKwAAK0AAK8AAK4CAK8DAqUJAKULAKwLALAAALEAALIAALMAALMDALQAALUAALYAALcEALoAALsAALsCALwAAL8AALkJAL4NAL8NAKoTAKwbAbEQALMVAL0QAL0RAKsREaodHbkQELMsALg2ALk3ALs+ALE2FbgpKbA1Nbc1Nb44N8AAAMIWAMsvAMUgDMcxAKVABb9NBbVJErFYEq1iMrtoMr5kP8BKAMFLAMxKANBBANFCANJFANFEB9JKAMFcANFZANZcANpfAMJUEMZVEc5hAM5pAMluBdRsANR8AM9YOrdERMpIQs1UVMR5WNt8X8VgYMdlZcxtYtx4YNF/btp9eraNf9qXXNCCZsyLeNSLd8SSecySf82kd9qqc9uBgdyBgd+EhN6JgtSIiNuJieGHhOGLg+GKhOKamty1ste4sNO+ueenp+inp+HHrebGrefKuOPTzejWzera1O7b1vLb2/bl4vTu7fbw7ffx7vnz8f///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAJAALAAAAAAQABAAAAjUACEJHEiwYEEABniQKfNFgQCDkATQwAMokEU+PQgUFDAjjR09e/LUmUNnh8aBCcCgUeRmzBkzie6EeQBAoAAMXuA8ciRGCaJHfXzUMCAQgYooWN48anTokR8dQk4sELggBhQrU9Q8evSHiJQgLCIIfMDCSZUjhbYuQkLFCRAMAiOQGGLE0CNBcZYmaRIDLqQFGF60eTRoSxc5jwjhACFWIAgMLtgUocJFy5orL0IQRHAiQgsbRZYswbEhBIiCCH6EiJAhAwQMKU5DjHCi9gnZEHMTDAgAOw=="
+        sg_left, sg_top, sg_width, sg_height = qClock.getPanelPos(id=panel)
+    
+    #sg_no_titlebar = True
+    #sg_resizable = False
+    #red_x = "R0lGODlhEAAQAPeQAIsAAI0AAI4AAI8AAJIAAJUAAJQCApkAAJoAAJ4AAJkJCaAAAKYAAKcAAKcCAKcDA6cGAKgAAKsAAKsCAKwAAK0AAK8AAK4CAK8DAqUJAKULAKwLALAAALEAALIAALMAALMDALQAALUAALYAALcEALoAALsAALsCALwAAL8AALkJAL4NAL8NAKoTAKwbAbEQALMVAL0QAL0RAKsREaodHbkQELMsALg2ALk3ALs+ALE2FbgpKbA1Nbc1Nb44N8AAAMIWAMsvAMUgDMcxAKVABb9NBbVJErFYEq1iMrtoMr5kP8BKAMFLAMxKANBBANFCANJFANFEB9JKAMFcANFZANZcANpfAMJUEMZVEc5hAM5pAMluBdRsANR8AM9YOrdERMpIQs1UVMR5WNt8X8VgYMdlZcxtYtx4YNF/btp9eraNf9qXXNCCZsyLeNSLd8SSecySf82kd9qqc9uBgdyBgd+EhN6JgtSIiNuJieGHhOGLg+GKhOKamty1ste4sNO+ueenp+inp+HHrebGrefKuOPTzejWzera1O7b1vLb2/bl4vTu7fbw7ffx7vnz8f///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAJAALAAAAAAQABAAAAjUACEJHEiwYEEABniQKfNFgQCDkATQwAMokEU+PQgUFDAjjR09e/LUmUNnh8aBCcCgUeRmzBkzie6EeQBAoAAMXuA8ciRGCaJHfXzUMCAQgYooWN48anTokR8dQk4sELggBhQrU9Q8evSHiJQgLCIIfMDCSZUjhbYuQkLFCRAMAiOQGGLE0CNBcZYmaRIDLqQFGF60eTRoSxc5jwjhACFWIAgMLtgUocJFy5orL0IQRHAiQgsbRZYswbEhBIiCCH6EiJAhAwQMKU5DjHCi9gnZEHMTDAgAOw=="
+    #layout = [[
+    #        sg.Button('', image_data=red_x, button_color=('black', 'black'), key='-exit-', tooltip='Closes'),
+    #        sg.Text(sg_title),
+    #        ],[
+    #        sg.Image(filename='', key='image'),
+    #        ]]
+    sg_no_titlebar = False
+    sg_resizable = True
     layout = [[
-            sg.Button('', image_data=red_x, button_color=('black', 'black'), key='-exit-', tooltip='Closes'),
-            sg.Text(sg_title),
-            ],[
             sg.Image(filename='', key='image'),
             ]]
-
+    
     # ウィンドウ作成
     sg_win = sg.Window(sg_title, layout,
                         keep_on_top=True,
@@ -536,6 +607,7 @@ if __name__ == '__main__':
                         finalize=True,
                         location=(sg_left, sg_top),
                         size=(sg_width + 4, sg_height + 22),
+                        resizable=sg_resizable,
                         )
 
     # イベントループ
@@ -548,6 +620,11 @@ if __name__ == '__main__':
             break
         if event in (None, '-exit-'):
             break
+
+        # サイズ変更対応
+        w, h = sg_win.size
+        sg_width = w - 4
+        sg_height = h - 22
 
         # 時計表示
         dt_now = datetime.datetime.now()

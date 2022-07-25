@@ -1,13 +1,18 @@
 @ECHO OFF
 
+    SET runMode=analog
+rem SET runMode=digital
+    SET panel=auto
+
 ECHO;
 ECHO designëIëÅiì¸óÕñ≥ÇµÇÕautoÅj
 SET design=
 SET /P design="?"
 IF %design%@==@        SET design=auto
 
-ECHO  start "" "pyClock_v2.exe" "analog" "0.7" %design%
-      start "" "pyClock_v2.exe" "analog" "0.7" %design%
+
+ECHO start "" "pyClock_v2.exe" "%runMode%" %panel% %design% "0.7"
+     start "" "pyClock_v2.exe" "%runMode%" %panel% %design% "0.7"
 
 ECHO;
 ECHO Waiting...5s
