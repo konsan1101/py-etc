@@ -11,8 +11,8 @@ SET /P design="?"
 IF %design%@==@        SET design=auto
 
 
-ECHO start "" "pyClock_v2.exe" "%runMode%" %panel% %design% "0.7"
-     start "" "pyClock_v2.exe" "%runMode%" %panel% %design% "0.7"
+ECHO start "" /min "pyClock_v2.exe" "%runMode%" %panel% %design% "0.7"
+     start "" /min "pyClock_v2.exe" "%runMode%" %panel% %design% "0.7"
 
 ECHO;
 ECHO Waiting...5s

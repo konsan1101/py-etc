@@ -98,27 +98,42 @@ def task_execute(path='', yymmdd='20221101', hhmm='0000', youbi='Mon', ):
         for f in path_files:
             if (os.path.isfile(f)):
                 ext=f[-4:].lower()
-                print(f,ext)
 
                 if (ext=='.wav') or (ext=='.mp3'):
                     file = f.replace('/','\\')
-                    sox=subprocess.Popen(['sox', '-q', file, '-d', 
-                        ], \
-                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+                    print(file)
+
+                    try:
+                        sox = subprocess.Popen(['sox', '-q', file, '-d', ], \
+                              shell=False, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+                        sox.wait()
+                        sox.terminate()
+                        sox = None
+                    except:
+                        pass
 
                 if (ext=='.mp4'):
-                    file = f.replace('/','\\')
-                    ffplay = subprocess.Popen(['ffplay', '-i', file, \
-                        '-noborder', '-autoexit', \
-                        '-loglevel', 'warning', \
-                        ], \
-                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+                    file = f.replace('/','\\') 
+                    print(file)
+
+                    try:
+                        ffplay = subprocess.Popen(['ffplay', '-i', file, \
+                            '-noborder', '-autoexit', \
+                            '-loglevel', 'warning', \
+                            ], \
+                            shell=False, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+                    except:
+                        pass
 
                 if (ext=='.bat'):
-                    file = f.replace('/','\\')
-                    cmd = subprocess.Popen(['cmd.exe', '/c', file, \
-                        ], \
-                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+                    file = '"' + f.replace('/','\\') + '"'
+                    print(file)
+
+                    try:
+                        cmd = subprocess.Popen(file)
+                        #shell=False, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+                    except:
+                        pass
 
 
 

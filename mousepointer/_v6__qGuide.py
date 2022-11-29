@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # ------------------------------------------------
-# COPYRIGHT (C) 2014-2022 Mitsuo KONDOU.
+# COPYRIGHT (C) 2014-2023 Mitsuo KONDOU.
 # This software is released under the MIT License.
 # https://github.com/konsan1101
 # Thank you for keeping the rules.
@@ -26,6 +26,7 @@ qPLATFORM = platform.system().lower() #windows,darwin,linux
 
 
 qPath_fonts     = '_fonts/'
+qPath_icons     = '_icons/'
 
 
 
@@ -57,13 +58,15 @@ class qGuide_class:
         if (title ==''):
             title = 'Guide_' + panel
         self.panel = panel
+        self.left, self.top, self.width, self.height = self.getPanelPos(self.panel,)
+
+        self.image = image.copy()
         self.title = title
 
         # 表示位置
         image_height, image_width = image.shape[:2]
         if  (self.title != 'detect_face') \
         and (self.title != 'detect_speech'):
-            self.left, self.top, self.width, self.height = self.getPanelPos(self.panel,)
 
             if (self.panel == '7') \
             or (self.panel == '8') \
@@ -71,13 +74,11 @@ class qGuide_class:
                 self.top -= 50
 
             if (self.title.find('_guide_') >= 0):
-                self.height = int(self.height/4)
+                self.height = int(self.height/4)    #DANGER !
                 if (self.panel == '7') \
                 or (self.panel == '8') \
                 or (self.panel == '9'):
                     self.top += (self.height * 3)
-
-            self.image  = cv2.resize(image, (self.width, self.height))
 
         elif  (self.title == 'detect_face'):
             w, h = pyautogui.size()
@@ -139,7 +140,7 @@ class qGuide_class:
                             )
             # 更新
             if (not self.window is None):
-                img = self.image.copy()
+                img = cv2.resize(self.image, (self.width, self.height))
                 png = cv2.imencode('.png', img)[1].tobytes()
                 self.window['image'].update(data=png)
 
@@ -151,21 +152,33 @@ class qGuide_class:
         else:
             return False
 
+    def setImage(self, img=None, ):
+        img = cv2.resize(self.image, (self.width, self.height))
+        png = cv2.imencode('.png', img)[1].tobytes()
+        self.window['image'].update(data=png)
+
+    def setAlphaChannel(self, alpha_channel=1, ):
+        try:
+            self.window.alpha_channel=alpha_channel
+        except:
+            pass
+
     def setMessage(self, txt='', ):
         try:
             if (not self.window is None):
 
-                img = self.image.copy()
+                img = cv2.resize(self.image, (self.width, self.height))
 
                 # 文字描写
-                if (txt != ''):
-                    if (self.font32_default is None):
-                        cv2.putText(img, txt, (5,self.height-15), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255,0,255))
-                    else:
-                        pil_image = self.cv2pil(img)
-                        text_draw = ImageDraw.Draw(pil_image)
-                        text_draw.text((10, self.height-42), txt, font=self.font32_default, fill=(255,0,255))
-                        img = self.pil2cv(pil_image)
+                if (self.font32_default != None):
+                    if (txt != ''):
+                        if (self.font32_default is None):
+                            cv2.putText(img, txt, (5,self.height-15), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255,0,255))
+                        else:
+                            pil_image = self.cv2pil(img)
+                            text_draw = ImageDraw.Draw(pil_image)
+                            text_draw.text((10, self.height-42), txt, font=self.font32_default, fill=(255,0,255))
+                            img = self.pil2cv(pil_image)
 
                 # 更新
                 png = cv2.imencode('.png', img)[1].tobytes()
@@ -271,6 +284,8 @@ class qGuide_class:
             return 0, 0, w, h
         elif (id == '0-'):
             return wb, hb, int(w-wb*2), int(h-hb*2)
+        elif (id == '0+'):
+            return -30, -30, w+60, h+60
         elif (id == '1'):
             return 0, 0, int(w/3), int(h/3)
         elif (id == '1-'):
@@ -318,23 +333,42 @@ if __name__ == '__main__':
 
     qGuide = qGuide_class()
 
-    img = cv2.imread('_icons/RiKi_start.png')
+    img = cv2.imread(qPath_icons + 'RiKi_start.png')
     qGuide.init(panel='5', title='', image=img,)
     qGuide.open()
 
     qGuide.setMessage(txt='', )
-    time.sleep(3.00)
+    time.sleep(5.00)
 
-    qGuide.close()
+    img = cv2.imread(qPath_icons + 'RiKi_base.png')
     qGuide.init(panel='5', title='_guide_', image=img,)
     qGuide.setMessage(txt=u'こんにちは', )
     #qGuide.open()
 
     chkTime = time.time()
-    while ((time.time() - chkTime) < 10):
+    while ((time.time() - chkTime) < 5):
         event, values = qGuide.read()
-        if event in (None, 'Exit'):
+        #print(event, values)
+        if event in (None, '-exit-'):
             break
+    qGuide.close()
+    qGuide.terminate()
+ 
+    img = cv2.imread(qPath_icons + '__black.png')
+    qGuide.init(panel='0+', title='black', image=img,)
+    qGuide.open()
+    #print(qGuide.height)
+
+    onece = True
+    alpha = 1
+    chkTime = time.time()
+    while ((time.time() - chkTime) < 15):
+        event, values = qGuide.read()
+        #print(event, values)
+        if event in (None, '-exit-'):
+            break
+        alpha -= 0.01
+        qGuide.setAlphaChannel(alpha)
 
     qGuide.close()
     qGuide.terminate()

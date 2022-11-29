@@ -9,6 +9,16 @@ PAUSE
 
 
 
+ECHO;
+    python -m pip  install --upgrade pyinstaller==5.1
+    python -m pip  install --upgrade numpy
+    python -m pip  install --upgrade pyautogui
+    python -m pip  install --upgrade pysimplegui
+    python -m pip  install --upgrade pywin32
+    python -m pip  install --upgrade psutil
+
+
+
 set pyname=MousePointer60
     echo;
     echo %pyname%.py

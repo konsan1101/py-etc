@@ -33,9 +33,11 @@ set pyname=pyClock_v2
 set pyname2=pyClock
     echo;
     echo %pyname%.py
-    pyinstaller %pyname%.py  -F --log-level ERROR --noconsole
+rem    pyinstaller %pyname%.py  -F --log-level ERROR --noconsole
+    pyinstaller %pyname%.py  -F --log-level ERROR
 IF EXIST "dist\%pyname%.exe"  ECHO "%pyname%.exe"
     copy "dist\%pyname%.exe"       "%pyname%.exe"
+    copy "dist\%pyname%.exe"       "%pyname2%.exe"
     del  "%pyname%.spec"
     copy "%pyname%.exe"        "C:\RiKi_assistant\%pyname2%.exe"
     copy "%pyname%.exe"        "C:\_‹¤—L\Player\%pyname2%.exe"

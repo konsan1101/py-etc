@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # ------------------------------------------------
-# COPYRIGHT (C) 2014-2022 Mitsuo KONDOU.
+# COPYRIGHT (C) 2014-2023 Mitsuo KONDOU.
 # This software is released under the MIT License.
 # https://github.com/konsan1101
 # Thank you for keeping the rules.
@@ -159,7 +159,7 @@ class qFunc_class:
         if (os.name == 'nt'):
             try:
                 kill = subprocess.Popen(['taskkill', '/im', name + '.exe', '/f', ], \
-                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+                       shell=False, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
                 kill.wait()
                 kill.terminate()
                 kill = None
@@ -169,7 +169,7 @@ class qFunc_class:
         else:
             try:
                 kill = subprocess.Popen(['pkill', '-9', '-f', name, ], \
-                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+                       shell=False, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
                 kill.wait()
                 kill.terminate()
                 kill = None
@@ -626,8 +626,8 @@ class qFunc_class:
 
         if (os.path.exists(playfile)):
 
-            sox=subprocess.Popen(['sox', '-q', playfile, '-d', ], \
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+            sox = subprocess.Popen(['sox', '-q', playfile, '-d', ], \
+                  shell=False, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
             if (sync == True):
                 sox.wait()
                 sox.terminate()
