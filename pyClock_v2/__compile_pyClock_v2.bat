@@ -14,6 +14,8 @@ ECHO;
     python -m pip  install --upgrade numpy
     python -m pip  install --upgrade pyautogui
     python -m pip  install --upgrade pysimplegui
+    python -m pip  install --upgrade pywin32
+    python -m pip  install --upgrade psutil
 
 ECHO;
     python -m pip  install --upgrade pillow

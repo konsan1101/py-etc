@@ -11,8 +11,12 @@
 
 
 import sys
+import os
 import time
 import datetime
+import glob
+
+import subprocess
 
 import pyautogui
 import numpy as np
@@ -26,7 +30,24 @@ import PySimpleGUI as sg
 
 
 
+# 共通ルーチン
+import  _v6__qFunc
+qFunc = _v6__qFunc.qFunc_class()
+
+
+
 qPath_fonts     = '_fonts/'
+qPath_config    = '_config/'
+qPath_task      = '_task/'
+qPath_0_all     = qPath_config + qPath_task + '0_all/'
+qPath_0_week    = qPath_config + qPath_task + '0_week/'
+qPath_1_mon     = qPath_config + qPath_task + '1_mon/'
+qPath_2_tue     = qPath_config + qPath_task + '2_tue/'
+qPath_3_wed     = qPath_config + qPath_task + '3_wed/'
+qPath_4_thu     = qPath_config + qPath_task + '4_thu/'
+qPath_5_fri     = qPath_config + qPath_task + '5_fri/'
+qPath_6_sat     = qPath_config + qPath_task + '6_sat/'
+qPath_7_sun     = qPath_config + qPath_task + '7_sun/'
 
 
 
@@ -35,6 +56,69 @@ runMode = 'analog'
 panel   = 'auto'
 design  = 'auto'
 alpha   = '0.7'
+
+
+
+def task_check(yymmdd='20221101', hhmm='0000', youbi='Mon', ):
+    if (True):
+        task_execute(path=qPath_0_all,  yymmdd=yymmdd, hhmm=hhmm, youbi=youbi, )
+    if (youbi=='Mon' or youbi=='Tue' or youbi=='Wed' or youbi=='Thu' or youbi=='Fri'):
+        task_execute(path=qPath_0_week, yymmdd=yymmdd, hhmm=hhmm, youbi=youbi, )
+    if (youbi=='Mon'):
+        task_execute(path=qPath_1_mon,  yymmdd=yymmdd, hhmm=hhmm, youbi=youbi, )
+    if (youbi=='Tue'):
+        task_execute(path=qPath_2_tue,  yymmdd=yymmdd, hhmm=hhmm, youbi=youbi, )
+    if (youbi=='Wed'):
+        task_execute(path=qPath_3_wed,  yymmdd=yymmdd, hhmm=hhmm, youbi=youbi, )
+    if (youbi=='Thu'):
+        task_execute(path=qPath_4_thu,  yymmdd=yymmdd, hhmm=hhmm, youbi=youbi, )
+    if (youbi=='Fri'):
+        task_execute(path=qPath_5_fri,  yymmdd=yymmdd, hhmm=hhmm, youbi=youbi, )
+    if (youbi=='Sat'):
+        task_execute(path=qPath_6_sat,  yymmdd=yymmdd, hhmm=hhmm, youbi=youbi, )
+    if (youbi=='Sun'):
+        task_execute(path=qPath_7_sun,  yymmdd=yymmdd, hhmm=hhmm, youbi=youbi, )
+        
+    path_dirs = glob.glob(qPath_config + qPath_task + yymmdd + '*')
+    if (len(path_dirs) > 0):
+        path_dirs.sort()
+        for p in path_dirs:
+            if (os.path.isdir(p)):
+                pa = p.replace('\\','/') + '/'
+                task_execute(path=pa, yymmdd=yymmdd, hhmm=hhmm, youbi=youbi, )
+
+
+
+def task_execute(path='', yymmdd='20221101', hhmm='0000', youbi='Mon', ):
+    #print(path, yymmdd, hhmm, youbi, )
+
+    path_files = glob.glob(path + hhmm + '*.*')
+    if (len(path_files) > 0):
+        path_files.sort()
+        for f in path_files:
+            if (os.path.isfile(f)):
+                ext=f[-4:].lower()
+                print(f,ext)
+
+                if (ext=='.wav') or (ext=='.mp3'):
+                    file = f.replace('/','\\')
+                    sox=subprocess.Popen(['sox', '-q', file, '-d', 
+                        ], \
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+
+                if (ext=='.mp4'):
+                    file = f.replace('/','\\')
+                    ffplay = subprocess.Popen(['ffplay', '-i', file, \
+                        '-noborder', '-autoexit', \
+                        '-loglevel', 'warning', \
+                        ], \
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
+
+                if (ext=='.bat'):
+                    file = f.replace('/','\\')
+                    cmd = subprocess.Popen(['cmd.exe', '/c', file, \
+                        ], \
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
 
 
 
@@ -123,13 +207,13 @@ class qClock_class:
             pass
         else:
             hhmm = '{:02d}:{:02d}'.format(int(88), int(88))
-            pil_image = self.cv2pil(self.digital_base)
+            pil_image = qFunc.cv2pil(self.digital_base)
             text_draw = ImageDraw.Draw(pil_image)
             if (self.digital_b_bcolor == 'white'):
                 text_draw.text((int(width*0.05),int(height*0.2)), hhmm, font=self.font99_dseg7, fill=(240,240,240))
             else:
                 text_draw.text((int(width*0.05),int(height*0.2)), hhmm, font=self.font99_dseg7, fill=(16,16,16))
-            self.digital_base = self.pil2cv(pil_image)
+            self.digital_base = qFunc.pil2cv(pil_image)
 
         self.last_hhmm = ''
 
@@ -162,16 +246,16 @@ class qClock_class:
             else:
                 hhmm2 = '{:02d} {:02d}'.format(int(h), int(m))
 
-                pil_image1 = self.cv2pil(self.digital_dseg7_0)
-                pil_image2 = self.cv2pil(self.digital_dseg7_0)
+                pil_image1 = qFunc.cv2pil(self.digital_dseg7_0)
+                pil_image2 = qFunc.cv2pil(self.digital_dseg7_0)
                 text_draw1 = ImageDraw.Draw(pil_image1)
                 text_draw1.text((int(width*0.63),int(height*0.05)), ymd, font=self.font32_dseg7, fill=(0,0,255))
                 text_draw1.text((int(width*0.05),int(height*0.2)), hhmm, font=self.font99_dseg7, fill=self.digital_b_tcolor)
                 text_draw2 = ImageDraw.Draw(pil_image2)
                 text_draw2.text((int(width*0.63),int(height*0.05)), ymd, font=self.font32_dseg7, fill=(0,0,255))
                 text_draw2.text((int(width*0.05),int(height*0.2)), hhmm2, font=self.font99_dseg7, fill=self.digital_b_tcolor)
-                self.digital_dseg7_0 = self.pil2cv(pil_image1)
-                self.digital_dseg7_1 = self.pil2cv(pil_image2)
+                self.digital_dseg7_0 = qFunc.pil2cv(pil_image1)
+                self.digital_dseg7_1 = qFunc.pil2cv(pil_image2)
 
         # 秒針
         if ((s % 2) == 0):
@@ -226,25 +310,25 @@ class qClock_class:
             else:
                 if ((design % 2) == 0):
                     hhmm2 = '{:02d} {:02d}'.format(int(h), int(m))
-                    pil_image1 = self.cv2pil(self.analog_dseg7_0)
-                    pil_image2 = self.cv2pil(self.analog_dseg7_0)
+                    pil_image1 = qFunc.cv2pil(self.analog_dseg7_0)
+                    pil_image2 = qFunc.cv2pil(self.analog_dseg7_0)
                     text_draw1 = ImageDraw.Draw(pil_image1)
                     text_draw1.text((int(width*0.37),int(height*0.30)), ymd, font=self.font32_dseg7, fill=(0,0,255))
                     text_draw1.text((int(width*0.06),int(height*0.6)), hhmm, font=self.font99_dseg7, fill=self.analog_b_tcolor)
                     text_draw2 = ImageDraw.Draw(pil_image2)
                     text_draw2.text((int(width*0.37),int(height*0.30)), ymd, font=self.font32_dseg7, fill=(0,0,255))
                     text_draw2.text((int(width*0.06),int(height*0.6)), hhmm2, font=self.font99_dseg7, fill=self.analog_b_tcolor)
-                    self.analog_dseg7_0 = self.pil2cv(pil_image1)
-                    self.analog_dseg7_1 = self.pil2cv(pil_image2)
+                    self.analog_dseg7_0 = qFunc.pil2cv(pil_image1)
+                    self.analog_dseg7_1 = qFunc.pil2cv(pil_image2)
                 else:
                     hh = '{:02d}'.format(int(h))
                     mm = '{:02d}'.format(int(m))
-                    pil_image = self.cv2pil(self.analog_dseg7_0)
+                    pil_image = qFunc.cv2pil(self.analog_dseg7_0)
                     text_draw = ImageDraw.Draw(pil_image)
                     text_draw.text((int(width*0.65),int(height*0.02)), ymd, font=self.font32_dseg7, fill=(0,0,255))
                     text_draw.text((int(width*0.05),int(height*0.08)), hh, font=self.font88_dseg7, fill=self.analog_b_tcolor)
                     text_draw.text((int(width*0.35),int(height*0.53)), mm, font=self.font88_dseg7, fill=self.analog_b_tcolor)
-                    self.analog_dseg7_0 = self.pil2cv(pil_image)
+                    self.analog_dseg7_0 = qFunc.pil2cv(pil_image)
                     self.analog_dseg7_1 = self.analog_dseg7_0.copy()
 
         # 文字 2 パターン
@@ -452,99 +536,20 @@ class qClock_class:
 
 
 
-    # qFunc,qGuide 共通
-    def cv2pil(self, cv2_image=None):
-        try:
-            wrk_image = cv2_image.copy()
-            if (wrk_image.ndim == 2):  # モノクロ
-                pass
-            elif (wrk_image.shape[2] == 3):  # カラー
-                wrk_image = cv2.cvtColor(wrk_image, cv2.COLOR_BGR2RGB)
-            elif (wrk_image.shape[2] == 4):  # 透過
-                wrk_image = cv2.cvtColor(wrk_image, cv2.COLOR_BGRA2RGBA)
-            pil_image = Image.fromarray(wrk_image)
-            return pil_image
-        except:
-            pass
-        return None
-
-    # qFunc,qGuide 共通
-    def pil2cv(self, pil_image=None):
-        try:
-            cv2_image = np.array(pil_image, dtype=np.uint8)
-            if (cv2_image.ndim == 2):  # モノクロ
-                pass
-            elif (cv2_image.shape[2] == 3):  # カラー
-                cv2_image = cv2.cvtColor(cv2_image, cv2.COLOR_RGB2BGR)
-            elif (cv2_image.shape[2] == 4):  # 透過
-                cv2_image = cv2.cvtColor(cv2_image, cv2.COLOR_RGBA2BGRA)
-            return cv2_image
-        except:
-            pass
-        return None
-
-    # qFunc,qGuide 共通
-    def getPanelPos(self, id='0-', ):
-        #left, top, width, height = getPanelPos(panel,)
-
-        w, h = pyautogui.size()
-        wa = int(w/100) 
-        ha = int(h/100) 
-        wb = int(w/20) 
-        hb = int(h/20) 
-        if   (id == '0'):
-            return 0, 0, w, h
-        elif (id == '0-'):
-            return wb, hb, int(w-wb*2), int(h-hb*2)
-        elif (id == '0+'):
-            return -30, -30, w+60, h+60
-        elif (id == '1'):
-            return 0, 0, int(w/3), int(h/3)
-        elif (id == '1-'):
-            return 0+wa, 0+ha, int((w/3)-wa*2), int((h/3)-ha*2)
-        elif (id == '2'):
-            return int(w/3), 0, int(w/3), int(h/3)
-        elif (id == '2-'):
-            return int(w/3)+wa, 0+ha, int((w/3)-wa*2), int((h/3)-ha*2)
-        elif (id == '3'):
-            return w-int(w/3), 0, int(w/3), int(h/3)
-        elif (id == '3-'):
-            return w-int(w/3)+wa, 0+ha, int((w/3)-wa*2), int((h/3)-ha*2)
-        elif (id == '4'):
-            return 0, int(h/3), int(w/3), int(h/3)
-        elif (id == '4-'):
-            return 0+wa, int(h/3)+ha, int((w/3)-wa*2), int((h/3)-ha*2)
-        elif (id == '5'):
-            return int(w/3), int(h/3), int(w/3), int(h/3)
-        elif (id == '5-'):
-            return int(w/3)+wa, int(h/3)+ha, int((w/3)-wa*2), int((h/3)-ha*2)
-        elif (id == '5+'):
-            return int(w/4), int(h/4), int(w/2), int(h/2)
-        elif (id == '6'):
-            return w-int(w/3), int(h/3), int(w/3), int(h/3)
-        elif (id == '6-'):
-            return w-int(w/3)+wa, int(h/3)+ha, int((w/3)-wa*2), int((h/3)-ha*2)
-        elif (id == '7'):
-            return 0, h-int(h/3), int(w/3), int(h/3)
-        elif (id == '7-'):
-            return 0+wa, h-int(h/3)+ha, int((w/3)-wa*2), int((h/3)-ha*2)
-        elif (id == '8'):
-            return int(w/3), h-int(h/3), int(w/3), int(h/3)
-        elif (id == '8-'):
-            return int(w/3)+wa, h-int(h/3)+ha, int((w/3)-wa*2), int((h/3)-ha*2)
-        elif (id == '9'):
-            return w-int(w/3), h-int(h/3), int(w/3), int(h/3)
-        elif (id == '9-'):
-            return w-int(w/3)+wa, h-int(h/3)+ha, int((w/3)-wa*2), int((h/3)-ha*2)
-        else:
-            return int(w/4), int(h/4), int(w/2), int(h/2)
-
-
-
 if __name__ == '__main__':
 
     # 初期化
     qClock = qClock_class()
+
+    qFunc.makeDirs(qPath_0_all,  remove=False, )
+    qFunc.makeDirs(qPath_0_week, remove=False, )
+    qFunc.makeDirs(qPath_1_mon,  remove=False, )
+    qFunc.makeDirs(qPath_2_tue,  remove=False, )
+    qFunc.makeDirs(qPath_3_wed,  remove=False, )
+    qFunc.makeDirs(qPath_4_thu,  remove=False, )
+    qFunc.makeDirs(qPath_5_fri,  remove=False, )
+    qFunc.makeDirs(qPath_6_sat,  remove=False, )
+    qFunc.makeDirs(qPath_7_sun,  remove=False, )
 
     # パラメータ
     if (len(sys.argv) >= 2):
@@ -575,7 +580,7 @@ if __name__ == '__main__':
             sg_width = int(w/3)
             sg_height = int(h/3)
     else:
-        sg_left, sg_top, sg_width, sg_height = qClock.getPanelPos(id=panel)
+        sg_left, sg_top, sg_width, sg_height = qFunc.getPanelPos(id=panel)
     
     #sg_no_titlebar = True
     #sg_resizable = False
@@ -612,6 +617,7 @@ if __name__ == '__main__':
 
     # イベントループ
     bk_s = 0
+    bk_m = 0
     while True:
         # イベントの読み込み
         event, values = sg_win.read(timeout=200, timeout_key='timeout')
@@ -627,7 +633,11 @@ if __name__ == '__main__':
         sg_height = h - 22
 
         # 時計表示
-        dt_now = datetime.datetime.now()
+        dt_now    = datetime.datetime.now()
+        dt_YYMMDD = dt_now.strftime('%Y%m%d')
+        dt_YOUBI  = dt_now.strftime('%a')
+        dt_HHMM   = dt_now.strftime('%H%M')
+        dt_YYYYMMDDHHMM  = dt_now.strftime('%H%M')
         s = dt_now.second
         m = dt_now.minute
         h = dt_now.hour
@@ -654,6 +664,12 @@ if __name__ == '__main__':
 
             imgbytes = cv2.imencode('.png', img)[1].tobytes() 
             sg_win['image'].update(data=imgbytes)
+
+        if (m != bk_m):
+            bk_m=m
+            task_check(dt_YYMMDD, dt_HHMM, dt_YOUBI, )
+
+
 
     # 終了処理
     sg_win.close()
