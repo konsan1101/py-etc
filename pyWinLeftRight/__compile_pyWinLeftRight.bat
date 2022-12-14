@@ -10,10 +10,25 @@ PAUSE
 
 
 ECHO;
-    python -m pip  install --upgrade pyinstaller==5.1
+ECHO -----
+ECHO tools
+ECHO -----
+rem           pip  install --upgrade pip
+    python -m pip  install --upgrade pip
+    python -m pip  install --upgrade wheel
+    python -m pip  install --upgrade setuptools
+    python -m pip  install --upgrade pyinstaller
+
+ECHO;
+ECHO -------
+ECHO etc
+ECHO -------
     python -m pip  install --upgrade pyautogui
 
-
+ECHO;
+ECHO -------
+ECHO compile
+ECHO -------
 
 set pyname=pyWinLeft
     echo;

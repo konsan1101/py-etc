@@ -10,14 +10,34 @@ PAUSE
 
 
 ECHO;
-    python -m pip  install --upgrade pyinstaller==5.1
+ECHO -----
+ECHO tools
+ECHO -----
+rem           pip  install --upgrade pip
+    python -m pip  install --upgrade pip
+    python -m pip  install --upgrade wheel
+    python -m pip  install --upgrade setuptools
+    python -m pip  install --upgrade pyinstaller
+
+ECHO;
+ECHO -------
+ECHO etc
+ECHO -------
     python -m pip  install --upgrade numpy
     python -m pip  install --upgrade pyautogui
     python -m pip  install --upgrade pysimplegui
     python -m pip  install --upgrade pywin32
     python -m pip  install --upgrade psutil
 
+    python -m pip  install --upgrade mojimoji
+    python -m pip  install --upgrade pillow
+    python -m pip  install --upgrade opencv-python
+    python -m pip  install --upgrade opencv-contrib-python
 
+ECHO;
+ECHO -------
+ECHO compile
+ECHO -------
 
 set pyname=MousePointer60
     echo;

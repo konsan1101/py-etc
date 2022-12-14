@@ -10,31 +10,45 @@ PAUSE
 
 
 ECHO;
-    python -m pip  install --upgrade pyinstaller==5.1
+ECHO -----
+ECHO tools
+ECHO -----
+rem           pip  install --upgrade pip
+    python -m pip  install --upgrade pip
+    python -m pip  install --upgrade wheel
+    python -m pip  install --upgrade setuptools
+    python -m pip  install --upgrade pyinstaller
+
+ECHO;
+ECHO -------
+ECHO etc
+ECHO -------
     python -m pip  install --upgrade numpy
     python -m pip  install --upgrade pyautogui
     python -m pip  install --upgrade pysimplegui
     python -m pip  install --upgrade pywin32
     python -m pip  install --upgrade psutil
 
-ECHO;
-    python -m pip  install --upgrade pillow
-    python -m pip  install --upgrade numpy
-    python -m pip  uninstall -y      opencv-python
-    python -m pip  install           opencv-python==4.4.0.46
-    python -m pip  uninstall -y      opencv-contrib-python
-    python -m pip  install           opencv-contrib-python==4.4.0.46
-
-ECHO;
     python -m pip  install --upgrade matplotlib
 
+    python -m pip  install --upgrade pillow
+    python -m pip  install --upgrade numpy
+    python -m pip  install --upgrade opencv-python
+    python -m pip  install --upgrade opencv-contrib-python
+
+ECHO;
+ECHO -------
+ECHO compile
+ECHO -------
 
 set pyname=pyClock_v2
 set pyname2=pyClock
     echo;
     echo %pyname%.py
-rem    pyinstaller %pyname%.py  -F --log-level ERROR --noconsole
-    pyinstaller %pyname%.py  -F --log-level ERROR
+
+    pyinstaller %pyname%.py  -F --log-level ERROR --noconsole
+rem    pyinstaller %pyname%.py  -F --log-level ERROR
+
 IF EXIST "dist\%pyname%.exe"  ECHO "%pyname%.exe"
     copy "dist\%pyname%.exe"       "%pyname%.exe"
     copy "dist\%pyname%.exe"       "%pyname2%.exe"
