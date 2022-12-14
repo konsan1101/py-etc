@@ -278,7 +278,7 @@ class qFunc_class:
             f2 = filename[:-4] + '.wrk.txt'
             res = self.remove(f2, )
             if (res == False):
-                return False
+                return False, ''
             else:
                 try:
                     os.rename(filename, f2)
