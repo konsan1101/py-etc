@@ -41,7 +41,7 @@ ECHO -------
 set pyname=test_plyer
     echo;
     echo %pyname%.py
-    pyinstaller %pyname%.py  -F --log-level ERROR
+    pyinstaller %pyname%.py  -F --log-level ERROR --hidden-import plyer.platforms.win.notification
 IF EXIST "dist\%pyname%.exe"  ECHO "%pyname%.exe"
     copy "dist\%pyname%.exe"       "%pyname%.exe"
     del  "%pyname%.spec"

@@ -230,7 +230,7 @@ class qFunc_class:
             if (res == False):
                 return False
             else:
-                f2 = filename[:-4] + '.tmp.txt'
+                f2 = filename[:-4] + '.txtsWrite.tmp'
                 res = self.remove(f2, )
                 if (res == False):
                     return False
@@ -275,7 +275,7 @@ class qFunc_class:
                 r = None
                 return False, ''
         else:
-            f2 = filename[:-4] + '.wrk.txt'
+            f2 = filename[:-4] + '.txtsRead.tmp'
             res = self.remove(f2, )
             if (res == False):
                 return False, ''

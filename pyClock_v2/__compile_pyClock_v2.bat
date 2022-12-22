@@ -23,18 +23,20 @@ ECHO;
 ECHO -------
 ECHO etc
 ECHO -------
-    python -m pip  install --upgrade numpy
     python -m pip  install --upgrade pyautogui
-    python -m pip  install --upgrade pysimplegui
     python -m pip  install --upgrade pywin32
     python -m pip  install --upgrade psutil
+    python -m pip  install --upgrade rainbow-logging-handler
+    python -m pip  install --upgrade pycryptodome
 
-    python -m pip  install --upgrade matplotlib
-
-    python -m pip  install --upgrade pillow
     python -m pip  install --upgrade numpy
     python -m pip  install --upgrade opencv-python
     python -m pip  install --upgrade opencv-contrib-python
+
+    python -m pip  install --upgrade pillow
+
+    python -m pip  install --upgrade pysimplegui
+    python -m pip  install --upgrade matplotlib
 
 ECHO;
 ECHO -------

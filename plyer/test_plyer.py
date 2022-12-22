@@ -3,30 +3,43 @@
 
 import time
 
-#import plyer
-from plyer import utils; platform = utils.platform
-from plyer import notification
+import plyer
 
 def bannerMSG(title='Message', txt='', ):
         if (txt == ''):
             return False
 
-        #plyer.notification.notify(
-        notification.notify(
+        plyer.notification.notify(
                 title=title,
                 message=txt,
                 timeout=10, 
                 app_name='python', 
-                app_icon='_icons/RiKi_start.ico', 
+                app_icon='', 
                 ticker='', 
                 toast=False)
 
 if __name__ == '__main__':
 
-    time.sleep(10)
-    bannerMSG(title='Message', txt='テスト1', )
-    time.sleep(2)
-    bannerMSG(title='Message', txt='テスト2', )
+    print('start')
+
+    txt  = ''
+    txt +='１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０'
+    txt +='１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０'
+
+    bannerMSG(title='Message', txt=txt, )
+
+    txt +='１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０'
+    txt +='１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０'
+
+    time.sleep(5)
+    bannerMSG(title='Message', txt=txt, )
+
+    txt +='１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０'
+    txt +='１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０'
+
+    time.sleep(5)
+    bannerMSG(title='Message', txt=txt, )
+
     time.sleep(20)
 
 
