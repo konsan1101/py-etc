@@ -733,7 +733,13 @@ class qFunc_class:
             return w-int(w/3), h-int(h/3), int(w/3), int(h/3)
         elif (id == '9-'):
             return w-int(w/3)+wa, h-int(h/3)+ha, int((w/3)-wa*2), int((h/3)-ha*2)
-        elif (id == 'telop'):
+        elif (id == '1t'):
+            return 0+wb, 0+hb, int(w/3), int(h/10)
+        elif (id == '123t'):
+            return 0, 0, w, int(h/5)
+        elif (id == '456t'):
+            return 0, int(h*0.4), w, int(h/5)
+        elif (id == '789t'):
             return 0, h-int(h/5), w, int(h/5)
         else:
             return int(w/4), int(h/4), int(w/2), int(h/2)

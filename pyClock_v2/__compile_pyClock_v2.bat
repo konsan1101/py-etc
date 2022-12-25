@@ -48,8 +48,8 @@ set pyname2=pyClock
     echo;
     echo %pyname%.py
 
-    pyinstaller %pyname%.py  -F --log-level ERROR --noconsole
-rem    pyinstaller %pyname%.py  -F --log-level ERROR
+    pyinstaller %pyname%.py  -F --log-level ERROR --noconsole --icon="icon_clock.ico"
+rem pyinstaller %pyname%.py  -F --log-level ERROR
 
 IF EXIST "dist\%pyname%.exe"  ECHO "%pyname%.exe"
     copy "dist\%pyname%.exe"       "%pyname%.exe"
