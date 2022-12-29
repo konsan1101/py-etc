@@ -14,11 +14,9 @@ import sys
 import os
 import time
 import datetime
+import codecs
 import glob
 
-import subprocess
-
-import pyautogui
 import numpy as np
 import cv2
 from PIL import Image, ImageDraw, ImageFont
@@ -31,8 +29,8 @@ import PySimpleGUI as sg
 
 
 # 共通ルーチン
-import  _v6__qFunc
-qFunc = _v6__qFunc.qFunc_class()
+import  _v6__qGUI
+qGUI  = _v6__qGUI.qGUI_class()
 
 
 
@@ -133,13 +131,13 @@ class qClock_class:
             pass
         else:
             hhmm = '{:02d}:{:02d}'.format(int(88), int(88))
-            pil_image = qFunc.cv2pil(self.digital_base)
+            pil_image = self.cv2pil(self.digital_base)
             text_draw = ImageDraw.Draw(pil_image)
             if (self.digital_b_bcolor == 'white'):
                 text_draw.text((int(width*0.05),int(height*0.2)), hhmm, font=self.font99_dseg7, fill=(240,240,240))
             else:
                 text_draw.text((int(width*0.05),int(height*0.2)), hhmm, font=self.font99_dseg7, fill=(16,16,16))
-            self.digital_base = qFunc.pil2cv(pil_image)
+            self.digital_base = self.pil2cv(pil_image)
 
         self.last_hhmm = ''
 
@@ -172,16 +170,16 @@ class qClock_class:
             else:
                 hhmm2 = '{:02d} {:02d}'.format(int(h), int(m))
 
-                pil_image1 = qFunc.cv2pil(self.digital_dseg7_0)
-                pil_image2 = qFunc.cv2pil(self.digital_dseg7_0)
+                pil_image1 = self.cv2pil(self.digital_dseg7_0)
+                pil_image2 = self.cv2pil(self.digital_dseg7_0)
                 text_draw1 = ImageDraw.Draw(pil_image1)
                 text_draw1.text((int(width*0.63),int(height*0.05)), ymd, font=self.font32_dseg7, fill=(0,0,255))
                 text_draw1.text((int(width*0.05),int(height*0.2)), hhmm, font=self.font99_dseg7, fill=self.digital_b_tcolor)
                 text_draw2 = ImageDraw.Draw(pil_image2)
                 text_draw2.text((int(width*0.63),int(height*0.05)), ymd, font=self.font32_dseg7, fill=(0,0,255))
                 text_draw2.text((int(width*0.05),int(height*0.2)), hhmm2, font=self.font99_dseg7, fill=self.digital_b_tcolor)
-                self.digital_dseg7_0 = qFunc.pil2cv(pil_image1)
-                self.digital_dseg7_1 = qFunc.pil2cv(pil_image2)
+                self.digital_dseg7_0 = self.pil2cv(pil_image1)
+                self.digital_dseg7_1 = self.pil2cv(pil_image2)
 
         # 秒針
         if ((s % 2) == 0):
@@ -236,25 +234,25 @@ class qClock_class:
             else:
                 if ((design % 2) == 0):
                     hhmm2 = '{:02d} {:02d}'.format(int(h), int(m))
-                    pil_image1 = qFunc.cv2pil(self.analog_dseg7_0)
-                    pil_image2 = qFunc.cv2pil(self.analog_dseg7_0)
+                    pil_image1 = self.cv2pil(self.analog_dseg7_0)
+                    pil_image2 = self.cv2pil(self.analog_dseg7_0)
                     text_draw1 = ImageDraw.Draw(pil_image1)
                     text_draw1.text((int(width*0.37),int(height*0.30)), ymd, font=self.font32_dseg7, fill=(0,0,255))
                     text_draw1.text((int(width*0.06),int(height*0.6)), hhmm, font=self.font99_dseg7, fill=self.analog_b_tcolor)
                     text_draw2 = ImageDraw.Draw(pil_image2)
                     text_draw2.text((int(width*0.37),int(height*0.30)), ymd, font=self.font32_dseg7, fill=(0,0,255))
                     text_draw2.text((int(width*0.06),int(height*0.6)), hhmm2, font=self.font99_dseg7, fill=self.analog_b_tcolor)
-                    self.analog_dseg7_0 = qFunc.pil2cv(pil_image1)
-                    self.analog_dseg7_1 = qFunc.pil2cv(pil_image2)
+                    self.analog_dseg7_0 = self.pil2cv(pil_image1)
+                    self.analog_dseg7_1 = self.pil2cv(pil_image2)
                 else:
                     hh = '{:02d}'.format(int(h))
                     mm = '{:02d}'.format(int(m))
-                    pil_image = qFunc.cv2pil(self.analog_dseg7_0)
+                    pil_image = self.cv2pil(self.analog_dseg7_0)
                     text_draw = ImageDraw.Draw(pil_image)
                     text_draw.text((int(width*0.65),int(height*0.02)), ymd, font=self.font32_dseg7, fill=(0,0,255))
                     text_draw.text((int(width*0.05),int(height*0.08)), hh, font=self.font88_dseg7, fill=self.analog_b_tcolor)
                     text_draw.text((int(width*0.35),int(height*0.53)), mm, font=self.font88_dseg7, fill=self.analog_b_tcolor)
-                    self.analog_dseg7_0 = qFunc.pil2cv(pil_image)
+                    self.analog_dseg7_0 = self.pil2cv(pil_image)
                     self.analog_dseg7_1 = self.analog_dseg7_0.copy()
 
         # 文字 2 パターン
@@ -460,6 +458,37 @@ class qClock_class:
 
         return img
 
+    # qGuide クラスと同一
+    def cv2pil(self, cv2_image=None):
+        try:
+            wrk_image = cv2_image.copy()
+            if (wrk_image.ndim == 2):  # モノクロ
+                pass
+            elif (wrk_image.shape[2] == 3):  # カラー
+                wrk_image = cv2.cvtColor(wrk_image, cv2.COLOR_BGR2RGB)
+            elif (wrk_image.shape[2] == 4):  # 透過
+                wrk_image = cv2.cvtColor(wrk_image, cv2.COLOR_BGRA2RGBA)
+            pil_image = Image.fromarray(wrk_image)
+            return pil_image
+        except:
+            pass
+        return None
+
+    # qGuide クラスと同一
+    def pil2cv(self, pil_image=None):
+        try:
+            cv2_image = np.array(pil_image, dtype=np.uint8)
+            if (cv2_image.ndim == 2):  # モノクロ
+                pass
+            elif (cv2_image.shape[2] == 3):  # カラー
+                cv2_image = cv2.cvtColor(cv2_image, cv2.COLOR_RGB2BGR)
+            elif (cv2_image.shape[2] == 4):  # 透過
+                cv2_image = cv2.cvtColor(cv2_image, cv2.COLOR_RGBA2BGRA)
+            return cv2_image
+        except:
+            pass
+        return None
+
 
 
 if __name__ == '__main__':
@@ -482,21 +511,24 @@ if __name__ == '__main__':
     sg.set_options(element_padding=(0,0), margins=(1,1), border_width=0)
 
     # レイアウト
-    w, h = pyautogui.size()
     sg_title = 'pyClock'
     if (panel == 'auto'):
+        #l, t = 0, 0
+        #w, h = qGUI.size()
+        screen = qGUI.getCornerScreen(rightLeft='right', topBottom='top', )
+        l, t, w, h = qGUI.getScreenPosSize(screen=screen, )
         if (runMode != 'digital'):
-            sg_left = w - int(w/3)
-            sg_top = 0
+            sg_left = l + w - int(w/3)
+            sg_top = t + 0
             sg_width = int(w/3)
             sg_height = int(w/3)
         else:
-            sg_left = w - int(w/3)
-            sg_top = 0
+            sg_left = l + w - int(w/3)
+            sg_top = t + 0
             sg_width = int(w/3)
             sg_height = int(h/3)
     else:
-        sg_left, sg_top, sg_width, sg_height = qFunc.getPanelPos(id=panel)
+        sg_left, sg_top, sg_width, sg_height = qGUI.getPanelPos(id=panel)
     
     #sg_no_titlebar = True
     #sg_resizable = False
