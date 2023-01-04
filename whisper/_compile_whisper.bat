@@ -21,6 +21,20 @@ rem           pip  install --upgrade pip
 
 ECHO;
 ECHO -------
+ECHO etc
+ECHO -------
+    python -m pip  install --upgrade screeninfo
+    python -m pip  install --upgrade pyautogui
+    python -m pip  install --upgrade pywin32
+    python -m pip  install --upgrade psutil
+    python -m pip  install --upgrade rainbow-logging-handler
+    python -m pip  install --upgrade pycryptodome
+
+    python -m pip  install --upgrade torch
+    python -m pip  install --upgrade whisper
+
+ECHO;
+ECHO -------
 ECHO compile
 ECHO -------
 
