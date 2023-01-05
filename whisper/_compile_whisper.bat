@@ -30,15 +30,18 @@ ECHO -------
     python -m pip  install --upgrade rainbow-logging-handler
     python -m pip  install --upgrade pycryptodome
 
-    python -m pip  install --upgrade torch
-    python -m pip  install --upgrade whisper
+    python -m pip  install --upgrade huggingface_hub
+    python -m pip  install --upgrade pyannote.audio
+
+rem python -m pip  install --upgrade torch
+rem python -m pip  install --upgrade whisper
 
 ECHO;
 ECHO -------
 ECHO compile
 ECHO -------
 
-set pyname=test_whisper
+set pyname=speech_api_whisper
     echo;
     echo %pyname%.py
 
