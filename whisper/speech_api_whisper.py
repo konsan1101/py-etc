@@ -79,20 +79,20 @@ class qWhisper_class:
 
         # 音声分離
         print('音声分離出力 ' + wav_file)
-        ffmpeg = subprocess.Popen(['ffmpeg',
+        ffmpeg = subprocess.Popen(['ffmpeg', '-y',
             '-i', inp_file,
             '-ar', '16000', '-ac', '1', 
             wav_file,
             ], shell=False, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
 
         # 時限待機
-        if (not ffmpeg is None):
+        if (ffmpeg is not None):
             checkTime = time.time()
             while ((time.time() - checkTime) < 30):
                 line = ffmpeg.stderr.readline()
                 #if (len(line) != 0):
                 #    print(line.decode())
-                if (not line) and (not ffmpeg.poll() is None):
+                if (not line) and (ffmpeg.poll() is not None):
                     break
                 time.sleep(0.01)
         ffmpeg.terminate()
@@ -107,7 +107,7 @@ class qWhisper_class:
         except:
             result = None
 
-        if (result == None):
+        if (result is None):
             print('★Whisper（処理）エラー')
             return False
 
@@ -176,7 +176,7 @@ class qWhisper_class:
 
         # 字幕合成
         print('字幕合成出力 ' + out_file)
-        ffmpeg = subprocess.Popen(['ffmpeg',
+        ffmpeg = subprocess.Popen(['ffmpeg', '-y',
             '-i', inp_file,
             '-i', srt_file,
             '-c', 'copy', '-c:s', 'mov_text', '-metadata:s:s:0', 'language=jpn',
@@ -184,13 +184,13 @@ class qWhisper_class:
             ], shell=False, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, )
 
         # 時限待機
-        if (not ffmpeg is None):
+        if (ffmpeg is not None):
             checkTime = time.time()
             while ((time.time() - checkTime) < 30):
                 line = ffmpeg.stderr.readline()
                 #if (len(line) != 0):
                 #    print(line.decode())
-                if (not line) and (not ffmpeg.poll() is None):
+                if (not line) and (ffmpeg.poll() is not None):
                     break
                 time.sleep(0.01)
         ffmpeg.terminate()
