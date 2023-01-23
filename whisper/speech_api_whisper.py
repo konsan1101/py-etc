@@ -213,35 +213,54 @@ if __name__ == '__main__':
     start_now  = datetime.datetime.now()
     start_time = start_now.strftime('%Y/%m/%d %H:%M:%S')
 
-    inp_file = 'temp3.mp4'
-    wav_file = inp_file[:-4] + '_output.wav'
-    txt_file = inp_file[:-4] + '_output.txt'
-    srt_file = inp_file[:-4] + '_output.srt'
-    out_file = inp_file[:-4] + '_output.mp4'
+    if (True):
 
-    res = qWhisper.whisper_proc(inp_file, wav_file, txt_file, srt_file, )
-    print(inp_file, res)
-    if (res == True):
-        ext = inp_file[-4:].lower()
-        if (ext == '.mp4') or (ext == '.m4v'):
-            res = qWhisper.jimaku_proc(inp_file, srt_file, out_file, )
-            print(out_file, res)
+        inp_file = 'temp_0104/temp3.mp4'
+        wav_file = inp_file[:-4] + '_output.wav'
+        txt_file = inp_file[:-4] + '_output.txt'
+        srt_file = inp_file[:-4] + '_output.srt'
+        out_file = inp_file[:-4] + '_output.mp4'
 
+        res = qWhisper.whisper_proc(inp_file, wav_file, txt_file, srt_file, )
+        print(inp_file, res)
+        if (res == True):
+            ext = inp_file[-4:].lower()
+            if (ext == '.mp4') or (ext == '.m4v'):
+                res = qWhisper.jimaku_proc(inp_file, srt_file, out_file, )
+                print(out_file, res)
 
+    if (True):
 
-    inp_file = 'temp4.m4v'
-    wav_file = inp_file[:-4] + '_output.wav'
-    txt_file = inp_file[:-4] + '_output.txt'
-    srt_file = inp_file[:-4] + '_output.srt'
-    out_file = inp_file[:-4] + '_output.mp4'
+        inp_file = 'temp_pfm/temp4.m4v'
+        wav_file = inp_file[:-4] + '_output.wav'
+        txt_file = inp_file[:-4] + '_output.txt'
+        srt_file = inp_file[:-4] + '_output.srt'
+        out_file = inp_file[:-4] + '_output.mp4'
 
-    res = qWhisper.whisper_proc(inp_file, wav_file, txt_file, srt_file, )
-    print(inp_file, res)
-    if (res == True):
-        ext = inp_file[-4:].lower()
-        if (ext == '.mp4') or (ext == '.m4v'):
-            res = qWhisper.jimaku_proc(inp_file, srt_file, out_file, )
-            print(out_file, res)
+        res = qWhisper.whisper_proc(inp_file, wav_file, txt_file, srt_file, )
+        print(inp_file, res)
+        if (res == True):
+            ext = inp_file[-4:].lower()
+            if (ext == '.mp4') or (ext == '.m4v'):
+                res = qWhisper.jimaku_proc(inp_file, srt_file, out_file, )
+                print(out_file, res)
+
+    if (False):
+
+        inp_file = 'temp_gijiroku/gijiroku.mp4'
+        wav_file = inp_file[:-4] + '_output.wav'
+        txt_file = inp_file[:-4] + '_output.txt'
+        srt_file = inp_file[:-4] + '_output.srt'
+        out_file = inp_file[:-4] + '_output.mp4'
+
+        res = qWhisper.whisper_proc(inp_file, wav_file, txt_file, srt_file, )
+        print(inp_file, res)
+        if (res == True):
+            ext = inp_file[-4:].lower()
+            if (ext == '.mp4') or (ext == '.m4v'):
+                res = qWhisper.jimaku_proc(inp_file, srt_file, out_file, )
+                print(out_file, res)
+
 
     end_now  = datetime.datetime.now()
     end_time = end_now.strftime('%Y/%m/%d %H:%M:%S')

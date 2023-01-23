@@ -36,6 +36,11 @@ ECHO -------
 rem python -m pip  install --upgrade torch
 rem python -m pip  install --upgrade whisper
 
+rem     python -m pip  install --upgrade ffmpeg
+rem     python -m pip  install --upgrade avutil
+rem rem python -m pip  install --upgrade avformat
+rem     python -m pip  install --upgrade tqdm
+
 ECHO;
 ECHO -------
 ECHO compile
