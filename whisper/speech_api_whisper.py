@@ -81,6 +81,7 @@ class qWhisper_class:
         print('音声分離出力 ' + wav_file)
         ffmpeg = subprocess.Popen(['ffmpeg', '-y',
             '-i', inp_file,
+            '-af', 'dynaudnorm', 
             '-ar', '16000', '-ac', '1', 
             wav_file,
             ], shell=False, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, )

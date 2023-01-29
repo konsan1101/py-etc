@@ -1,0 +1,18 @@
+https://looooooooop.blog.fc2.com/blog-entry-1098.html
+
+
+オクターブ表示
+ffmpeg -i "desktop/temp4.m4v" -filter_complex showcqt=size=640x360 -pix_fmt yuv420p -acodec copy -loglevel error -f matroska - | ffplay -i - -loglevel error
+ffplay -f lavfi -i "amovie=desktop/temp4.m4v,asplit[out1],showcqt[out0]"
+
+ffplay -i "desktop/temp4.mp3" -af showcqt
+
+スペクトル表示
+ffmpeg -i "desktop/temp4.m4v" -filter_complex showspectrum=size=640x360:slide=scroll:mode=separate -pix_fmt yuv420p -acodec copy -loglevel error -f matroska - | ffplay -i - -loglevel error
+
+波形表示
+ffmpeg -i "desktop/temp4.m4v" -filter_complex showwaves=size=640x360:mode=cline:split_channels=1 -pix_fmt yuv420p -acodec copy -loglevel error -f matroska - | ffplay -i - -loglevel error
+
+スコープ表示
+ffmpeg -i "desktop/temp4.m4v" -filter_complex avectorscope=size=640x360 -pix_fmt yuv420p -acodec copy -loglevel error -f matroska - | ffplay -i - -loglevel error
+
