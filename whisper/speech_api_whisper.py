@@ -8,22 +8,36 @@
 # Thank you for keeping the rules.
 # ------------------------------------------------
 
-# ★　メモ 2023/01/04時点
-#   pytorchはPython3.10以下でしか実行できない。torchの更新待ち。
-#   またexe化も出来ない。原因不明。
-
 # ★　以下、実行環境構築法
-#   https://github.com/openai/whisper
-#   gitからzipダウンロード、解凍後、以下を実行する。↓
-#   cd C:\Users\admin\Documents\GitHub\py-etc\whisper\whisper-main
-#   python setup.py install
+## 　↓　2023/06/25操作不要
+##   https://github.com/openai/whisper
+##   gitからzipダウンロード、解凍後、以下を実行する。↓
+##   cd C:\Users\admin\Documents\GitHub\py-etc\whisper\whisper-main
+##   python setup.py install
+## 　↑　2023/06/25操作不要
+#
+#    python -m pip  install --upgrade screeninfo
+#    python -m pip  install --upgrade pyautogui
+#    python -m pip  install --upgrade pywin32
+#    python -m pip  install --upgrade psutil
+#    python -m pip  install --upgrade rainbow-logging-handler
+#    python -m pip  install --upgrade pycryptodome
+#
+#    python -m pip  install --upgrade torch
+#    python -m pip  install --upgrade openai-whisper
+#
+#    python -m pip  install --upgrade six
+#    python -m pip  install --upgrade tqdm
+#    python -m pip  install --upgrade packaging
+#    python -m pip  install --upgrade tokenizers
+
 # ★　CUDA有効化
 #   pip uninstall torch
 #   pip install   torch  --extra-index-url https://download.pytorch.org/whl/cu116
 
-# 以下、不要。
-#   pip install torch
-#   pip install whisper
+# ★　メモ 2023/06/25時点
+#   exe化可能。
+#    pyinstaller %pyname%.py  -F --log-level ERROR  --copy-metadata tokenizers --copy-metadata packaging --copy-metadata tqdm --copy-metadata regex --copy-metadata requests --copy-metadata packaging --copy-metadata filelock --copy-metadata numpy --copy-metadata tokenizers --collect-data whisper
 
 
 
@@ -38,6 +52,19 @@ import subprocess
 
 import torch
 import whisper
+
+
+
+# 共通ルーチン
+import   _v6__qFunc
+qFunc  = _v6__qFunc.qFunc_class()
+import   _v6__qLog
+qLog   = _v6__qLog.qLog_class()
+
+
+
+qPath_temp  = 'temp/'
+qPath_log   = 'temp/_log/'
 
 
 
@@ -204,17 +231,72 @@ class qWhisper_class:
 
 
 
+# シグナル処理
+import signal
+def signal_handler(signal_number, stack_frame):
+    print(os.path.basename(__file__), 'accept signal =', signal_number)
+
+#signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGINT,  signal.SIG_IGN)
+signal.signal(signal.SIGTERM, signal.SIG_IGN)
+
+
+
+runMode = 'debug'
+
+# 'tiny','base','small','medium','large' or 'large-v2'
+model   = 'tiny'
+
+inpFile = ''
+
+
+
 if __name__ == '__main__':
+    main_name = 'whisper'
+    main_id   = '{0:10s}'.format(main_name).replace(' ', '_')
 
-    # 'tiny','base','small','medium' or 'large'
-    model = 'large'
+    # ディレクトリ作成
+    qFunc.makeDirs(qPath_temp, remove=False, )
+    qFunc.makeDirs(qPath_log,  remove=False, )
 
-    qWhisper = qWhisper_class(cuda=False, model=model, )
+    # ログ
+    nowTime  = datetime.datetime.now()
+    filename = qPath_log + nowTime.strftime('%Y%m%d.%H%M%S') + '.' + os.path.basename(__file__) + '.log'
+    qLog.init(mode='logger', filename=filename, )
+    qLog.log('info', main_id, 'init')
+    qLog.log('info', main_id, 'exsample.py runMode, ')
 
-    start_now  = datetime.datetime.now()
-    start_time = start_now.strftime('%Y/%m/%d %H:%M:%S')
-
+    # パラメータ
     if (True):
+        if (len(sys.argv) >= 2):
+            p = str(sys.argv[1])
+            if (os.path.exists(p)):
+                inpFile = p
+                model   = 'large-v2'
+            else:
+                runMode = p.lower()
+        if (len(sys.argv) >= 3):
+            model = str(sys.argv[2])
+        if (len(sys.argv) >= 4):
+            inpFile = str(sys.argv[3])
+
+        qLog.log('info', main_id, 'runMode = ' + str(runMode ))
+        qLog.log('info', main_id, 'model   = ' + str(model   ))
+        qLog.log('info', main_id, 'inpFile = ' + str(inpFile ))
+
+    # モデル設定
+    if (True):
+        qWhisper = qWhisper_class(cuda=False, model=model, )
+
+    # 開始
+    if (True):
+        start_now  = datetime.datetime.now()
+        start_time = start_now.strftime('%Y/%m/%d %H:%M:%S')
+
+        qLog.log('info', main_id, 'start')
+
+    # debug 1
+    if (runMode == 'debug') and (inpFile == ''):
 
         inp_file = 'temp_0104/temp3.mp4'
         wav_file = inp_file[:-4] + '_output.wav'
@@ -230,7 +312,8 @@ if __name__ == '__main__':
                 res = qWhisper.jimaku_proc(inp_file, srt_file, out_file, )
                 print(out_file, res)
 
-    if (True):
+    # debug 2
+    if (runMode == 'debug') and (inpFile == ''):
 
         inp_file = 'temp_pfm/temp4.m4v'
         wav_file = inp_file[:-4] + '_output.wav'
@@ -246,9 +329,12 @@ if __name__ == '__main__':
                 res = qWhisper.jimaku_proc(inp_file, srt_file, out_file, )
                 print(out_file, res)
 
-    if (False):
 
-        inp_file = 'temp_gijiroku/gijiroku.mp4'
+
+    # 実行
+    if (inpFile != ''):
+
+        inp_file = inpFile
         wav_file = inp_file[:-4] + '_output.wav'
         txt_file = inp_file[:-4] + '_output.txt'
         srt_file = inp_file[:-4] + '_output.srt'
@@ -263,9 +349,13 @@ if __name__ == '__main__':
                 print(out_file, res)
 
 
-    end_now  = datetime.datetime.now()
-    end_time = end_now.strftime('%Y/%m/%d %H:%M:%S')
 
-    print('complete!', str(end_now-start_now), start_time, end_time, )
+    # 終了
+    if (True):
+        end_now  = datetime.datetime.now()
+        end_time = end_now.strftime('%Y/%m/%d %H:%M:%S')
+
+        qLog.log('info', main_id, 'proctime ' + str(end_now-start_now))
+        qLog.log('info', main_id, 'complete!')
 
 

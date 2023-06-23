@@ -30,16 +30,16 @@ ECHO -------
     python -m pip  install --upgrade rainbow-logging-handler
     python -m pip  install --upgrade pycryptodome
 
-    python -m pip  install --upgrade huggingface_hub
-    python -m pip  install --upgrade pyannote.audio
+    python -m pip  install --upgrade numpy==1.24.0
+    python -m pip  install --upgrade torch
+    python -m pip  install --upgrade openai-whisper
 
-rem python -m pip  install --upgrade torch
-rem python -m pip  install --upgrade whisper
+    python -m pip  install --upgrade six
+    python -m pip  install --upgrade tqdm
+    python -m pip  install --upgrade packaging
+    python -m pip  install --upgrade tokenizers
 
-rem     python -m pip  install --upgrade ffmpeg
-rem     python -m pip  install --upgrade avutil
-rem rem python -m pip  install --upgrade avformat
-rem     python -m pip  install --upgrade tqdm
+
 
 ECHO;
 ECHO -------
@@ -50,11 +50,8 @@ set pyname=speech_api_whisper
     echo;
     echo %pyname%.py
 
-    pyinstaller %pyname%.py  -F --log-level ERROR
-rem pyinstaller %pyname%.py  -F --log-level ERROR --hidden-import=pytorch --collect-data torch --copy-metadata torch --copy-metadata tqdm --copy-metadata regex --copy-metadata sacremoses --copy-metadata requests --copy-metadata packaging --copy-metadata filelock --copy-metadata numpy --copy-metadata tokenizers --copy-metadata importlib_metadata --hidden-import="sklearn.utils._cython_blas" --hidden-import="sklearn.neighbors.typedefs" --hidden-import="sklearn.neighbors.quad_tree" --hidden-import="sklearn.tree" --hidden-import="sklearn.tree._utils"
-rem pyinstaller %pyname%.py  -F --log-level ERROR --hidden-import=torch --collect-data torch --copy-metadata torch --hidden-import=tqdm --copy-metadata tqdm
-rem pyinstaller %pyname%.py  -F --log-level ERROR --hidden-import=whisper
-rem pyinstaller %pyname%.py  -F --log-level ERROR --noconsole
+rem pyinstaller %pyname%.py  -F --log-level ERROR  --copy-metadata tqdm --copy-metadata regex --copy-metadata requests --copy-metadata packaging --copy-metadata filelock --copy-metadata numpy --copy-metadata tokenizers --collect-data whisper
+    pyinstaller %pyname%.py  -F --log-level ERROR  --copy-metadata tokenizers --copy-metadata packaging --copy-metadata tqdm --copy-metadata regex --copy-metadata requests --copy-metadata packaging --copy-metadata filelock --copy-metadata numpy --copy-metadata tokenizers --collect-data whisper
 
 IF EXIST "dist\%pyname%.exe"  ECHO "%pyname%.exe"
     copy "dist\%pyname%.exe"       "%pyname%.exe"
