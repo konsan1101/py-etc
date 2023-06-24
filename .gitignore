@@ -112,6 +112,6 @@ temp*
 /keras_lstm/test3_history.*
 /keras_lstm/test3_weight.*
 /m2det/weight/
-/whisper/speech_api_whisper.exe
+/pyWhisper/*.exe
 
 
