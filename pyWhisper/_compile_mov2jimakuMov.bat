@@ -30,18 +30,17 @@ ECHO -------
     python -m pip  install --upgrade rainbow-logging-handler
     python -m pip  install --upgrade pycryptodome
 
-rem python -m pip  install --upgrade numpy
-    python -m pip  install --upgrade numpy==1.24.3
+    python -m pip  install --upgrade numpy==1.23.5
+    python -m pip  install --upgrade numba==0.56.4
     python -m pip  install --upgrade pycc
-rem python -m pip  install --upgrade numba
-    python -m pip  install --upgrade numba==0.57.0
+
     python -m pip  install --upgrade torch
     python -m pip  install --upgrade openai-whisper
 
-    python -m pip  install --upgrade six
-    python -m pip  install --upgrade tqdm
-    python -m pip  install --upgrade packaging
-    python -m pip  install --upgrade tokenizers
+rem    python -m pip  install --upgrade six
+rem    python -m pip  install --upgrade tqdm
+rem    python -m pip  install --upgrade packaging
+rem    python -m pip  install --upgrade tokenizers
 
 
 
@@ -54,8 +53,8 @@ set pyname=RiKi_mov2jimakuMov
     echo;
     echo %pyname%.py
 
-rem pyinstaller %pyname%.py  -F --log-level ERROR  --copy-metadata tqdm --copy-metadata regex --copy-metadata requests --copy-metadata packaging --copy-metadata filelock --copy-metadata numpy --copy-metadata tokenizers --collect-data whisper
-    pyinstaller %pyname%.py  -F --log-level ERROR  --copy-metadata tokenizers --copy-metadata packaging --copy-metadata tqdm --copy-metadata regex --copy-metadata requests --copy-metadata packaging --copy-metadata filelock --copy-metadata numpy --copy-metadata tokenizers --collect-data whisper
+rem pyinstaller %pyname%.py  -F --log-level ERROR  --copy-metadata tokenizers --copy-metadata packaging --copy-metadata tqdm --copy-metadata regex --copy-metadata requests --copy-metadata packaging --copy-metadata filelock --copy-metadata numpy --copy-metadata tokenizers --collect-data whisper
+    pyinstaller %pyname%.py  -F --log-level ERROR  --collect-data whisper
 
 IF EXIST "dist\%pyname%.exe"  ECHO "%pyname%.exe"
     copy "dist\%pyname%.exe"       "%pyname%.exe"

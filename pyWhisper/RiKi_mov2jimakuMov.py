@@ -131,12 +131,10 @@ class qWhisper_class:
 
         # 音声認識
         #print('Whisper音声認識')
-        try:
-            #result = whisper_model.transcribe(inp_file)
-            result = self.whisper_model.transcribe(wav_file, verbose=True, fp16=False, )
-            #result = whisper_model.transcribe(inp_file, verbose=True, task='translate')
-        except:
-            result = None
+        #try:
+        result = self.whisper_model.transcribe(wav_file, verbose=True, fp16=False, )
+        #except:
+        #    result = None
 
         if (result is None):
             print('★Whisper（処理）エラー')
@@ -263,9 +261,12 @@ if __name__ == '__main__':
     main_id   = '{0:10s}'.format(main_name).replace(' ', '_')
 
     #　実行パスセット
-    path_current = os.path.dirname(sys.argv[0])
-    #print(path_current)
-    os.chdir(path_current)
+    try:
+        path_current = os.path.dirname(sys.argv[0])
+        #print(path_current)
+        os.chdir(path_current)
+    except:
+        pass
 
     # ディレクトリ作成
     qFunc.makeDirs(qPath_temp, remove=False, )
