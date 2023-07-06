@@ -113,6 +113,5 @@ temp*
 /keras_lstm/test3_weight.*
 /m2det/weight/
 /pyWhisper/*.exe
-/spleeter_py310/*.exe
-
+/pdfminer/*.exe
 
