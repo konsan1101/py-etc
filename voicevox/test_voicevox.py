@@ -38,6 +38,14 @@ def generate_wav(outText, speaker=1, outFile='test_voicevox.wav'):
 if __name__ == '__main__':
     outText = 'こんにちは！'
 
+    for i in range(50):
+        tmpFile = 'test_voicevox_' + str(i) + '.wav'
+        try:
+            generate_wav(outText=outText, speaker=i, outFile=tmpFile,)
+            print(i)
+        except:
+            pass
+
     # 女性
     for i in (6,20):
         print(i)
